@@ -1,4 +1,4 @@
--- Interfaz By ChristianSebas con Fly V3
+-- Interfaz de GUI con Fly V3 - By ChristianSebas
 local player = game.Players.LocalPlayer
 local gui = Instance.new("ScreenGui", player:WaitForChild("PlayerGui"))
 gui.Name = "ChristianSebasUI"
@@ -18,7 +18,7 @@ cBtn.Active = true
 cBtn.Draggable = true
 cBtn.Parent = gui
 
--- Menú
+-- Menú principal
 local menu = Instance.new("Frame")
 menu.Size = UDim2.new(0, 200, 0, 260)
 menu.Position = UDim2.new(0.5, -100, 0.5, -130)
@@ -34,6 +34,7 @@ title.Font = Enum.Font.GothamBold
 title.TextColor3 = Color3.new(1, 1, 1)
 title.BackgroundTransparency = 1
 
+-- Crear botones
 local function crearBoton(nombre, y)
     local btn = Instance.new("TextButton", menu)
     btn.Size = UDim2.new(0.9, 0, 0, 35)
@@ -53,7 +54,7 @@ local xrayBtn = crearBoton("X-Ray (Nombres)", 0.65)
 local cerrarBtn = crearBoton("Cerrar", 0.8)
 cerrarBtn.TextColor3 = Color3.fromRGB(255, 50, 50)
 
--- Abrir/Cerrar Menú
+-- Abrir/Cerrar menú
 cBtn.MouseButton1Click:Connect(function()
     menu.Visible = not menu.Visible
 end)
@@ -62,7 +63,7 @@ cerrarBtn.MouseButton1Click:Connect(function()
     menu.Visible = false
 end)
 
--- Funciones
+-- Funciones de botones
 local function setSpeed(val)
     local hum = player.Character and player.Character:FindFirstChild("Humanoid") or player.CharacterAdded:Wait():WaitForChild("Humanoid")
     hum.WalkSpeed = val
