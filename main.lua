@@ -1,21 +1,21 @@
--- GUI completa con imagen personalizada - By ChristianSebas
+-- GUI By ChristianSebas con Fly V3, X-Ray, salto y velocidad
 local player = game.Players.LocalPlayer
 local gui = Instance.new("ScreenGui", player:WaitForChild("PlayerGui"))
 gui.Name = "ChristianSebasUI"
 gui.ResetOnSpawn = false
 
--- BOTÓN flotante con imagen (modifica el ID aquí)
+-- Botón flotante con imagen personalizada (ID correcto)
 local cBtn = Instance.new("ImageButton")
 cBtn.Size = UDim2.new(0, 50, 0, 50)
 cBtn.Position = UDim2.new(0.5, -25, 0.5, -25)
 cBtn.BackgroundColor3 = Color3.new(0, 0, 0)
 cBtn.BorderSizePixel = 0
-cBtn.Image = "rbxassetid://94777373855263" -- ← Tu ID de imagen va aquí
+cBtn.Image = "rbxassetid://94777373855263" -- Tu imagen subida
 cBtn.Active = true
 cBtn.Draggable = true
 cBtn.Parent = gui
 
--- MENÚ principal
+-- Menú principal oculto al inicio
 local menu = Instance.new("Frame")
 menu.Size = UDim2.new(0, 200, 0, 260)
 menu.Position = UDim2.new(0.5, -100, 0.5, -130)
@@ -31,7 +31,7 @@ title.Font = Enum.Font.GothamBold
 title.TextColor3 = Color3.new(1, 1, 1)
 title.BackgroundTransparency = 1
 
--- Botones
+-- Crear botones del menú
 local function crearBoton(nombre, y)
     local btn = Instance.new("TextButton", menu)
     btn.Size = UDim2.new(0.9, 0, 0, 35)
@@ -51,11 +51,12 @@ local xrayBtn = crearBoton("X-Ray (Nombres)", 0.65)
 local cerrarBtn = crearBoton("Cerrar", 0.8)
 cerrarBtn.TextColor3 = Color3.fromRGB(255, 50, 50)
 
--- Abrir/cerrar el menú
+-- Mostrar / ocultar menú al tocar el icono
 cBtn.MouseButton1Click:Connect(function()
     menu.Visible = not menu.Visible
 end)
 
+-- Cerrar menú desde botón interno
 cerrarBtn.MouseButton1Click:Connect(function()
     menu.Visible = false
 end)
@@ -71,19 +72,22 @@ local function setJump(val)
     hum.JumpPower = val
 end
 
+-- Botón de velocidad
 speedBtn.MouseButton1Click:Connect(function()
     setSpeed(100)
 end)
 
+-- Botón de salto
 jumpBtn.MouseButton1Click:Connect(function()
     setJump(150)
 end)
 
+-- Botón de Fly V3 (original)
 flyBtn.MouseButton1Click:Connect(function()
-    -- Aquí se ejecuta el FlyV3 real
     loadstring(game:HttpGet("https://raw.githubusercontent.com/XNEOFF/FlyGuiV3/main/FlyGuiV3.txt"))()
 end)
 
+-- Botón X-Ray (nombres)
 xrayBtn.MouseButton1Click:Connect(function()
     for _, v in pairs(game.Players:GetPlayers()) do
         if v.Character and v.Character:FindFirstChild("Head") and not v.Character.Head:FindFirstChild("NameTag") then
