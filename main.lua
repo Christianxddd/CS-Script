@@ -1,24 +1,21 @@
--- Interfaz de GUI con Fly V3 - By ChristianSebas
+-- GUI completa con imagen personalizada - By ChristianSebas
 local player = game.Players.LocalPlayer
 local gui = Instance.new("ScreenGui", player:WaitForChild("PlayerGui"))
 gui.Name = "ChristianSebasUI"
 gui.ResetOnSpawn = false
 
--- Botón flotante "C"
-local cBtn = Instance.new("TextButton")
+-- BOTÓN flotante con imagen (modifica el ID aquí)
+local cBtn = Instance.new("ImageButton")
 cBtn.Size = UDim2.new(0, 50, 0, 50)
 cBtn.Position = UDim2.new(0.5, -25, 0.5, -25)
-cBtn.Text = "C"
-cBtn.TextScaled = true
-cBtn.Font = Enum.Font.SourceSansBold
-cBtn.TextColor3 = Color3.new(1, 1, 1)
 cBtn.BackgroundColor3 = Color3.new(0, 0, 0)
 cBtn.BorderSizePixel = 0
+cBtn.Image = "rbxassetid://94777373855263" -- ← Tu ID de imagen va aquí
 cBtn.Active = true
 cBtn.Draggable = true
 cBtn.Parent = gui
 
--- Menú principal
+-- MENÚ principal
 local menu = Instance.new("Frame")
 menu.Size = UDim2.new(0, 200, 0, 260)
 menu.Position = UDim2.new(0.5, -100, 0.5, -130)
@@ -34,7 +31,7 @@ title.Font = Enum.Font.GothamBold
 title.TextColor3 = Color3.new(1, 1, 1)
 title.BackgroundTransparency = 1
 
--- Crear botones
+-- Botones
 local function crearBoton(nombre, y)
     local btn = Instance.new("TextButton", menu)
     btn.Size = UDim2.new(0.9, 0, 0, 35)
@@ -54,7 +51,7 @@ local xrayBtn = crearBoton("X-Ray (Nombres)", 0.65)
 local cerrarBtn = crearBoton("Cerrar", 0.8)
 cerrarBtn.TextColor3 = Color3.fromRGB(255, 50, 50)
 
--- Abrir/Cerrar menú
+-- Abrir/cerrar el menú
 cBtn.MouseButton1Click:Connect(function()
     menu.Visible = not menu.Visible
 end)
@@ -63,7 +60,7 @@ cerrarBtn.MouseButton1Click:Connect(function()
     menu.Visible = false
 end)
 
--- Funciones de botones
+-- Funciones
 local function setSpeed(val)
     local hum = player.Character and player.Character:FindFirstChild("Humanoid") or player.CharacterAdded:Wait():WaitForChild("Humanoid")
     hum.WalkSpeed = val
@@ -83,6 +80,7 @@ jumpBtn.MouseButton1Click:Connect(function()
 end)
 
 flyBtn.MouseButton1Click:Connect(function()
+    -- Aquí se ejecuta el FlyV3 real
     loadstring(game:HttpGet("https://raw.githubusercontent.com/XNEOFF/FlyGuiV3/main/FlyGuiV3.txt"))()
 end)
 
