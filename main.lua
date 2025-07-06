@@ -1,4 +1,4 @@
--- Interfaz By ChristianSebas Mejorado
+-- Interfaz By ChristianSebas con Fly V3
 local player = game.Players.LocalPlayer
 local gui = Instance.new("ScreenGui", player:WaitForChild("PlayerGui"))
 gui.Name = "ChristianSebasUI"
@@ -20,8 +20,8 @@ cBtn.Parent = gui
 
 -- Menú
 local menu = Instance.new("Frame")
-menu.Size = UDim2.new(0, 200, 0, 240)
-menu.Position = UDim2.new(0.5, -100, 0.5, -120)
+menu.Size = UDim2.new(0, 200, 0, 260)
+menu.Position = UDim2.new(0.5, -100, 0.5, -130)
 menu.BackgroundColor3 = Color3.fromRGB(25, 25, 25)
 menu.Visible = false
 menu.Parent = gui
@@ -34,7 +34,6 @@ title.Font = Enum.Font.GothamBold
 title.TextColor3 = Color3.new(1, 1, 1)
 title.BackgroundTransparency = 1
 
--- Crear botones
 local function crearBoton(nombre, y)
     local btn = Instance.new("TextButton", menu)
     btn.Size = UDim2.new(0.9, 0, 0, 35)
@@ -47,104 +46,59 @@ local function crearBoton(nombre, y)
     return btn
 end
 
-local speedBtn = crearBoton("Correr Rápido (Velocidad 100)", 0.2)
-local jumpBtn = crearBoton("Saltar Alto (Poder 150)", 0.35)
-local flyBtn = crearBoton("Activar Vuelo (Velocidad 80)", 0.5)
-local xrayBtn = crearBoton("X-Ray (Ver nombres)", 0.65)
+local speedBtn = crearBoton("Correr Rápido (100)", 0.2)
+local jumpBtn = crearBoton("Saltar Alto (150)", 0.35)
+local flyBtn = crearBoton("Fly V3", 0.5)
+local xrayBtn = crearBoton("X-Ray (Nombres)", 0.65)
 local cerrarBtn = crearBoton("Cerrar", 0.8)
 cerrarBtn.TextColor3 = Color3.fromRGB(255, 50, 50)
 
 -- Abrir/Cerrar Menú
 cBtn.MouseButton1Click:Connect(function()
-	menu.Visible = not menu.Visible
+    menu.Visible = not menu.Visible
 end)
 
 cerrarBtn.MouseButton1Click:Connect(function()
-	menu.Visible = false
+    menu.Visible = false
 end)
 
--- Velocidad
+-- Funciones
+local function setSpeed(val)
+    local hum = player.Character and player.Character:FindFirstChild("Humanoid") or player.CharacterAdded:Wait():WaitForChild("Humanoid")
+    hum.WalkSpeed = val
+end
+
+local function setJump(val)
+    local hum = player.Character and player.Character:FindFirstChild("Humanoid") or player.CharacterAdded:Wait():WaitForChild("Humanoid")
+    hum.JumpPower = val
+end
+
 speedBtn.MouseButton1Click:Connect(function()
-	local char = player.Character or player.CharacterAdded:Wait()
-	local humanoid = char:WaitForChild("Humanoid")
-	humanoid.WalkSpeed = 100 -- Puedes cambiar este número
+    setSpeed(100)
 end)
 
--- Salto Alto
 jumpBtn.MouseButton1Click:Connect(function()
-	local char = player.Character or player.CharacterAdded:Wait()
-	local humanoid = char:WaitForChild("Humanoid")
-	humanoid.JumpPower = 150 -- Puedes cambiar este número
+    setJump(150)
 end)
 
--- Fly REAL editable
 flyBtn.MouseButton1Click:Connect(function()
-	local char = player.Character or player.CharacterAdded:Wait()
-	local root = char:WaitForChild("HumanoidRootPart")
-	local flying = true
-	local speed = 80 -- Cambia este número para ajustar velocidad de vuelo
-
-	local bodyGyro = Instance.new("BodyGyro", root)
-	bodyGyro.P = 9e4
-	bodyGyro.maxTorque = Vector3.new(9e9, 9e9, 9e9)
-	bodyGyro.cframe = root.CFrame
-
-	local bodyVelocity = Instance.new("BodyVelocity", root)
-	bodyVelocity.velocity = Vector3.new(0,0,0)
-	bodyVelocity.maxForce = Vector3.new(9e9, 9e9, 9e9)
-
-	local UIS = game:GetService("UserInputService")
-	local control = {F = 0, B = 0, L = 0, R = 0, U = 0}
-
-	local conn1 = UIS.InputBegan:Connect(function(input)
-		if input.KeyCode == Enum.KeyCode.W then control.F = 1 end
-		if input.KeyCode == Enum.KeyCode.S then control.B = -1 end
-		if input.KeyCode == Enum.KeyCode.A then control.L = -1 end
-		if input.KeyCode == Enum.KeyCode.D then control.R = 1 end
-		if input.KeyCode == Enum.KeyCode.Space then control.U = 1 end
-	end)
-
-	local conn2 = UIS.InputEnded:Connect(function(input)
-		if input.KeyCode == Enum.KeyCode.W then control.F = 0 end
-		if input.KeyCode == Enum.KeyCode.S then control.B = 0 end
-		if input.KeyCode == Enum.KeyCode.A then control.L = 0 end
-		if input.KeyCode == Enum.KeyCode.D then control.R = 0 end
-		if input.KeyCode == Enum.KeyCode.Space then control.U = 0 end
-	end)
-
-	spawn(function()
-		while flying do
-			wait()
-			local camCF = workspace.CurrentCamera.CFrame
-			bodyGyro.cframe = camCF
-			bodyVelocity.velocity = (camCF.lookVector * (control.F + control.B) + camCF.RightVector * (control.R + control.L) + Vector3.new(0, control.U, 0)) * speed
-		end
-	end)
-
-	wait(12) -- Tiempo que durará el vuelo
-	flying = false
-	bodyGyro:Destroy()
-	bodyVelocity:Destroy()
-	conn1:Disconnect()
-	conn2:Disconnect()
+    loadstring(game:HttpGet("https://raw.githubusercontent.com/XNEOFF/FlyGuiV3/main/FlyGuiV3.txt"))()
 end)
 
--- XRAY (ver nombres de todos los jugadores)
 xrayBtn.MouseButton1Click:Connect(function()
-	for _, v in pairs(game.Players:GetPlayers()) do
-		if v.Character and v.Character:FindFirstChild("Head") and not v.Character.Head:FindFirstChild("NameTag") then
-			local billboard = Instance.new("BillboardGui", v.Character.Head)
-			billboard.Name = "NameTag"
-			billboard.Size = UDim2.new(0, 200, 0, 50)
-			billboard.Adornee = v.Character.Head
-			billboard.AlwaysOnTop = true
-
-			local textLabel = Instance.new("TextLabel", billboard)
-			textLabel.Size = UDim2.new(1, 0, 1, 0)
-			textLabel.BackgroundTransparency = 1
-			textLabel.Text = v.Name
-			textLabel.TextColor3 = Color3.new(1, 1, 1)
-			textLabel.TextScaled = true
-		end
-	end
+    for _, v in pairs(game.Players:GetPlayers()) do
+        if v.Character and v.Character:FindFirstChild("Head") and not v.Character.Head:FindFirstChild("NameTag") then
+            local billboard = Instance.new("BillboardGui", v.Character.Head)
+            billboard.Name = "NameTag"
+            billboard.Size = UDim2.new(0,200,0,50)
+            billboard.Adornee = v.Character.Head
+            billboard.AlwaysOnTop = true
+            local textLabel = Instance.new("TextLabel", billboard)
+            textLabel.Size = UDim2.new(1,0,1,0)
+            textLabel.BackgroundTransparency = 1
+            textLabel.Text = v.Name
+            textLabel.TextColor3 = Color3.new(1,1,1)
+            textLabel.TextScaled = true
+        end
+    end
 end)
