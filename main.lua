@@ -4,8 +4,6 @@ local Players = game:GetService("Players")
 local player = Players.LocalPlayer
 local PlayerGui = player:WaitForChild("PlayerGui")
 local RunService = game:GetService("RunService")
-local TweenService = game:GetService("TweenService")
-local SoundService = game:GetService("SoundService")
 
 -- Función efecto rainbow
 local function rainbowColor()
@@ -114,23 +112,11 @@ local sectionsLayout = Instance.new("UIListLayout", sectionsFrame)
 sectionsLayout.SortOrder = Enum.SortOrder.LayoutOrder
 sectionsLayout.Padding = UDim.new(0, 8)
 
--- Tabla para guardar todos los scripts de juegos y utilidades
+-- Tabla para guardar scripts (ejemplo reducido, agrega los que quieras)
 local gamesPopular = {
 	{ name = "Blox Fruits", script = "https://raw.githubusercontent.com/tlredz/Scripts/refs/heads/main/main.luau", desc = "Script para Blox Fruits. Diviértete y desbloquea frutas." },
 	{ name = "Jailbreak", script = "https://raw.githubusercontent.com/BlitzIsKing/UniversalFarm/main/Loader/Regular", desc = "Script para Jailbreak con funcionalidades de farm." },
-	{ name = "Dead Rails", script = "https://raw.githubusercontent.com/gumanba/Scripts/refs/heads/main/DeadRails", desc = "Script para Dead Rails, automatiza tareas." },
-	{ name = "BedWars", script = "https://raw.githubusercontent.com/RegularVynixu/Utilities/main/BedWars/bedwars.lua", desc = "Script para BedWars con hacks y funciones." },
-	{ name = "Brookhaven 🏡", script = "https://raw.githubusercontent.com/Project-X-Roblox/Project-X-Roblox/main/Brookhaven.lua", desc = "Script para Brookhaven para mejoras y trucos." },
-	{ name = "Pet Simulator X 🐾", script = "https://raw.githubusercontent.com/Project-X-Roblox/Project-X-Roblox/main/PetSimulatorX.lua", desc = "Scripts para Pet Simulator X con utilidades." },
-	{ name = "Arsenal 🔫", script = "https://raw.githubusercontent.com/Project-X-Roblox/Project-X-Roblox/main/Arsenal.lua", desc = "Script para Arsenal con mods y hacks." },
-	{ name = "Doors 🚪", script = "https://raw.githubusercontent.com/TheEpicBlox/Fly/main/Doors.lua", desc = "Script para Doors, ayuda y mejoras." },
-	{ name = "Evade 💨", script = "https://raw.githubusercontent.com/Project-X-Roblox/Project-X-Roblox/main/Evade.lua", desc = "Scripts para Evade con funciones extra." },
-	{ name = "Shindo Life 🌀", script = "https://raw.githubusercontent.com/RegularVynixu/Utilities/main/ShindoLife/ShindoLife.lua", desc = "Script para Shindo Life con mejoras." },
-	{ name = "Murder Mystery 2 🔪", script = "https://raw.githubusercontent.com/Project-X-Roblox/Project-X-Roblox/main/MM2.lua", desc = "Script para Murder Mystery 2 con mods." },
-	{ name = "Anime Fighters 🥊", script = "https://raw.githubusercontent.com/Project-X-Roblox/Project-X-Roblox/main/AnimeFighters.lua", desc = "Script para Anime Fighters con hacks." },
-	{ name = "Phantom Forces 🎯", script = "https://raw.githubusercontent.com/Project-X-Roblox/Project-X-Roblox/main/PhantomForces.lua", desc = "Script para Phantom Forces con mods." },
-	{ name = "Natural Disaster Survival 🌪️", script = "https://raw.githubusercontent.com/Project-X-Roblox/Project-X-Roblox/main/NaturalDisaster.lua", desc = "Script para Natural Disaster Survival." },
-	{ name = "Tower of Hell 🗼", script = "https://raw.githubusercontent.com/Project-X-Roblox/Project-X-Roblox/main/TowerOfHell.lua", desc = "Script para Tower of Hell, trucos y más." }
+	-- agrega más acá...
 }
 
 local utilities = {
@@ -138,15 +124,11 @@ local utilities = {
 	{ name = "ESP Player", script = "", desc = "Muestra el nombre de los jugadores sobre sus cabezas. Toggle ON/OFF." },
 	{ name = "Touch Fling", script = "https://rawscripts.net/raw/Universal-Script-TOUCH-FLING-ULTRA-POWER-30194", desc = "Activa el script de Touch Fling ultra power." },
 	{ name = "Brainlot", script = "https://raw.githubusercontent.com/Akbar123s/Script-Roblox-/refs/heads/main/nabaruBrainrot", desc = "Script para Brainlot." },
-	{ name = "Infinity Yield (Comandos)", script = "https://raw.githubusercontent.com/EdgeIY/infiniteyield/master/source", desc = "Panel de comandos universal." },
-	{ name = "Anti AFK", script = "https://raw.githubusercontent.com/EdgeIY/AntiAfk/master/source", desc = "Evita que te baneen por estar AFK." },
-	{ name = "Chat Spy", script = "https://raw.githubusercontent.com/Project-X-Roblox/Project-X-Roblox/main/ChatSpy.lua", desc = "Visualiza chats ocultos en juegos." },
-	{ name = "Admin Panel", script = "https://raw.githubusercontent.com/EdgeIY/AdminV3ForRoblox/master/Source", desc = "Panel de admin para juegos." },
-	{ name = "Walk on Walls", script = "https://raw.githubusercontent.com/Project-X-Roblox/Project-X-Roblox/main/WalkOnWalls.lua", desc = "Permite caminar sobre paredes." },
-	{ name = "Auto Clicker", script = "https://raw.githubusercontent.com/Project-X-Roblox/Project-X-Roblox/main/AutoClicker.lua", desc = "Automatiza clicks." }
+	{ name = "Infinity Yield (Comandos)", script = "https://raw.githubusercontent.com/EdgeIY/infiniteyield/master/source", desc = "Panel de comandos universal." }
+	-- agrega más utilidades si quieres
 }
 
--- Helper para crear botones secciones (expandibles)
+-- Función para crear secciones expandibles
 local function crearSeccion(titulo, items)
 	local container = Instance.new("Frame", sectionsFrame)
 	container.Size = UDim2.new(1, 0, 0, 40)
@@ -181,7 +163,7 @@ local function crearSeccion(titulo, items)
 	layout.SortOrder = Enum.SortOrder.LayoutOrder
 	layout.Padding = UDim.new(0,6)
 
-	-- Función para alternar visibilidad
+	-- Alternar visibilidad
 	header.MouseButton1Click:Connect(function()
 		itemsFrame.Visible = not itemsFrame.Visible
 		header.Text = titulo .. (itemsFrame.Visible and " ▲" or " ▼")
@@ -195,7 +177,7 @@ local function crearSeccion(titulo, items)
 		end
 	end)
 
-	-- Crear botón para cada script
+	-- Botones scripts
 	for i, item in ipairs(items) do
 		local btn = Instance.new("TextButton", itemsFrame)
 		btn.Size = UDim2.new(1, 0, 0, 40)
@@ -211,7 +193,6 @@ local function crearSeccion(titulo, items)
 		local cornerBtn = Instance.new("UICorner", btn)
 		cornerBtn.CornerRadius = UDim.new(0,6)
 
-		-- Al tocar botón abrir subventana con info
 		btn.MouseButton1Click:Connect(function()
 			openInfoWindow(item)
 		end)
@@ -220,7 +201,7 @@ local function crearSeccion(titulo, items)
 	return container
 end
 
--- Crear la ventana modal de info del script
+-- Ventana modal info
 local infoWindow = Instance.new("Frame", gui)
 infoWindow.Name = "InfoWindow"
 infoWindow.Size = UDim2.new(0, 350, 0, 200)
@@ -267,47 +248,4 @@ executeBtn.TextColor3 = Color3.new(1,1,1)
 executeBtn.BackgroundColor3 = Color3.fromRGB(0, 150, 0)
 executeBtn.AutoButtonColor = false
 local executeCorner = Instance.new("UICorner", executeBtn)
-executeCorner.CornerRadius = UDim.new(0, 8)
-
-local cancelBtn = Instance.new("TextButton", infoWindow)
-cancelBtn.Size = UDim2.new(0.4, 0, 0, 40)
-cancelBtn.Position = UDim2.new(0.55, 0, 1, -50)
-cancelBtn.Text = "Cancelar"
-cancelBtn.Font = Enum.Font.Arcade
-cancelBtn.TextScaled = true
-cancelBtn.TextColor3 = Color3.new(1,1,1)
-cancelBtn.BackgroundColor3 = Color3.fromRGB(150, 0, 0)
-cancelBtn.AutoButtonColor = false
-local cancelCorner = Instance.new("UICorner", cancelBtn)
-cancelCorner.CornerRadius = UDim.new(0, 8)
-
-local currentScript = nil
-
-function openInfoWindow(item)
-	infoTitle.Text = item.name
-	infoDesc.Text = item.desc
-	infoWindow.Visible = true
-	currentScript = item.script
-end
-
-executeBtn.MouseButton1Click:Connect(function()
-	if currentScript and currentScript ~= "" then
-		local success, err = pcall(function()
-			loadstring(game:HttpGet(currentScript))()
-		end)
-		if not success then
-			warn("Error al ejecutar script: ", err)
-		end
-	end
-	infoWindow.Visible = false
-end)
-
-cancelBtn.MouseButton1Click:Connect(function()
-	infoWindow.Visible = false
-end)
-
--- Crear las secciones en el panel
-local juegosPopularesSection = crearSeccion("🔥 Juegos Populares", gamesPopular)
-local utilidadesSection = crearSeccion("🛠️ Utilidades", utilities)
-
--- Efecto rainbow dinámico para texto y bord
+executeCorner.CornerRadius =
