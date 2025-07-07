@@ -15,7 +15,7 @@ local function rainbow()
 end
 
 -- Botón flotante "C"
-local openBtn = Instance.new("TextButton", gui)
+local openBtn = Instance.new("TextButton")
 openBtn.Size = UDim2.new(0, 50, 0, 50)
 openBtn.Position = UDim2.new(0, 20, 0.5, -25)
 openBtn.BackgroundColor3 = Color3.new(0, 0, 0)
@@ -24,7 +24,9 @@ openBtn.Text = "C"
 openBtn.TextScaled = true
 openBtn.Font = Enum.Font.GothamBlack
 openBtn.TextColor3 = Color3.new(1, 1, 1)
-openBtn.Draggable = true
+openBtn.Name = "AbrirPanel"
+openBtn.Parent = gui
+Instance.new("UICorner", openBtn)
 
 -- Panel principal
 local panel = Instance.new("Frame", gui)
@@ -102,25 +104,18 @@ local function crearBoton(nombre, scriptURL)
 	return btn
 end
 
--- Juegos Populares
+-- Secciones
 scroll:AddChild(crearSeccion("🎮 Juegos Populares"))
 scroll:AddChild(crearBoton("🧠 Brainlot", "https://raw.githubusercontent.com/Akbar123s/Script-Roblox-/refs/heads/main/nabaruBrainrot"))
 scroll:AddChild(crearBoton("🚓 Jailbreak", "https://raw.githubusercontent.com/BlitzIsKing/UniversalFarm/main/Loader/Regular"))
 scroll:AddChild(crearBoton("🚂 Dead Rails", "https://raw.githubusercontent.com/gumanba/Scripts/refs/heads/main/DeadRails"))
 scroll:AddChild(crearBoton("🍉 Blox Fruits", "https://raw.githubusercontent.com/tlredz/Scripts/refs/heads/main/main.luau"))
 scroll:AddChild(crearBoton("🔥 Anime Fighters", "https://raw.githubusercontent.com/synolope/robloxscripts/main/animefighters.lua"))
-scroll:AddChild(crearBoton("🌀 Slap Battles", "https://raw.githubusercontent.com/zaeburYT/RobloxScripts/main/SlapBattles.lua"))
-scroll:AddChild(crearBoton("🕹️ Bedwars", "https://raw.githubusercontent.com/KinqzScripts/Free/main/bedwars.lua"))
-scroll:AddChild(crearBoton("💣 Arsenal", "https://raw.githubusercontent.com/EdgeIY/infiniteyield/master/source"))
-scroll:AddChild(crearBoton("🔫 Phantom Forces", "https://raw.githubusercontent.com/FilteringEnabled/FE/main/Phantom.lua"))
-scroll:AddChild(crearBoton("⛏️ Mining Simulator", "https://raw.githubusercontent.com/GenesisRoblox/Roblox-Scripts/main/MiningSimulator.lua"))
 
--- Utilidades
 scroll:AddChild(crearSeccion("🛠️ Utilidades"))
 scroll:AddChild(crearBoton("🚀 Fly V3", "https://raw.githubusercontent.com/XNEOFF/FlyGuiV3/main/FlyGuiV3.txt"))
 scroll:AddChild(crearBoton("👁 ESP Player", "https://rawscripts.net/raw/ESP-Script-Advanced-Player-30201"))
 scroll:AddChild(crearBoton("🌀 Touch Fling", "https://rawscripts.net/raw/Universal-Script-TOUCH-FLING-ULTRA-POWER-30194"))
-scroll:AddChild(crearBoton("🧠 Steal Brain", "https://raw.githubusercontent.com/Akbar123s/Script-Roblox-/refs/heads/main/nabaruBrainrot"))
 scroll:AddChild(crearBoton("📜 Comandos (Infinity Yield)", "https://raw.githubusercontent.com/EdgeIY/infiniteyield/master/source"))
 
 -- Botón Regresar
@@ -136,7 +131,7 @@ backBtn.MouseButton1Click:Connect(function()
 	panel.Visible = false
 end)
 
--- Mostrar panel con sonido
+-- Mostrar panel y sonido al presionar "C"
 openBtn.MouseButton1Click:Connect(function()
 	panel.Visible = not panel.Visible
 	if panel.Visible then miau:Play() end
@@ -159,8 +154,10 @@ searchBox:GetPropertyChangedSignal("Text"):Connect(function()
 	local term = searchBox.Text:lower()
 	for _, btn in pairs(scroll:GetChildren()) do
 		if btn:IsA("TextButton") then
-			local match = btn.Text:lower():find(term)
-			btn.Visible = match ~= nil
+			btn.Visible = btn.Text:lower():find(term) ~= nil
 		end
 	end
 end)
+
+-- Añadir Scroll a panel
+scroll.Parent = panel
