@@ -1,222 +1,187 @@
---[[
-🔰 PANEL PROFESIONAL by ChristianSebas
--- Discord: @christianxyx
--- TikTok: @christ_sebast_7d
--- GitHub: github.com/Christianxddd
-]]
-
+--// GUI GhostHub V2 - By Christian
 local player = game.Players.LocalPlayer
 local gui = Instance.new("ScreenGui", player:WaitForChild("PlayerGui"))
-gui.Name = "PanelProCS"
+gui.Name = "GhostHubV2"
 gui.ResetOnSpawn = false
 
--- Rainbow
-local function rainbow()
+-- Rainbow Function
+local function rainbowColor()
 	local t = tick()
 	return Color3.fromRGB(
-		math.sin(t) * 127 + 128,
-		math.sin(t + 2 * math.pi / 3) * 127 + 128,
-		math.sin(t + 4 * math.pi / 3) * 127 + 128
+		math.floor(math.sin(t)*127+128),
+		math.floor(math.sin(t+2)*127+128),
+		math.floor(math.sin(t+4)*127+128)
 	)
 end
 
--- Botón "C"
-local openBtn = Instance.new("TextButton", gui)
-openBtn.Size = UDim2.new(0, 50, 0, 50)
-openBtn.Position = UDim2.new(0, 20, 0, 20)
-openBtn.BackgroundColor3 = Color3.fromRGB(0, 0, 0)
-openBtn.Text = "C"
-openBtn.Font = Enum.Font.Arcade
-openBtn.TextScaled = true
-openBtn.TextColor3 = Color3.new(1, 1, 1)
-openBtn.Active = true
-openBtn.Draggable = true
-
--- Panel principal
+-- Main Frame
 local mainFrame = Instance.new("Frame", gui)
-mainFrame.Size = UDim2.new(0, 600, 0, 450)
-mainFrame.Position = UDim2.new(0.5, -300, 0.5, -225)
+mainFrame.Size = UDim2.new(0, 360, 0, 500)
+mainFrame.Position = UDim2.new(0.5, -180, 0.5, -250)
 mainFrame.BackgroundColor3 = Color3.fromRGB(20, 20, 20)
 mainFrame.BackgroundTransparency = 0.3
-mainFrame.Visible = false
 mainFrame.Active = true
 mainFrame.Draggable = true
+
+-- UI Rainbow
 local stroke = Instance.new("UIStroke", mainFrame)
 stroke.Thickness = 2
+stroke.Color = rainbowColor()
 
--- Título
+-- Title
 local title = Instance.new("TextLabel", mainFrame)
-title.Size = UDim2.new(1, 0, 0, 30)
-title.Text = "Im Christian Sebast"
-title.TextColor3 = Color3.new(1, 1, 1)
-title.BackgroundTransparency = 1
+title.Size = UDim2.new(1, 0, 0, 40)
+title.Text = "🌈 Im Christian Sebast"
 title.Font = Enum.Font.Arcade
 title.TextScaled = true
+title.TextColor3 = Color3.new(1,1,1)
+title.BackgroundTransparency = 1
 
--- Datos
-local datos = Instance.new("TextLabel", mainFrame)
-datos.Size = UDim2.new(1, 0, 0, 20)
-datos.Position = UDim2.new(0, 0, 0, 30)
-datos.Text = "Usuario: Christian_xyx | TikTok: @christ_sebast_7d"
-datos.TextColor3 = Color3.new(1, 1, 1)
-datos.BackgroundTransparency = 1
-datos.Font = Enum.Font.Gotham
-datos.TextScaled = true
+-- User Info
+local info = Instance.new("TextLabel", mainFrame)
+info.Size = UDim2.new(1, -20, 0, 25)
+info.Position = UDim2.new(0, 10, 0, 45)
+info.Text = "Usuario: Christian_xyx | TikTok: @christ_sebast_7d"
+info.Font = Enum.Font.GothamSemibold
+info.TextScaled = true
+info.TextColor3 = Color3.new(1,1,1)
+info.BackgroundTransparency = 1
 
--- Botón cerrar
-local closeBtn = Instance.new("TextButton", mainFrame)
-closeBtn.Size = UDim2.new(0, 30, 0, 30)
-closeBtn.Position = UDim2.new(1, -35, 0, 5)
-closeBtn.Text = "X"
-closeBtn.Font = Enum.Font.Arcade
-closeBtn.TextScaled = true
-closeBtn.TextColor3 = Color3.new(1, 0, 0)
-closeBtn.BackgroundColor3 = Color3.fromRGB(40, 40, 40)
-closeBtn.MouseButton1Click:Connect(function()
-	mainFrame.Visible = false
-end)
+-- Frame donde irán las carpetas
+local folderFrame = Instance.new("Frame", mainFrame)
+folderFrame.Size = UDim2.new(1, -20, 1, -100)
+folderFrame.Position = UDim2.new(0, 10, 0, 80)
+folderFrame.BackgroundTransparency = 1
 
--- Mostrar panel
-openBtn.MouseButton1Click:Connect(function()
-	mainFrame.Visible = not mainFrame.Visible
-end)
+-- Scroll (desplazamiento)
+local scroll = Instance.new("ScrollingFrame", folderFrame)
+scroll.Size = UDim2.new(1, 0, 1, 0)
+scroll.CanvasSize = UDim2.new(0, 0, 2, 0)
+scroll.ScrollBarThickness = 4
+scroll.BackgroundTransparency = 1
 
--- Lista de carpetas
-local carpetas = {
-	["Juegos Populares"] = {
-		{nombre = "Blox Fruits", url = "https://raw.githubusercontent.com/tlredz/Scripts/refs/heads/main/main.luau"},
-		{nombre = "Brainlot", url = "https://raw.githubusercontent.com/Akbar123s/Script-Roblox-/refs/heads/main/nabaruBrainrot"},
-		{nombre = "Jailbreak", url = "https://raw.githubusercontent.com/BlitzIsKing/UniversalFarm/main/Loader/Regular"},
-		{nombre = "Dead Rails", url = "https://raw.githubusercontent.com/gumanba/Scripts/refs/heads/main/DeadRails", raw = true},
-		-- + Agrega más scripts aquí
-	},
-
-	["Comandos"] = {
-		{nombre = "Fly V3", url = "https://raw.githubusercontent.com/XNEOFF/FlyGuiV3/main/FlyGuiV3.txt"},
-		{nombre = "Touch Fling", url = "https://rawscripts.net/raw/Universal-Script-TOUCH-FLING-ULTRA-POWER-30194"},
-		{nombre = "ESP Player", esToggle = true},
-		{nombre = "Infinity Yield", url = "https://raw.githubusercontent.com/EdgeIY/infiniteyield/master/source"},
-	},
-
-	["General"] = {
-		-- Más de 40 scripts variados y útiles
-		{nombre = "Anti Lag", url = "https://pastebin.com/raw/HXG1qEwx"},
-		{nombre = "Admin GUI", url = "https://raw.githubusercontent.com/FilteringEnabled/FE/main/FEAdminV2"},
-		-- Agrega más aquí...
-	},
-
-	["Utilidades"] = {
-		{nombre = "FPS Booster", url = "https://pastebin.com/raw/KwS3U8mE"},
-		{nombre = "Bypasser", url = "https://raw.githubusercontent.com/xxzzr/testing/main/bypass"},
-	},
-
-	["Troll y Experimentos"] = {
-		{nombre = "Morph GUI", url = "https://raw.githubusercontent.com/Squex01/MorphGUI/main/main.lua"},
-		{nombre = "Screamer GUI", url = "https://pastebin.com/raw/WpM3QwZK"},
-	}
-}
-
--- Función para crear pestañas
-local function crearPestana(nombreCarpeta, scripts)
-	local scroll = Instance.new("ScrollingFrame", mainFrame)
-	scroll.Size = UDim2.new(1, -20, 1, -80)
-	scroll.Position = UDim2.new(0, 10, 0, 60)
-	scroll.CanvasSize = UDim2.new(0, 0, 0, #scripts * 45)
-	scroll.ScrollBarThickness = 6
-	scroll.Visible = false
-	scroll.Name = nombreCarpeta
-	scroll.BackgroundTransparency = 1
-
-	for i, script in ipairs(scripts) do
-		local b = Instance.new("TextButton", scroll)
-		b.Size = UDim2.new(1, -10, 0, 40)
-		b.Position = UDim2.new(0, 5, 0, (i - 1) * 45)
-		b.BackgroundColor3 = Color3.fromRGB(30, 30, 30)
-		b.TextColor3 = Color3.new(1, 1, 1)
-		b.Font = Enum.Font.GothamBold
-		b.TextScaled = true
-		b.Text = script.nombre
-		b.MouseButton1Click:Connect(function()
-			if script.esToggle then
-				-- Toggle ESP
-				local state = not _G.espOn
-				_G.espOn = state
-				for _, v in pairs(game.Players:GetPlayers()) do
-					if v ~= player and v.Character and v.Character:FindFirstChild("Head") then
-						if state then
-							local gui = Instance.new("BillboardGui", v.Character.Head)
-							gui.Name = "NameTag"
-							gui.Size = UDim2.new(0, 200, 0, 50)
-							gui.AlwaysOnTop = true
-							gui.Adornee = v.Character.Head
-							local txt = Instance.new("TextLabel", gui)
-							txt.Size = UDim2.new(1, 0, 1, 0)
-							txt.BackgroundTransparency = 1
-							txt.Text = v.Name
-							txt.TextColor3 = Color3.new(1, 1, 1)
-							txt.TextScaled = true
-						else
-							local tag = v.Character.Head:FindFirstChild("NameTag")
-							if tag then tag:Destroy() end
-						end
-					end
-				end
-			elseif script.url then
-				local success, err = pcall(function()
-					loadstring(game:HttpGet(script.url, script.raw or false))()
-				end)
-				if not success then warn("Error al cargar:", err) end
-			end
-		end)
-	end
-
-	return scroll
-end
-
--- Barra de búsqueda
-local search = Instance.new("TextBox", mainFrame)
-search.Size = UDim2.new(0.5, 0, 0, 25)
-search.Position = UDim2.new(0.05, 0, 1, -30)
-search.PlaceholderText = "🔍 Buscar script..."
-search.Font = Enum.Font.Gotham
-search.TextScaled = true
-search.TextColor3 = Color3.new(1,1,1)
-search.BackgroundColor3 = Color3.fromRGB(30,30,30)
-
--- Carpeta activa
-local pestañas = {}
-local actual = nil
-
--- Botones de carpetas
-for i, carpeta in ipairs({"Juegos Populares", "Comandos", "General", "Utilidades", "Troll y Experimentos"}) do
-	local btn = Instance.new("TextButton", mainFrame)
-	btn.Size = UDim2.new(0.18, 0, 0, 30)
-	btn.Position = UDim2.new(0.02 + ((i - 1) * 0.19), 0, 0, 55)
-	btn.Text = carpeta
+-- Función para crear carpetas
+local function crearCarpeta(nombre, callback)
+	local btn = Instance.new("TextButton", scroll)
+	btn.Size = UDim2.new(1, -10, 0, 40)
+	btn.Position = UDim2.new(0, 5, 0, #scroll:GetChildren()*45)
+	btn.Text = "📁 " .. nombre
 	btn.Font = Enum.Font.Arcade
 	btn.TextScaled = true
-	btn.BackgroundColor3 = Color3.fromRGB(40, 40, 40)
-	btn.TextColor3 = Color3.new(1, 1, 1)
-
-	local p = crearPestana(carpeta, carpetas[carpeta])
-	pestañas[carpeta] = p
-
-	btn.MouseButton1Click:Connect(function()
-		for _, frame in pairs(pestañas) do
-			frame.Visible = false
-		end
-		p.Visible = true
-	end)
+	btn.TextColor3 = Color3.new(1,1,1)
+	btn.BackgroundColor3 = Color3.fromRGB(30,30,30)
+	btn.MouseButton1Click:Connect(callback)
 end
 
--- Rainbow dinámico
+-- SubPanel para scripts por carpeta
+local subPanel = Instance.new("Frame", gui)
+subPanel.Size = UDim2.new(0, 360, 0, 500)
+subPanel.Position = UDim2.new(0.5, -180, 0.5, -250)
+subPanel.BackgroundColor3 = Color3.fromRGB(15, 15, 15)
+subPanel.BackgroundTransparency = 0.3
+subPanel.Visible = false
+subPanel.Active = true
+subPanel.Draggable = true
+
+local subScroll = Instance.new("ScrollingFrame", subPanel)
+subScroll.Size = UDim2.new(1, -20, 1, -60)
+subScroll.Position = UDim2.new(0, 10, 0, 40)
+subScroll.CanvasSize = UDim2.new(0, 0, 10, 0)
+subScroll.ScrollBarThickness = 4
+subScroll.BackgroundTransparency = 1
+
+local subTitle = Instance.new("TextLabel", subPanel)
+subTitle.Size = UDim2.new(1, 0, 0, 40)
+subTitle.Text = ""
+subTitle.Font = Enum.Font.Arcade
+subTitle.TextScaled = true
+subTitle.TextColor3 = Color3.new(1,1,1)
+subTitle.BackgroundTransparency = 1
+
+local regresar = Instance.new("TextButton", subPanel)
+regresar.Size = UDim2.new(1, -20, 0, 40)
+regresar.Position = UDim2.new(0, 10, 1, -45)
+regresar.Text = "🔙 Regresar"
+regresar.Font = Enum.Font.Arcade
+regresar.TextScaled = true
+regresar.TextColor3 = Color3.new(1,1,1)
+regresar.BackgroundColor3 = Color3.fromRGB(50,50,50)
+regresar.MouseButton1Click:Connect(function()
+	subPanel.Visible = false
+	mainFrame.Visible = true
+end)
+
+-- Función para agregar scripts en la subpestaña
+local function mostrarScripts(nombre, scripts)
+	subTitle.Text = nombre
+	subScroll:ClearAllChildren()
+	for i, scriptData in ipairs(scripts) do
+		local btn = Instance.new("TextButton", subScroll)
+		btn.Size = UDim2.new(1, -10, 0, 35)
+		btn.Position = UDim2.new(0, 5, 0, (i-1)*40)
+		btn.Text = "▶️ " .. scriptData.name
+		btn.Font = Enum.Font.GothamBold
+		btn.TextScaled = true
+		btn.TextColor3 = Color3.new(1,1,1)
+		btn.BackgroundColor3 = Color3.fromRGB(25,25,25)
+		btn.MouseButton1Click:Connect(function()
+			loadstring(game:HttpGet(scriptData.url))()
+		end)
+	end
+	mainFrame.Visible = false
+	subPanel.Visible = true
+end
+
+-- Scripts organizados
+local juegosPopulares = {
+	{name="Brainlot", url="https://raw.githubusercontent.com/Akbar123s/Script-Roblox-/refs/heads/main/nabaruBrainrot"},
+	{name="Jailbreak", url="https://raw.githubusercontent.com/BlitzIsKing/UniversalFarm/main/Loader/Regular"},
+	{name="Dead Rails", url="https://raw.githubusercontent.com/gumanba/Scripts/refs/heads/main/DeadRails"},
+	{name="Blox Fruits", url="https://raw.githubusercontent.com/tlredz/Scripts/refs/heads/main/main.luau"},
+	-- Agrega más si deseas
+}
+
+local comandos = {
+	{name="Fly V3", url="https://raw.githubusercontent.com/XNEOFF/FlyGuiV3/main/FlyGuiV3.txt"},
+	{name="Touch Fling", url="https://rawscripts.net/raw/Universal-Script-TOUCH-FLING-ULTRA-POWER-30194"},
+	{name="ESP Player", url="https://raw.githubusercontent.com/Bidachi/ESP/main/ESP.lua"},
+	{name="Infinity Yield", url="https://raw.githubusercontent.com/EdgeIY/infiniteyield/master/source"},
+}
+
+local general = {
+	{name="Chat Troll", url="https://raw.githubusercontent.com/UltraStuff/scripts2/main/ChatTroll.lua"},
+	{name="Zombie Virus", url="https://raw.githubusercontent.com/xennyy/nysource/main/ZombieInfection"},
+	{name="Animation Changer", url="https://raw.githubusercontent.com/Syntaxx64/RobloxScripts/main/AnimationChanger.lua"},
+	{name="RTX Shader", url="https://raw.githubusercontent.com/mgamingpro1/scripts/main/RTX.lua"},
+	{name="Fling GUI", url="https://raw.githubusercontent.com/lerkermer/lua-projects/master/UniversalFlingGui.lua"},
+	-- Añade 35+ más si quieres
+}
+
+-- Crear carpetas
+crearCarpeta("Juegos Populares", function()
+	mostrarScripts("Juegos Populares", juegosPopulares)
+end)
+
+crearCarpeta("Comandos", function()
+	mostrarScripts("Comandos", comandos)
+end)
+
+crearCarpeta("General", function()
+	mostrarScripts("General", general)
+end)
+
+-- Efecto Rainbow dinámico
 game:GetService("RunService").RenderStepped:Connect(function()
-	local c = rainbow()
-	title.TextColor3 = c
-	stroke.Color = c
-	for _, obj in ipairs(mainFrame:GetDescendants()) do
-		if obj:IsA("TextButton") or obj:IsA("TextLabel") then
-			obj.TextColor3 = c
+	local col = rainbowColor()
+	stroke.Color = col
+	for _, v in pairs(mainFrame:GetDescendants()) do
+		if v:IsA("TextLabel") or v:IsA("TextButton") then
+			v.TextColor3 = col
+		end
+	end
+	for _, v in pairs(subPanel:GetDescendants()) do
+		if v:IsA("TextLabel") or v:IsA("TextButton") then
+			v.TextColor3 = col
 		end
 	end
 end)
