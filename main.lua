@@ -2,18 +2,13 @@ local player = game.Players.LocalPlayer
 
 -- GUI principal
 local gui = Instance.new("ScreenGui", player:WaitForChild("PlayerGui"))
-gui.Name = "ChristianSebas_UI"
+gui.Name = "CS_UI"
 gui.ResetOnSpawn = false
 
--- Sonido miau al abrir
-local miau = Instance.new("Sound", gui)
-miau.SoundId = "rbxassetid://9120470040"
-miau.Volume = 1
-
--- Botón flotante "C"
+-- Botón "C" para abrir el panel
 local openBtn = Instance.new("TextButton", gui)
-openBtn.Size = UDim2.new(0, 50, 0, 50)
-openBtn.Position = UDim2.new(0, 20, 0.5, -25)
+openBtn.Size = UDim2.new(0, 60, 0, 60)
+openBtn.Position = UDim2.new(0, 20, 0.5, -30)
 openBtn.Text = "C"
 openBtn.TextScaled = true
 openBtn.Font = Enum.Font.GothamBlack
@@ -25,87 +20,97 @@ Instance.new("UICorner", openBtn)
 
 -- Panel principal
 local panel = Instance.new("Frame", gui)
-panel.Size = UDim2.new(0, 400, 0, 500)
-panel.Position = UDim2.new(0.5, -200, 0.5, -250)
+panel.Size = UDim2.new(0, 420, 0, 540)
+panel.Position = UDim2.new(0.5, -210, 0.5, -270)
 panel.BackgroundColor3 = Color3.fromRGB(25, 25, 25)
 panel.Visible = false
 panel.Active = true
 panel.Draggable = true
 Instance.new("UICorner", panel)
 
--- UIStroke rainbow
-local stroke = Instance.new("UIStroke", panel)
-stroke.Thickness = 2
-
 -- Título
 local title = Instance.new("TextLabel", panel)
 title.Size = UDim2.new(1, 0, 0, 40)
+title.Position = UDim2.new(0, 0, 0, 0)
 title.Text = "Im Christian Sebast"
 title.TextScaled = true
-title.Font = Enum.Font.GothamBlack
+title.Font = Enum.Font.GothamBold
 title.TextColor3 = Color3.new(1, 1, 1)
 title.BackgroundTransparency = 1
 
--- Scroll con scripts
-local scroll = Instance.new("ScrollingFrame", panel)
-scroll.Size = UDim2.new(1, 0, 1, -40)
-scroll.Position = UDim2.new(0, 0, 0, 40)
-scroll.CanvasSize = UDim2.new(0, 0, 3, 0)
-scroll.ScrollBarThickness = 6
-scroll.BackgroundTransparency = 1
+-- Datos
+local user = Instance.new("TextLabel", panel)
+user.Size = UDim2.new(1, -20, 0, 30)
+user.Position = UDim2.new(0, 10, 0, 50)
+user.Text = "Usuario Roblox: Christian_xyx"
+user.TextScaled = true
+user.Font = Enum.Font.Gotham
+user.TextColor3 = Color3.new(1, 1, 1)
+user.BackgroundTransparency = 1
 
-local layout = Instance.new("UIListLayout", scroll)
-layout.Padding = UDim.new(0, 6)
+local tiktok = Instance.new("TextLabel", panel)
+tiktok.Size = UDim2.new(1, -20, 0, 30)
+tiktok.Position = UDim2.new(0, 10, 0, 85)
+tiktok.Text = "TikTok: @christ_sebast_7d"
+tiktok.TextScaled = true
+tiktok.Font = Enum.Font.Gotham
+tiktok.TextColor3 = Color3.fromRGB(255, 0, 255)
+tiktok.BackgroundTransparency = 1
 
--- Función rainbow
-local function rainbow()
-	local t = tick()
-	return Color3.fromHSV((t % 5) / 5, 1, 1)
-end
+-- Botón "Scripts"
+local scriptsBtn = Instance.new("TextButton", panel)
+scriptsBtn.Size = UDim2.new(0.9, 0, 0, 40)
+scriptsBtn.Position = UDim2.new(0.05, 0, 0, 130)
+scriptsBtn.Text = "📂 Scripts"
+scriptsBtn.TextScaled = true
+scriptsBtn.Font = Enum.Font.GothamBold
+scriptsBtn.BackgroundColor3 = Color3.fromRGB(40, 40, 40)
+scriptsBtn.TextColor3 = Color3.new(1, 1, 1)
+Instance.new("UICorner", scriptsBtn)
 
--- Botón para scripts
-local function crearBoton(nombre, url)
-	local btn = Instance.new("TextButton", scroll)
-	btn.Size = UDim2.new(0.9, 0, 0, 35)
-	btn.Position = UDim2.new(0.05, 0, 0, 0)
-	btn.Text = nombre
-	btn.TextScaled = true
-	btn.Font = Enum.Font.Gotham
-	btn.TextColor3 = Color3.new(1, 1, 1)
-	btn.BackgroundColor3 = Color3.fromRGB(40, 40, 40)
-	btn.MouseButton1Click:Connect(function()
-		pcall(function()
-			loadstring(game:HttpGet(url))()
-		end)
-	end)
-	return btn
-end
+-- Sub-pestaña de Scripts
+local scriptsPage = Instance.new("Frame", gui)
+scriptsPage.Size = UDim2.new(0, 420, 0, 540)
+scriptsPage.Position = panel.Position
+scriptsPage.BackgroundColor3 = Color3.fromRGB(30, 30, 30)
+scriptsPage.Visible = false
+Instance.new("UICorner", scriptsPage)
 
--- Scripts populares
-crearBoton("🧠 Brainlot", "https://raw.githubusercontent.com/Akbar123s/Script-Roblox-/refs/heads/main/nabaruBrainrot")
-crearBoton("🚓 Jailbreak", "https://raw.githubusercontent.com/BlitzIsKing/UniversalFarm/main/Loader/Regular")
-crearBoton("🚂 Dead Rails", "https://raw.githubusercontent.com/gumanba/Scripts/refs/heads/main/DeadRails")
-crearBoton("🍉 Blox Fruits", "https://raw.githubusercontent.com/tlredz/Scripts/refs/heads/main/main.luau")
-crearBoton("🚀 Fly V3", "https://raw.githubusercontent.com/XNEOFF/FlyGuiV3/main/FlyGuiV3.txt")
-crearBoton("🌀 Touch Fling", "https://rawscripts.net/raw/Universal-Script-TOUCH-FLING-ULTRA-POWER-30194")
-crearBoton("📜 Infinity Yield", "https://raw.githubusercontent.com/EdgeIY/infiniteyield/master/source")
+-- Título scripts
+local sTitle = Instance.new("TextLabel", scriptsPage)
+sTitle.Size = UDim2.new(1, 0, 0, 40)
+sTitle.Text = "📜 Scripts Disponibles"
+sTitle.TextScaled = true
+sTitle.Font = Enum.Font.GothamBold
+sTitle.TextColor3 = Color3.new(1, 1, 1)
+sTitle.BackgroundTransparency = 1
 
--- Abrir/Cerrar panel
-openBtn.MouseButton1Click:Connect(function()
-	panel.Visible = not panel.Visible
-	if panel.Visible then
-		miau:Play()
-	end
+-- Botón volver
+local volver = Instance.new("TextButton", scriptsPage)
+volver.Size = UDim2.new(0.9, 0, 0, 40)
+volver.Position = UDim2.new(0.05, 0, 1, -50)
+volver.Text = "🔙 Regresar"
+volver.TextScaled = true
+volver.Font = Enum.Font.Gotham
+volver.BackgroundColor3 = Color3.fromRGB(50, 50, 50)
+volver.TextColor3 = Color3.new(1, 1, 1)
+Instance.new("UICorner", volver)
+
+-- Abrir scripts
+scriptsBtn.MouseButton1Click:Connect(function()
+	panel.Visible = false
+	scriptsPage.Visible = true
 end)
 
--- Rainbow en tiempo real
-game:GetService("RunService").RenderStepped:Connect(function()
-	local color = rainbow()
-	stroke.Color = color
-	title.TextColor3 = color
-	for _, btn in pairs(scroll:GetChildren()) do
-		if btn:IsA("TextButton") then
-			btn.TextColor3 = color
-		end
-	end
+-- Regresar al panel principal
+volver.MouseButton1Click:Connect(function()
+	scriptsPage.Visible = false
+	panel.Visible = true
+end)
+
+-- Mostrar/Ocultar panel
+openBtn.MouseButton1Click:Connect(function()
+	local anyVisible = panel.Visible or scriptsPage.Visible
+	panel.Visible = not anyVisible
+	scriptsPage.Visible = false
 end)
