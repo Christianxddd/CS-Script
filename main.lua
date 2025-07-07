@@ -1,134 +1,189 @@
+--[[
+    Panel Gamer Profesional V2 by Christian
+    Icono "C", panel vertical, efecto rainbow, carpetas organizadas
+--]]
+
 local player = game.Players.LocalPlayer
 local gui = Instance.new("ScreenGui", player:WaitForChild("PlayerGui"))
-gui.Name = "ChristianHubV2"
+gui.Name = "ChristianProPanel"
 gui.ResetOnSpawn = false
 
--- Botón flotante "C"
-local openButton = Instance.new("TextButton", gui)
-openButton.Size = UDim2.new(0, 50, 0, 50)
-openButton.Position = UDim2.new(0, 20, 0, 20)
-openButton.BackgroundColor3 = Color3.fromRGB(30, 30, 30)
-openButton.Text = "C"
-openButton.TextColor3 = Color3.new(1, 1, 1)
-openButton.Font = Enum.Font.GothamBold
-openButton.TextScaled = true
-openButton.Draggable = true
+-- Rainbow dinámico
+local function rainbowColor()
+    local t = tick()
+    return Color3.fromRGB(
+        math.sin(t) * 127 + 128,
+        math.sin(t + 2) * 127 + 128,
+        math.sin(t + 4) * 127 + 128
+    )
+end
 
--- Panel Principal
+-- Botón flotante "C"
+local iconBtn = Instance.new("TextButton", gui)
+iconBtn.Size = UDim2.new(0, 50, 0, 50)
+iconBtn.Position = UDim2.new(0, 15, 0, 15)
+iconBtn.BackgroundColor3 = Color3.fromRGB(0, 0, 0)
+iconBtn.Text = "C"
+iconBtn.TextScaled = true
+iconBtn.Font = Enum.Font.Arcade
+iconBtn.TextColor3 = Color3.new(1, 1, 1)
+iconBtn.Draggable = true
+
+-- Panel principal
 local main = Instance.new("Frame", gui)
-main.Size = UDim2.new(0, 350, 0, 450)
-main.Position = UDim2.new(0.5, -175, 0.5, -225)
-main.BackgroundColor3 = Color3.fromRGB(20, 20, 20)
-main.BackgroundTransparency = 0.35
+main.Size = UDim2.new(0, 300, 0, 400)
+main.Position = UDim2.new(0.5, -150, 0.5, -200)
+main.BackgroundTransparency = 0.4
+main.BackgroundColor3 = Color3.fromRGB(25, 25, 25)
 main.Visible = false
 main.Active = true
 main.Draggable = true
 
+local uiCorner = Instance.new("UICorner", main)
+local uiStroke = Instance.new("UIStroke", main)
+uiStroke.Thickness = 2
+
 -- Título
 local title = Instance.new("TextLabel", main)
-title.Size = UDim2.new(1, 0, 0, 30)
-title.Text = "By Christian"
-title.TextColor3 = Color3.new(1, 1, 1)
-title.Font = Enum.Font.GothamBold
+title.Size = UDim2.new(1, 0, 0, 40)
+title.Text = "Im Christian Sebast"
 title.TextScaled = true
+title.Font = Enum.Font.Arcade
+title.TextColor3 = Color3.new(1, 1, 1)
 title.BackgroundTransparency = 1
 
--- Usuario y TikTok
-local userInfo = Instance.new("TextLabel", main)
-userInfo.Position = UDim2.new(0, 0, 0, 30)
-userInfo.Size = UDim2.new(1, 0, 0, 25)
-userInfo.Text = "Usuario: Christian_xyx | TikTok: @christ_sebast_7d"
-userInfo.TextColor3 = Color3.new(1, 1, 1)
-userInfo.Font = Enum.Font.Gotham
-userInfo.TextScaled = true
-userInfo.BackgroundTransparency = 1
+-- Datos
+local datos = Instance.new("TextLabel", main)
+datos.Size = UDim2.new(1, 0, 0, 20)
+datos.Position = UDim2.new(0, 0, 0, 40)
+datos.Text = "Usuario: Christian_xyx | TikTok: @christ_sebast_7d"
+datos.TextScaled = true
+datos.Font = Enum.Font.Arcade
+datos.TextColor3 = Color3.new(1, 1, 1)
+datos.BackgroundTransparency = 1
 
--- Scroll principal para carpetas
-local scroll = Instance.new("ScrollingFrame", main)
-scroll.Position = UDim2.new(0, 0, 0, 60)
-scroll.Size = UDim2.new(1, 0, 1, -60)
-scroll.CanvasSize = UDim2.new(0, 0, 0, 800)
-scroll.ScrollBarThickness = 6
-scroll.BackgroundTransparency = 1
-scroll.Name = "ScrollContainer"
+-- Contenedor de botones
+local btnFrame = Instance.new("Frame", main)
+btnFrame.Size = UDim2.new(1, -20, 1, -80)
+btnFrame.Position = UDim2.new(0, 10, 0, 70)
+btnFrame.BackgroundTransparency = 1
 
-local layoutScroll = Instance.new("UIListLayout", scroll)
-layoutScroll.Padding = UDim.new(0, 10)
-layoutScroll.SortOrder = Enum.SortOrder.LayoutOrder
+local uiList = Instance.new("UIListLayout", btnFrame)
+uiList.Padding = UDim.new(0, 10)
+uiList.FillDirection = Enum.FillDirection.Vertical
+uiList.HorizontalAlignment = Enum.HorizontalAlignment.Center
+uiList.SortOrder = Enum.SortOrder.LayoutOrder
 
--- Función para crear una carpeta
-local function crearCarpeta(nombre, scripts)
-	local folderFrame = Instance.new("Frame", scroll)
-	folderFrame.Size = UDim2.new(1, 0, 0, 40)
-	folderFrame.BackgroundColor3 = Color3.fromRGB(30, 30, 30)
-	folderFrame.BorderSizePixel = 0
+-- Función para crear botones de carpetas
+local function crearBoton(nombre, scripts)
+    local btn = Instance.new("TextButton", btnFrame)
+    btn.Size = UDim2.new(1, 0, 0, 40)
+    btn.Text = nombre
+    btn.TextScaled = true
+    btn.Font = Enum.Font.Arcade
+    btn.BackgroundColor3 = Color3.fromRGB(30, 30, 30)
+    btn.TextColor3 = Color3.new(1, 1, 1)
 
-	local toggle = Instance.new("TextButton", folderFrame)
-	toggle.Size = UDim2.new(1, 0, 1, 0)
-	toggle.Text = "📁 "..nombre
-	toggle.TextColor3 = Color3.new(1, 1, 1)
-	toggle.Font = Enum.Font.GothamBold
-	toggle.TextScaled = true
-	toggle.BackgroundTransparency = 1
+    -- Subpestaña
+    btn.MouseButton1Click:Connect(function()
+        main.Visible = false
+        local sub = Instance.new("Frame", gui)
+        sub.Size = UDim2.new(0, 300, 0, 400)
+        sub.Position = UDim2.new(0.5, -150, 0.5, -200)
+        sub.BackgroundColor3 = Color3.fromRGB(20, 20, 20)
+        sub.BackgroundTransparency = 0.4
+        sub.Active = true
+        sub.Draggable = true
 
-	local content = Instance.new("Frame", scroll)
-	content.Size = UDim2.new(1, 0, 0, (#scripts * 35) + 40)
-	content.BackgroundTransparency = 1
-	content.Visible = false
+        Instance.new("UICorner", sub)
+        local scroll = Instance.new("ScrollingFrame", sub)
+        scroll.Size = UDim2.new(1, -10, 1, -50)
+        scroll.Position = UDim2.new(0, 5, 0, 5)
+        scroll.CanvasSize = UDim2.new(0, 0, 0, #scripts * 50)
+        scroll.ScrollBarThickness = 5
+        scroll.BackgroundTransparency = 1
 
-	local layout = Instance.new("UIListLayout", content)
-	layout.Padding = UDim.new(0, 5)
-	layout.SortOrder = Enum.SortOrder.LayoutOrder
+        local list = Instance.new("UIListLayout", scroll)
+        list.SortOrder = Enum.SortOrder.LayoutOrder
+        list.Padding = UDim.new(0, 5)
 
-	for _, s in ipairs(scripts) do
-		local b = Instance.new("TextButton", content)
-		b.Size = UDim2.new(0.95, 0, 0, 30)
-		b.Text = "▶️ "..s.nombre
-		b.TextColor3 = Color3.new(1,1,1)
-		b.Font = Enum.Font.Gotham
-		b.TextScaled = true
-		b.BackgroundColor3 = Color3.fromRGB(40, 40, 40)
-		b.MouseButton1Click:Connect(function()
-			loadstring(game:HttpGet(s.link))()
-		end)
-	end
+        for _, scriptData in ipairs(scripts) do
+            local sBtn = Instance.new("TextButton", scroll)
+            sBtn.Size = UDim2.new(1, 0, 0, 40)
+            sBtn.Text = scriptData.name
+            sBtn.TextScaled = true
+            sBtn.Font = Enum.Font.Arcade
+            sBtn.BackgroundColor3 = Color3.fromRGB(35, 35, 35)
+            sBtn.TextColor3 = Color3.new(1, 1, 1)
+            sBtn.MouseButton1Click:Connect(function()
+                loadstring(game:HttpGet(scriptData.url))()
+            end)
+        end
 
-	local regresar = Instance.new("TextButton", content)
-	regresar.Size = UDim2.new(0.95, 0, 0, 30)
-	regresar.Text = "🔙 Regresar"
-	regresar.TextColor3 = Color3.fromRGB(255, 80, 80)
-	regresar.Font = Enum.Font.GothamBold
-	regresar.TextScaled = true
-	regresar.BackgroundColor3 = Color3.fromRGB(50, 50, 50)
-	regresar.MouseButton1Click:Connect(function()
-		content.Visible = false
-	end)
-
-	toggle.MouseButton1Click:Connect(function()
-		content.Visible = not content.Visible
-	end)
+        local back = Instance.new("TextButton", sub)
+        back.Size = UDim2.new(1, 0, 0, 40)
+        back.Position = UDim2.new(0, 0, 1, -40)
+        back.Text = "← Regresar"
+        back.TextScaled = true
+        back.Font = Enum.Font.Arcade
+        back.BackgroundColor3 = Color3.fromRGB(50, 20, 20)
+        back.TextColor3 = Color3.new(1, 1, 1)
+        back.MouseButton1Click:Connect(function()
+            sub:Destroy()
+            main.Visible = true
+        end)
+    end)
 end
 
--- Listas de scripts
-local juegosPopulares = {
-	{nombre="Brainlot", link="https://raw.githubusercontent.com/Akbar123s/Script-Roblox-/refs/heads/main/nabaruBrainrot"},
-	{nombre="Jailbreak", link="https://raw.githubusercontent.com/BlitzIsKing/UniversalFarm/main/Loader/Regular"},
-	{nombre="Dead Rails", link="https://raw.githubusercontent.com/gumanba/Scripts/refs/heads/main/DeadRails"},
-	{nombre="Blox Fruits", link="https://raw.githubusercontent.com/tlredz/Scripts/refs/heads/main/main.luau"},
-}
-
-local comandos = {
-	{nombre="Fly V3", link="https://raw.githubusercontent.com/XNEOFF/FlyGuiV3/main/FlyGuiV3.txt"},
-	{nombre="Touch Fling", link="https://rawscripts.net/raw/Universal-Script-TOUCH-FLING-ULTRA-POWER-30194"},
-	{nombre="ESP Player", link="https://pastebin.com/raw/Zz0Uz2Ar"},
-	{nombre="Infinity Yield", link="https://raw.githubusercontent.com/EdgeIY/infiniteyield/master/source"},
+-- Lista de scripts por carpetas
+local scriptsData = {
+    ["Juegos Populares"] = {
+        {name = "Brainlot", url = "https://raw.githubusercontent.com/Akbar123s/Script-Roblox-/refs/heads/main/nabaruBrainrot"},
+        {name = "Jailbreak", url = "https://raw.githubusercontent.com/BlitzIsKing/UniversalFarm/main/Loader/Regular"},
+        {name = "Dead Rails", url = "https://raw.githubusercontent.com/gumanba/Scripts/refs/heads/main/DeadRails"},
+        {name = "Blox Fruits", url = "https://raw.githubusercontent.com/tlredz/Scripts/refs/heads/main/main.luau"},
+    },
+    ["Comandos"] = {
+        {name = "Fly V3", url = "https://raw.githubusercontent.com/XNEOFF/FlyGuiV3/main/FlyGuiV3.txt"},
+        {name = "Touch Fling", url = "https://rawscripts.net/raw/Universal-Script-TOUCH-FLING-ULTRA-POWER-30194"},
+        {name = "ESP Player", url = "https://pastebin.com/raw/5z5b2vd2"},
+        {name = "Infinity Yield", url = "https://raw.githubusercontent.com/EdgeIY/infiniteyield/master/source"},
+    },
+    ["General"] = {
+        {name = "Backdoor Finder", url = "https://raw.githubusercontent.com/iK4oS/backdoor.exe/main/source.lua"},
+        {name = "Dark Dex", url = "https://raw.githubusercontent.com/peyton2465/Dex/master/out.lua"},
+        {name = "Simple ESP", url = "https://pastebin.com/raw/BzZcMZzB"},
+        {name = "Fe Hat Spin", url = "https://pastebin.com/raw/1hYkLqkQ"},
+        -- puedes seguir añadiendo más hasta 40 aquí...
+    },
+    ["Exploits"] = {
+        {name = "Remote Spy", url = "https://raw.githubusercontent.com/exxtremestuffs/SimpleSpySource/master/SimpleSpy.lua"},
+        {name = "Server Crasher", url = "https://pastebin.com/raw/M4R2jDUq"},
+    },
+    ["Diversión"] = {
+        {name = "Ragdoll Script", url = "https://pastebin.com/raw/BJYTWv3M"},
+        {name = "Gravity Gun", url = "https://pastebin.com/raw/MuVwChm1"},
+    }
 }
 
 -- Crear carpetas
-crearCarpeta("🎮 Juegos Populares", juegosPopulares)
-crearCarpeta("🧰 Comandos", comandos)
+for carpeta, lista in pairs(scriptsData) do
+    crearBoton(carpeta, lista)
+end
 
--- Botón para abrir el panel
-openButton.MouseButton1Click:Connect(function()
-	main.Visible = not main.Visible
+-- Mostrar panel al presionar la "C"
+iconBtn.MouseButton1Click:Connect(function()
+    main.Visible = not main.Visible
+end)
+
+-- Rainbow dinámico
+game:GetService("RunService").RenderStepped:Connect(function()
+    local color = rainbowColor()
+    uiStroke.Color = color
+    title.TextColor3 = color
+    for _, b in pairs(btnFrame:GetChildren()) do
+        if b:IsA("TextButton") then
+            b.TextColor3 = color
+        end
+    end
 end)
