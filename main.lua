@@ -1,139 +1,116 @@
 local player = game.Players.LocalPlayer
+
+-- GUI principal
 local gui = Instance.new("ScreenGui", player:WaitForChild("PlayerGui"))
-gui.Name = "Christian_UI"
+gui.Name = "CS_UI"
 gui.ResetOnSpawn = false
 
--- BOTÓN "C"
-local openBtn = Instance.new("TextButton")
-openBtn.Size = UDim2.new(0, 50, 0, 50)
-openBtn.Position = UDim2.new(0, 20, 0, 20)
-openBtn.BackgroundColor3 = Color3.fromRGB(30, 30, 30)
+-- Botón "C" para abrir el panel
+local openBtn = Instance.new("TextButton", gui)
+openBtn.Size = UDim2.new(0, 60, 0, 60)
+openBtn.Position = UDim2.new(0, 20, 0.5, -30)
 openBtn.Text = "C"
-openBtn.Font = Enum.Font.GothamBlack
 openBtn.TextScaled = true
-openBtn.TextColor3 = Color3.new(1,1,1)
+openBtn.Font = Enum.Font.GothamBlack
+openBtn.BackgroundColor3 = Color3.fromRGB(20, 20, 20)
+openBtn.TextColor3 = Color3.new(1, 1, 1)
 openBtn.Draggable = true
-openBtn.Parent = gui
+openBtn.Active = true
+Instance.new("UICorner", openBtn)
 
--- PANEL PRINCIPAL
-local mainFrame = Instance.new("Frame", gui)
-mainFrame.Size = UDim2.new(0, 400, 0, 300)
-mainFrame.Position = UDim2.new(0.5, -200, 0.5, -150)
-mainFrame.BackgroundColor3 = Color3.fromRGB(20, 20, 20)
-mainFrame.Visible = false
-mainFrame.Active = true
-mainFrame.Draggable = true
+-- Panel principal
+local panel = Instance.new("Frame", gui)
+panel.Size = UDim2.new(0, 420, 0, 540)
+panel.Position = UDim2.new(0.5, -210, 0.5, -270)
+panel.BackgroundColor3 = Color3.fromRGB(25, 25, 25)
+panel.Visible = false
+panel.Active = true
+panel.Draggable = true
+Instance.new("UICorner", panel)
 
--- TÍTULO
-local title = Instance.new("TextLabel", mainFrame)
+-- Título
+local title = Instance.new("TextLabel", panel)
 title.Size = UDim2.new(1, 0, 0, 40)
 title.Position = UDim2.new(0, 0, 0, 0)
-title.Text = "By Christian"
+title.Text = "Im Christian Sebast"
+title.TextScaled = true
 title.Font = Enum.Font.GothamBold
 title.TextColor3 = Color3.new(1, 1, 1)
-title.TextScaled = true
 title.BackgroundTransparency = 1
 
--- DATOS PERSONALES
-local info = Instance.new("TextLabel", mainFrame)
-info.Size = UDim2.new(1, -20, 0, 30)
-info.Position = UDim2.new(0, 10, 0, 45)
-info.Text = "Usuario: Christian_xyx | TikTok: @christ_sebast_7d"
-info.Font = Enum.Font.Gotham
-info.TextColor3 = Color3.new(1,1,1)
-info.TextScaled = true
-info.BackgroundTransparency = 1
+-- Datos
+local user = Instance.new("TextLabel", panel)
+user.Size = UDim2.new(1, -20, 0, 30)
+user.Position = UDim2.new(0, 10, 0, 50)
+user.Text = "Usuario Roblox: Christian_xyx"
+user.TextScaled = true
+user.Font = Enum.Font.Gotham
+user.TextColor3 = Color3.new(1, 1, 1)
+user.BackgroundTransparency = 1
 
--- BOTÓN "Scripts"
-local scriptsBtn = Instance.new("TextButton", mainFrame)
-scriptsBtn.Size = UDim2.new(0.5, -15, 0, 40)
-scriptsBtn.Position = UDim2.new(0, 10, 0, 85)
+local tiktok = Instance.new("TextLabel", panel)
+tiktok.Size = UDim2.new(1, -20, 0, 30)
+tiktok.Position = UDim2.new(0, 10, 0, 85)
+tiktok.Text = "TikTok: @christ_sebast_7d"
+tiktok.TextScaled = true
+tiktok.Font = Enum.Font.Gotham
+tiktok.TextColor3 = Color3.fromRGB(255, 0, 255)
+tiktok.BackgroundTransparency = 1
+
+-- Botón "Scripts"
+local scriptsBtn = Instance.new("TextButton", panel)
+scriptsBtn.Size = UDim2.new(0.9, 0, 0, 40)
+scriptsBtn.Position = UDim2.new(0.05, 0, 0, 130)
 scriptsBtn.Text = "📂 Scripts"
-scriptsBtn.Font = Enum.Font.GothamBlack
 scriptsBtn.TextScaled = true
+scriptsBtn.Font = Enum.Font.GothamBold
 scriptsBtn.BackgroundColor3 = Color3.fromRGB(40, 40, 40)
-scriptsBtn.TextColor3 = Color3.new(1,1,1)
+scriptsBtn.TextColor3 = Color3.new(1, 1, 1)
+Instance.new("UICorner", scriptsBtn)
 
--- PANEL DE SCRIPTS
-local scriptsFrame = Instance.new("Frame", gui)
-scriptsFrame.Size = UDim2.new(0, 400, 0, 300)
-scriptsFrame.Position = mainFrame.Position
-scriptsFrame.BackgroundColor3 = Color3.fromRGB(25, 25, 25)
-scriptsFrame.Visible = false
-scriptsFrame.Active = true
-scriptsFrame.Draggable = true
+-- Sub-pestaña de Scripts
+local scriptsPage = Instance.new("Frame", gui)
+scriptsPage.Size = UDim2.new(0, 420, 0, 540)
+scriptsPage.Position = panel.Position
+scriptsPage.BackgroundColor3 = Color3.fromRGB(30, 30, 30)
+scriptsPage.Visible = false
+Instance.new("UICorner", scriptsPage)
 
--- TÍTULO Scripts
-local scriptsTitle = Instance.new("TextLabel", scriptsFrame)
-scriptsTitle.Size = UDim2.new(1, 0, 0, 40)
-scriptsTitle.Position = UDim2.new(0, 0, 0, 0)
-scriptsTitle.Text = "🎮 Juegos Populares"
-scriptsTitle.Font = Enum.Font.GothamBold
-scriptsTitle.TextColor3 = Color3.new(1, 1, 1)
-scriptsTitle.TextScaled = true
-scriptsTitle.BackgroundTransparency = 1
+-- Título scripts
+local sTitle = Instance.new("TextLabel", scriptsPage)
+sTitle.Size = UDim2.new(1, 0, 0, 40)
+sTitle.Text = "📜 Scripts Disponibles"
+sTitle.TextScaled = true
+sTitle.Font = Enum.Font.GothamBold
+sTitle.TextColor3 = Color3.new(1, 1, 1)
+sTitle.BackgroundTransparency = 1
 
--- SCROLL CONTAINER
-local scroll = Instance.new("ScrollingFrame", scriptsFrame)
-scroll.Size = UDim2.new(1, -20, 1, -80)
-scroll.Position = UDim2.new(0, 10, 0, 50)
-scroll.CanvasSize = UDim2.new(0, 0, 2, 0)
-scroll.BackgroundTransparency = 1
-scroll.ScrollBarThickness = 8
+-- Botón volver
+local volver = Instance.new("TextButton", scriptsPage)
+volver.Size = UDim2.new(0.9, 0, 0, 40)
+volver.Position = UDim2.new(0.05, 0, 1, -50)
+volver.Text = "🔙 Regresar"
+volver.TextScaled = true
+volver.Font = Enum.Font.Gotham
+volver.BackgroundColor3 = Color3.fromRGB(50, 50, 50)
+volver.TextColor3 = Color3.new(1, 1, 1)
+Instance.new("UICorner", volver)
 
--- FUNCIÓN PARA CREAR BOTÓN DE SCRIPT
-local function crearBoton(nombre, scriptURL, y)
-	local btn = Instance.new("TextButton", scroll)
-	btn.Size = UDim2.new(1, 0, 0, 40)
-	btn.Position = UDim2.new(0, 0, 0, y)
-	btn.Text = nombre
-	btn.Font = Enum.Font.GothamBlack
-	btn.TextScaled = true
-	btn.BackgroundColor3 = Color3.fromRGB(35, 35, 35)
-	btn.TextColor3 = Color3.new(1,1,1)
-	btn.MouseButton1Click:Connect(function()
-		loadstring(game:HttpGet(scriptURL))()
-	end)
-end
-
--- LISTA DE SCRIPTS
-local scripts = {
-	{"🧠 Brainlot", "https://raw.githubusercontent.com/Akbar123s/Script-Roblox-/refs/heads/main/nabaruBrainrot"},
-	{"🚓 Jailbreak", "https://raw.githubusercontent.com/BlitzIsKing/UniversalFarm/main/Loader/Regular"},
-	{"🚂 Dead Rails", "https://raw.githubusercontent.com/gumanba/Scripts/refs/heads/main/DeadRails"},
-	{"🍉 Blox Fruits", "https://raw.githubusercontent.com/tlredz/Scripts/refs/heads/main/main.luau"},
-	{"🌀 Touch Fling", "https://rawscripts.net/raw/Universal-Script-TOUCH-FLING-ULTRA-POWER-30194"},
-	{"🚀 Fly V3", "https://raw.githubusercontent.com/XNEOFF/FlyGuiV3/main/FlyGuiV3.txt"},
-	{"👁 ESP Player", "https://pastebin.com/raw/DZ3uT8tF"},
-	{"🧱 Comandos (Infinity Yield)", "https://raw.githubusercontent.com/EdgeIY/infinityyield/master/source"}
-}
-
--- CREAR TODOS LOS BOTONES
-for i, data in ipairs(scripts) do
-	crearBoton(data[1], data[2], (i - 1) * 45)
-end
-
--- BOTÓN REGRESAR
-local backBtn = Instance.new("TextButton", scriptsFrame)
-backBtn.Size = UDim2.new(1, -20, 0, 40)
-backBtn.Position = UDim2.new(0, 10, 1, -45)
-backBtn.Text = "⬅️ Regresar"
-backBtn.Font = Enum.Font.GothamBold
-backBtn.TextScaled = true
-backBtn.BackgroundColor3 = Color3.fromRGB(40, 40, 40)
-backBtn.TextColor3 = Color3.new(1,1,1)
-
--- FUNCIONES DE MOSTRAR
-openBtn.MouseButton1Click:Connect(function()
-	mainFrame.Visible = not mainFrame.Visible
-end)
-
+-- Abrir scripts
 scriptsBtn.MouseButton1Click:Connect(function()
-	mainFrame.Visible = false
-	scriptsFrame.Visible = true
+	panel.Visible = false
+	scriptsPage.Visible = true
 end)
 
-backBtn.MouseButton1Click:Connect(function()
-	scriptsFrame.Visible = false
-	mainFrame.Visible = true
+-- Regresar al panel principal
+volver.MouseButton1Click:Connect(function()
+	scriptsPage.Visible = false
+	panel.Visible = true
+end)
+
+-- Mostrar/Ocultar panel
+openBtn.MouseButton1Click:Connect(function()
+	local anyVisible = panel.Visible or scriptsPage.Visible
+	panel.Visible = not anyVisible
+	scriptsPage.Visible = false
 end)
