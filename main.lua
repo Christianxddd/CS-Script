@@ -46,7 +46,7 @@ panel.BackgroundTransparency = 0.35
 panel.Visible = false
 panel.Active = true
 panel.Draggable = true
-panel.ZIndex = 4
+panel.ZIndex = 10 -- Muy arriba para que no quede atrás
 
 local panelCorner = Instance.new("UICorner", panel)
 panelCorner.CornerRadius = UDim.new(0, 10)
@@ -64,7 +64,7 @@ title.Text = "Im Christian Sebast"
 title.TextColor3 = Color3.new(1, 1, 1)
 title.Font = Enum.Font.Arcade
 title.TextScaled = true
-title.ZIndex = 5
+title.ZIndex = 11
 
 -- Función para mostrar/ocultar panel y reproducir sonido
 iconBtn.MouseButton1Click:Connect(function()
