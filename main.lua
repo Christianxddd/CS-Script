@@ -1,10 +1,9 @@
--- 🎮 PANEL GAMER - ChristianSebas
 local player = game.Players.LocalPlayer
 local gui = Instance.new("ScreenGui", player:WaitForChild("PlayerGui"))
 gui.Name = "ChristianSebasGamerUI"
 gui.ResetOnSpawn = false
 
--- 🌈 Efecto Rainbow dinámico
+-- 🎨 Rainbow dinámico
 local function rainbow()
 	local t = tick()
 	return Color3.fromRGB(
@@ -14,7 +13,7 @@ local function rainbow()
 	)
 end
 
--- 🔘 Botón flotante con letra "C"
+-- 🔘 Botón flotante "C"
 local cBtn = Instance.new("TextButton", gui)
 cBtn.Size = UDim2.new(0, 60, 0, 60)
 cBtn.Position = UDim2.new(0, 20, 0, 20)
@@ -26,10 +25,10 @@ cBtn.TextScaled = true
 cBtn.Font = Enum.Font.Arcade
 cBtn.Draggable = true
 
--- 🧱 Panel horizontal
+-- 🧱 Panel horizontal y más bajo
 local menu = Instance.new("Frame", gui)
-menu.Size = UDim2.new(0.95, 0, 0.5, 0)
-menu.Position = UDim2.new(0.025, 0, 0.2, 0)
+menu.Size = UDim2.new(0.95, 0, 0.55, 0)
+menu.Position = UDim2.new(0.025, 0, 0.25, 0)
 menu.BackgroundColor3 = Color3.fromRGB(20, 20, 20)
 menu.BackgroundTransparency = 0.3
 menu.Visible = false
@@ -39,28 +38,28 @@ Instance.new("UICorner", menu)
 local stroke = Instance.new("UIStroke", menu)
 stroke.Thickness = 2
 
--- 📝 Nuevo título
-local title = Instance.new("TextLabel", menu)
+-- 📝 Título arriba del todo
+local title = Instance.new("TextLabel", gui)
 title.Size = UDim2.new(1, 0, 0, 40)
-title.Position = UDim2.new(0, 0, 0, 0)
+title.Position = UDim2.new(0, 0, 0.18, 0)
 title.Text = "Im Christian Sebast"
 title.Font = Enum.Font.Arcade
 title.TextScaled = true
 title.BackgroundTransparency = 1
-title.TextColor3 = Color3.new(1,1,1)
+title.TextColor3 = Color3.new(1, 1, 1)
 
--- Mostrar/ocultar panel
+-- Toggle panel
 cBtn.MouseButton1Click:Connect(function()
 	menu.Visible = not menu.Visible
 end)
 
--- 🔧 Variables Globales
+-- 🔧 Variables iniciales
 _G.velocidad = 16
 _G.salto = 50
 _G.velON = false
 _G.saltoON = false
 
--- 🛠 Actualizar Humanoid
+-- 🛠 Función actualizar Humanoid
 local function actualizarHumanoid()
 	local hum = player.Character and player.Character:FindFirstChild("Humanoid")
 	if hum then
@@ -69,7 +68,7 @@ local function actualizarHumanoid()
 	end
 end
 
--- ⚙️ Crear control de velocidad y salto
+-- ⚙️ Crear controles de Velocidad / Salto
 local function crearControl(nombre, y, variable, toggleVar)
 	local label = Instance.new("TextLabel", menu)
 	label.Position = UDim2.new(0.02, 0, y, 0)
@@ -78,7 +77,7 @@ local function crearControl(nombre, y, variable, toggleVar)
 	label.Font = Enum.Font.Arcade
 	label.TextScaled = true
 	label.BackgroundTransparency = 1
-	label.TextColor3 = Color3.new(1,1,1)
+	label.TextColor3 = Color3.new(1, 1, 1)
 
 	local toggle = Instance.new("TextButton", menu)
 	toggle.Position = UDim2.new(0.13, 0, y, 0)
@@ -86,8 +85,8 @@ local function crearControl(nombre, y, variable, toggleVar)
 	toggle.Text = "OFF"
 	toggle.Font = Enum.Font.Arcade
 	toggle.TextScaled = true
-	toggle.BackgroundColor3 = Color3.fromRGB(40,40,40)
-	toggle.TextColor3 = Color3.fromRGB(255, 0, 0)
+	toggle.BackgroundColor3 = Color3.fromRGB(40, 40, 40)
+	toggle.TextColor3 = Color3.new(1, 0, 0)
 
 	local valLabel = Instance.new("TextLabel", menu)
 	valLabel.Position = UDim2.new(0.21, 0, y, 0)
@@ -96,7 +95,7 @@ local function crearControl(nombre, y, variable, toggleVar)
 	valLabel.Font = Enum.Font.Arcade
 	valLabel.TextScaled = true
 	valLabel.BackgroundTransparency = 1
-	valLabel.TextColor3 = Color3.new(1,1,1)
+	valLabel.TextColor3 = Color3.new(1, 1, 1)
 
 	local plus = Instance.new("TextButton", menu)
 	plus.Position = UDim2.new(0.27, 0, y, 0)
@@ -104,8 +103,8 @@ local function crearControl(nombre, y, variable, toggleVar)
 	plus.Text = "+"
 	plus.Font = Enum.Font.Arcade
 	plus.TextScaled = true
-	plus.BackgroundColor3 = Color3.fromRGB(40,40,40)
-	plus.TextColor3 = Color3.new(1,1,1)
+	plus.BackgroundColor3 = Color3.fromRGB(40, 40, 40)
+	plus.TextColor3 = Color3.new(1, 1, 1)
 
 	local minus = Instance.new("TextButton", menu)
 	minus.Position = UDim2.new(0.32, 0, y, 0)
@@ -113,8 +112,8 @@ local function crearControl(nombre, y, variable, toggleVar)
 	minus.Text = "-"
 	minus.Font = Enum.Font.Arcade
 	minus.TextScaled = true
-	minus.BackgroundColor3 = Color3.fromRGB(40,40,40)
-	minus.TextColor3 = Color3.new(1,1,1)
+	minus.BackgroundColor3 = Color3.fromRGB(40, 40, 40)
+	minus.TextColor3 = Color3.new(1, 1, 1)
 
 	plus.MouseButton1Click:Connect(function()
 		_G[variable] += 1
@@ -136,43 +135,34 @@ local function crearControl(nombre, y, variable, toggleVar)
 	end)
 end
 
--- ✨ Ligeramente más abajo que antes
-crearControl("Velocidad", 0.13, "velocidad", "velON")
-crearControl("Salto", 0.25, "salto", "saltoON")
+crearControl("Velocidad", 0.12, "velocidad", "velON")
+crearControl("Salto", 0.24, "salto", "saltoON")
 
--- 🎮 Crear botones de scripts
-local function crearBoton(nombre, posX, posY, scriptUrl)
+-- 🎮 Botones de funciones
+local function crearBoton(nombre, posX, posY, url)
 	local btn = Instance.new("TextButton", menu)
 	btn.Size = UDim2.new(0.13, 0, 0.08, 0)
 	btn.Position = UDim2.new(posX, 0, posY, 0)
 	btn.Text = nombre
 	btn.Font = Enum.Font.Arcade
 	btn.TextScaled = true
-	btn.BackgroundColor3 = Color3.fromRGB(40,40,40)
-	btn.TextColor3 = Color3.new(1,1,1)
+	btn.BackgroundColor3 = Color3.fromRGB(40, 40, 40)
+	btn.TextColor3 = Color3.new(1, 1, 1)
 	btn.MouseButton1Click:Connect(function()
-		if nombre == "🌀 Touch Fling" then
-			if not _G._flingUsed then
-				_G._flingUsed = true
-				loadstring(game:HttpGet(scriptUrl))()
-			end
-		else
-			loadstring(game:HttpGet(scriptUrl))()
-		end
+		loadstring(game:HttpGet(url))()
 	end)
 end
 
-crearBoton("🚀 Fly V3", 0.45, 0.13, "https://raw.githubusercontent.com/XNEOFF/FlyGuiV3/main/FlyGuiV3.txt")
-crearBoton("🌀 Touch Fling", 0.6, 0.13, "https://rawscripts.net/raw/Universal-Script-TOUCH-FLING-ULTRA-POWER-30194")
-crearBoton("🧠 Brainlot", 0.75, 0.13, "https://raw.githubusercontent.com/Akbar123s/Script-Roblox-/refs/heads/main/nabaruBrainrot")
-crearBoton("🚓 Jailbreak", 0.45, 0.26, "https://raw.githubusercontent.com/BlitzIsKing/UniversalFarm/main/Loader/Regular")
-crearBoton("🚂 Dead Rails", 0.6, 0.26, "https://raw.githubusercontent.com/gumanba/Scripts/refs/heads/main/DeadRails")
-crearBoton("🍉 Blox Fruits", 0.75, 0.26, "https://raw.githubusercontent.com/tlredz/Scripts/refs/heads/main/main.luau")
+crearBoton("🚀 Fly V3", 0.45, 0.12, "https://raw.githubusercontent.com/XNEOFF/FlyGuiV3/main/FlyGuiV3.txt")
+crearBoton("🧠 Brainlot", 0.6, 0.12, "https://raw.githubusercontent.com/Akbar123s/Script-Roblox-/refs/heads/main/nabaruBrainrot")
+crearBoton("🚓 Jailbreak", 0.75, 0.12, "https://raw.githubusercontent.com/BlitzIsKing/UniversalFarm/main/Loader/Regular")
+crearBoton("🚂 Dead Rails", 0.45, 0.25, "https://raw.githubusercontent.com/gumanba/Scripts/refs/heads/main/DeadRails")
+crearBoton("🍉 Blox Fruits", 0.6, 0.25, "https://raw.githubusercontent.com/tlredz/Scripts/refs/heads/main/main.luau")
 
--- 👁 ESP toggle
+-- 👁 ESP TOGGLE
 local espBtn = Instance.new("TextButton", menu)
 espBtn.Size = UDim2.new(0.13, 0, 0.08, 0)
-espBtn.Position = UDim2.new(0.45, 0, 0.39, 0)
+espBtn.Position = UDim2.new(0.75, 0, 0.25, 0)
 espBtn.Text = "👁 ESP (OFF)"
 espBtn.Font = Enum.Font.Arcade
 espBtn.TextScaled = true
@@ -204,7 +194,7 @@ espBtn.MouseButton1Click:Connect(function()
 	end
 end)
 
--- ❌ Cerrar panel
+-- ❌ Botón cerrar
 local cerrar = Instance.new("TextButton", menu)
 cerrar.Position = UDim2.new(0.9, 0, 0.9, 0)
 cerrar.Size = UDim2.new(0.08, 0, 0.08, 0)
@@ -217,7 +207,7 @@ cerrar.MouseButton1Click:Connect(function()
 	menu.Visible = false
 end)
 
--- 🌈 Rainbow animado en todo
+-- 🌈 Efecto rainbow animado
 game:GetService("RunService").RenderStepped:Connect(function()
 	local color = rainbow()
 	stroke.Color = color
@@ -228,7 +218,7 @@ game:GetService("RunService").RenderStepped:Connect(function()
 	end
 end)
 
--- Reset velocidad y salto al morir
+-- Reinicio tras respawn
 player.CharacterAdded:Connect(function(char)
 	char:WaitForChild("Humanoid").WalkSpeed = _G.velON and _G.velocidad or 16
 	char:WaitForChild("Humanoid").JumpPower = _G.saltoON and _G.salto or 50
