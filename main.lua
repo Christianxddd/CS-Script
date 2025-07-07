@@ -25,10 +25,10 @@ cBtn.TextScaled = true
 cBtn.Font = Enum.Font.Arcade
 cBtn.Draggable = true
 
--- Panel vertical con scroll
+-- Marco general movible
 local menu = Instance.new("Frame", gui)
-menu.Size = UDim2.new(0, 280, 0, 400)
-menu.Position = UDim2.new(0, 100, 0.15, 0)
+menu.Size = UDim2.new(0, 300, 0, 700) -- PANEL MÁS ALTO
+menu.Position = UDim2.new(0, 100, 0.1, 0)
 menu.BackgroundColor3 = Color3.fromRGB(25, 25, 25)
 menu.BackgroundTransparency = 0.3
 menu.Visible = false
@@ -38,7 +38,7 @@ Instance.new("UICorner", menu)
 local stroke = Instance.new("UIStroke", menu)
 stroke.Thickness = 2
 
--- ScrollingFrame interno (panel vertical)
+-- Scroll interno
 local scroll = Instance.new("ScrollingFrame", menu)
 scroll.Size = UDim2.new(1, 0, 1, 0)
 scroll.CanvasSize = UDim2.new(0, 0, 0, 0)
@@ -51,7 +51,7 @@ local layout = Instance.new("UIListLayout", scroll)
 layout.SortOrder = Enum.SortOrder.LayoutOrder
 layout.Padding = UDim.new(0, 6)
 
--- Mostrar/ocultar menú
+-- Mostrar/Ocultar
 cBtn.MouseButton1Click:Connect(function()
 	menu.Visible = not menu.Visible
 end)
@@ -59,13 +59,13 @@ end)
 -- Título
 local title = Instance.new("TextLabel", scroll)
 title.Size = UDim2.new(1, 0, 0, 40)
-title.Text = "🎮 Panel Gamer - ChristianSebas"
+title.Text = "🎮 ChristianSebas UI"
 title.Font = Enum.Font.Arcade
 title.TextScaled = true
 title.TextColor3 = Color3.new(1,1,1)
 title.BackgroundTransparency = 1
 
--- Variables y funciones
+-- Variables
 local velocidad, salto = 16, 50
 local velON, saltoON = false, false
 
@@ -77,7 +77,7 @@ local function actualizarHumanoid()
 	end
 end
 
--- Crear control de velocidad o salto
+-- Control genérico
 local function crearControl(nombre, variable, toggleVar)
 	local frame = Instance.new("Frame", scroll)
 	frame.Size = UDim2.new(1, 0, 0, 60)
@@ -146,6 +146,7 @@ local function crearControl(nombre, variable, toggleVar)
 	end)
 end
 
+-- Inicializar
 _G["velocidad"] = velocidad
 _G["salto"] = salto
 _G["velON"] = velON
@@ -154,7 +155,7 @@ _G["saltoON"] = saltoON
 crearControl("Velocidad", "velocidad", "velON")
 crearControl("Salto", "salto", "saltoON")
 
--- Crear botón
+-- Crear botón de acción
 local function crearBoton(nombre, funcion)
 	local btn = Instance.new("TextButton", scroll)
 	btn.Size = UDim2.new(0.95, 0, 0, 40)
@@ -203,7 +204,6 @@ crearBoton("🌀 Touch Fling", function()
 	end
 end)
 
--- Scripts especiales
 crearBoton("🧠 Steal Brainlot", function()
 	loadstring(game:HttpGet("https://raw.githubusercontent.com/Akbar123s/Script-Roblox-/refs/heads/main/nabaruBrainrot"))()
 end)
@@ -220,12 +220,11 @@ crearBoton("🍉 Blox Fruits", function()
 	loadstring(game:HttpGet("https://raw.githubusercontent.com/tlredz/Scripts/refs/heads/main/main.luau"))()
 end)
 
--- Botón cerrar
 crearBoton("❌ Cerrar", function()
 	menu.Visible = false
 end)
 
--- Rainbow activo
+-- Efecto Rainbow
 game:GetService("RunService").RenderStepped:Connect(function()
 	local color = rainbow()
 	stroke.Color = color
@@ -236,7 +235,7 @@ game:GetService("RunService").RenderStepped:Connect(function()
 	end
 end)
 
--- Al reaparecer
+-- Restaurar al reaparecer
 player.CharacterAdded:Connect(function(char)
 	char:WaitForChild("Humanoid").WalkSpeed = velON and velocidad or 16
 	char:WaitForChild("Humanoid").JumpPower = saltoON and salto or 50
