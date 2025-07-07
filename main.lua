@@ -1,8 +1,3 @@
---[[
-    Panel Gamer Profesional V2 by Christian
-    Icono "C", panel vertical, efecto rainbow, carpetas organizadas
---]]
-
 local player = game.Players.LocalPlayer
 local gui = Instance.new("ScreenGui", player:WaitForChild("PlayerGui"))
 gui.Name = "ChristianProPanel"
@@ -29,7 +24,7 @@ iconBtn.Font = Enum.Font.Arcade
 iconBtn.TextColor3 = Color3.new(1, 1, 1)
 iconBtn.Draggable = true
 
--- Panel principal
+-- Panel principal (movible)
 local main = Instance.new("Frame", gui)
 main.Size = UDim2.new(0, 300, 0, 400)
 main.Position = UDim2.new(0.5, -150, 0.5, -200)
@@ -39,7 +34,7 @@ main.Visible = false
 main.Active = true
 main.Draggable = true
 
-local uiCorner = Instance.new("UICorner", main)
+Instance.new("UICorner", main)
 local uiStroke = Instance.new("UIStroke", main)
 uiStroke.Thickness = 2
 
@@ -62,7 +57,7 @@ datos.Font = Enum.Font.Arcade
 datos.TextColor3 = Color3.new(1, 1, 1)
 datos.BackgroundTransparency = 1
 
--- Contenedor de botones
+-- Contenedor de botones de carpetas
 local btnFrame = Instance.new("Frame", main)
 btnFrame.Size = UDim2.new(1, -20, 1, -80)
 btnFrame.Position = UDim2.new(0, 10, 0, 70)
@@ -74,7 +69,7 @@ uiList.FillDirection = Enum.FillDirection.Vertical
 uiList.HorizontalAlignment = Enum.HorizontalAlignment.Center
 uiList.SortOrder = Enum.SortOrder.LayoutOrder
 
--- Función para crear botones de carpetas
+-- Función para crear carpetas
 local function crearBoton(nombre, scripts)
     local btn = Instance.new("TextButton", btnFrame)
     btn.Size = UDim2.new(1, 0, 0, 40)
@@ -84,7 +79,6 @@ local function crearBoton(nombre, scripts)
     btn.BackgroundColor3 = Color3.fromRGB(30, 30, 30)
     btn.TextColor3 = Color3.new(1, 1, 1)
 
-    -- Subpestaña
     btn.MouseButton1Click:Connect(function()
         main.Visible = false
         local sub = Instance.new("Frame", gui)
@@ -96,6 +90,7 @@ local function crearBoton(nombre, scripts)
         sub.Draggable = true
 
         Instance.new("UICorner", sub)
+
         local scroll = Instance.new("ScrollingFrame", sub)
         scroll.Size = UDim2.new(1, -10, 1, -50)
         scroll.Position = UDim2.new(0, 5, 0, 5)
@@ -135,7 +130,7 @@ local function crearBoton(nombre, scripts)
     end)
 end
 
--- Lista de scripts por carpetas
+-- Lista de carpetas y scripts
 local scriptsData = {
     ["Juegos Populares"] = {
         {name = "Brainlot", url = "https://raw.githubusercontent.com/Akbar123s/Script-Roblox-/refs/heads/main/nabaruBrainrot"},
@@ -154,7 +149,6 @@ local scriptsData = {
         {name = "Dark Dex", url = "https://raw.githubusercontent.com/peyton2465/Dex/master/out.lua"},
         {name = "Simple ESP", url = "https://pastebin.com/raw/BzZcMZzB"},
         {name = "Fe Hat Spin", url = "https://pastebin.com/raw/1hYkLqkQ"},
-        -- puedes seguir añadiendo más hasta 40 aquí...
     },
     ["Exploits"] = {
         {name = "Remote Spy", url = "https://raw.githubusercontent.com/exxtremestuffs/SimpleSpySource/master/SimpleSpy.lua"},
@@ -171,12 +165,12 @@ for carpeta, lista in pairs(scriptsData) do
     crearBoton(carpeta, lista)
 end
 
--- Mostrar panel al presionar la "C"
+-- Mostrar panel
 iconBtn.MouseButton1Click:Connect(function()
     main.Visible = not main.Visible
 end)
 
--- Rainbow dinámico
+-- Rainbow en tiempo real
 game:GetService("RunService").RenderStepped:Connect(function()
     local color = rainbowColor()
     uiStroke.Color = color
