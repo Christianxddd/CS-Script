@@ -1,83 +1,72 @@
 local player = game.Players.LocalPlayer
 local gui = Instance.new("ScreenGui", player:WaitForChild("PlayerGui"))
-gui.Name = "Christian_ProPanel"
+gui.Name = "ChristianPanel"
 gui.ResetOnSpawn = false
 
+-- Función rainbow
 local function rainbow()
 	local t = tick()
-	return Color3.fromRGB(
-		math.sin(t) * 127 + 128,
-		math.sin(t + 2) * 127 + 128,
-		math.sin(t + 4) * 127 + 128
-	)
+	return Color3.fromHSV((t % 5) / 5, 1, 1)
 end
 
--- Icono flotante "C"
-local icon = Instance.new("TextButton")
+-- Icono "C"
+local icon = Instance.new("TextButton", gui)
 icon.Size = UDim2.new(0, 50, 0, 50)
 icon.Position = UDim2.new(0, 20, 0, 20)
 icon.Text = "C"
 icon.TextScaled = true
 icon.Font = Enum.Font.Arcade
-icon.BackgroundColor3 = Color3.fromRGB(20,20,20)
-icon.TextColor3 = Color3.new(1,1,1)
+icon.BackgroundColor3 = Color3.fromRGB(0, 0, 0)
+icon.TextColor3 = Color3.new(1, 1, 1)
 icon.Draggable = true
-icon.Parent = gui
 
--- Panel principal (más transparente ahora)
-local main = Instance.new("Frame", gui)
-main.Size = UDim2.new(0, 450, 0, 500)
-main.Position = UDim2.new(0.5, -225, 0.5, -250)
-main.BackgroundColor3 = Color3.fromRGB(15, 15, 15)
-main.BackgroundTransparency = 0.4 -- TRANSPARENCIA AJUSTADA
-main.Visible = false
-main.Active = true
-main.Draggable = true
+-- Panel Principal
+local panel = Instance.new("Frame", gui)
+panel.Size = UDim2.new(0, 400, 0, 550)
+panel.Position = UDim2.new(0.5, -200, 0.5, -275)
+panel.BackgroundColor3 = Color3.fromRGB(20, 20, 20)
+panel.BackgroundTransparency = 0.5 -- 🔁 MÁS TRANSPARENTE
+panel.Active = true
+panel.Draggable = true
+panel.Visible = false
 
-local stroke = Instance.new("UIStroke", main)
+local stroke = Instance.new("UIStroke", panel)
 stroke.Thickness = 2
 
-local title = Instance.new("TextLabel", main)
+-- Título
+local title = Instance.new("TextLabel", panel)
 title.Size = UDim2.new(1, 0, 0, 40)
+title.Position = UDim2.new(0, 0, 0, 0)
 title.Text = "By Christian"
-title.TextScaled = true
 title.Font = Enum.Font.Arcade
-title.TextColor3 = Color3.new(1,1,1)
+title.TextScaled = true
+title.TextColor3 = Color3.new(1, 1, 1)
 title.BackgroundTransparency = 1
 
-local datos = Instance.new("TextLabel", main)
-datos.Size = UDim2.new(1, 0, 0, 20)
+-- Datos
+local datos = Instance.new("TextLabel", panel)
+datos.Size = UDim2.new(1, 0, 0, 25)
 datos.Position = UDim2.new(0, 0, 0, 40)
 datos.Text = "Usuario: Christian_xyx | TikTok: @christ_sebast_7d"
 datos.TextScaled = true
 datos.Font = Enum.Font.Gotham
-datos.TextColor3 = Color3.fromRGB(255,255,255)
+datos.TextColor3 = Color3.fromRGB(255, 255, 255)
 datos.BackgroundTransparency = 1
 
-local function crearRegresar(parent)
-	local back = Instance.new("TextButton", parent)
-	back.Size = UDim2.new(0.3, 0, 0, 30)
-	back.Position = UDim2.new(0.35, 0, 1, -40)
-	back.Text = "⬅ Regresar"
-	back.TextScaled = true
-	back.Font = Enum.Font.Arcade
-	back.BackgroundColor3 = Color3.fromRGB(50,50,50)
-	back.TextColor3 = Color3.new(1,1,1)
-	return back
-end
+-- Barra de búsqueda
+local search = Instance.new("TextBox", panel)
+search.Size = UDim2.new(0.9, 0, 0, 30)
+search.Position = UDim2.new(0.05, 0, 0, 70)
+search.PlaceholderText = "Buscar scripts..."
+search.Text = ""
+search.TextScaled = true
+search.Font = Enum.Font.Gotham
+search.BackgroundColor3 = Color3.fromRGB(35, 35, 35)
+search.TextColor3 = Color3.new(1, 1, 1)
 
-local buscador = Instance.new("TextBox", main)
-buscador.Size = UDim2.new(0.9, 0, 0, 30)
-buscador.Position = UDim2.new(0.05, 0, 0, 70)
-buscador.PlaceholderText = "Buscar scripts..."
-buscador.Text = ""
-buscador.TextScaled = true
-buscador.Font = Enum.Font.Gotham
-buscador.BackgroundColor3 = Color3.fromRGB(35,35,35)
-buscador.TextColor3 = Color3.new(1,1,1)
-
-local scroll = Instance.new("ScrollingFrame", main)
-scroll.Size = UDim2.new(0.9, 0, 0.72, 0)
+-- Scroll principal
+local scroll = Instance.new("ScrollingFrame", panel)
+scroll.Size = UDim2.new(0.9, 0, 0.7, 0)
 scroll.Position = UDim2.new(0.05, 0, 0, 110)
 scroll.CanvasSize = UDim2.new(0, 0, 5, 0)
 scroll.ScrollBarThickness = 4
@@ -86,6 +75,7 @@ scroll.BackgroundTransparency = 1
 local layout = Instance.new("UIListLayout", scroll)
 layout.Padding = UDim.new(0, 6)
 
+-- Crear carpeta
 local function crearCarpeta(nombre, scripts)
 	local folderBtn = Instance.new("TextButton", scroll)
 	folderBtn.Size = UDim2.new(1, 0, 0, 40)
@@ -96,10 +86,10 @@ local function crearCarpeta(nombre, scripts)
 	folderBtn.TextColor3 = Color3.new(1,1,1)
 
 	local subFrame = Instance.new("Frame", gui)
-	subFrame.Size = main.Size
-	subFrame.Position = main.Position
-	subFrame.BackgroundColor3 = main.BackgroundColor3
-	subFrame.BackgroundTransparency = main.BackgroundTransparency
+	subFrame.Size = panel.Size
+	subFrame.Position = panel.Position
+	subFrame.BackgroundColor3 = panel.BackgroundColor3
+	subFrame.BackgroundTransparency = panel.BackgroundTransparency
 	subFrame.Visible = false
 	subFrame.Active = true
 	subFrame.Draggable = true
@@ -110,10 +100,17 @@ local function crearCarpeta(nombre, scripts)
 	local titulo = title:Clone()
 	titulo.Parent = subFrame
 
-	local volver = crearRegresar(subFrame)
-	volver.MouseButton1Click:Connect(function()
+	local backBtn = Instance.new("TextButton", subFrame)
+	backBtn.Size = UDim2.new(0.3, 0, 0, 30)
+	backBtn.Position = UDim2.new(0.35, 0, 1, -40)
+	backBtn.Text = "⬅ Regresar"
+	backBtn.TextScaled = true
+	backBtn.Font = Enum.Font.Arcade
+	backBtn.BackgroundColor3 = Color3.fromRGB(40, 40, 40)
+	backBtn.TextColor3 = Color3.new(1, 1, 1)
+	backBtn.MouseButton1Click:Connect(function()
 		subFrame.Visible = false
-		main.Visible = true
+		panel.Visible = true
 	end)
 
 	local subScroll = scroll:Clone()
@@ -134,11 +131,12 @@ local function crearCarpeta(nombre, scripts)
 	end
 
 	folderBtn.MouseButton1Click:Connect(function()
-		main.Visible = false
+		panel.Visible = false
 		subFrame.Visible = true
 	end)
 end
 
+-- Scripts
 local juegosPopulares = {
 	{nombre = "🧠 Brainlot", url = "https://raw.githubusercontent.com/Akbar123s/Script-Roblox-/refs/heads/main/nabaruBrainrot"},
 	{nombre = "🚓 Jailbreak", url = "https://raw.githubusercontent.com/BlitzIsKing/UniversalFarm/main/Loader/Regular"},
@@ -156,16 +154,18 @@ local comandos = {
 crearCarpeta("🎮 Juegos Populares", juegosPopulares)
 crearCarpeta("🧰 Comandos", comandos)
 
+-- Mostrar panel
 icon.MouseButton1Click:Connect(function()
-	main.Visible = not main.Visible
+	panel.Visible = not panel.Visible
 end)
 
+-- Rainbow dinámico
 game:GetService("RunService").RenderStepped:Connect(function()
-	local c = rainbow()
-	stroke.Color = c
-	for _, el in pairs(main:GetDescendants()) do
+	local color = rainbow()
+	stroke.Color = color
+	for _, el in pairs(panel:GetDescendants()) do
 		if el:IsA("TextLabel") or el:IsA("TextButton") then
-			el.TextColor3 = c
+			el.TextColor3 = color
 		end
 	end
 end)
