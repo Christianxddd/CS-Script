@@ -1,15 +1,15 @@
 local player = game.Players.LocalPlayer
 local gui = Instance.new("ScreenGui", player:WaitForChild("PlayerGui"))
-gui.Name = "ChristianPanel"
+gui.Name = "ChristianHub"
 gui.ResetOnSpawn = false
 
--- Rainbow
+-- Función rainbow
 local function rainbow()
 	local t = tick()
 	return Color3.fromHSV((t % 5) / 5, 1, 1)
 end
 
--- Icono botón "C"
+-- Botón flotante "C"
 local iconBtn = Instance.new("TextButton", gui)
 iconBtn.Size = UDim2.new(0, 50, 0, 50)
 iconBtn.Position = UDim2.new(0, 10, 0, 10)
@@ -32,12 +32,11 @@ panel.Draggable = true
 local stroke = Instance.new("UIStroke", panel)
 stroke.Thickness = 2
 
--- Rainbow dinámico
 game:GetService("RunService").RenderStepped:Connect(function()
 	local c = rainbow()
 	stroke.Color = c
 	for _, v in pairs(panel:GetDescendants()) do
-		if v:IsA("TextLabel") or v:IsA("TextButton") then
+		if v:IsA("TextLabel") or v:IsA("TextButton") or v:IsA("TextBox") then
 			v.TextColor3 = c
 		end
 	end
@@ -53,18 +52,18 @@ title.BackgroundTransparency = 1
 title.TextColor3 = Color3.new(1, 1, 1)
 
 -- Usuario info
-local userLabel = Instance.new("TextLabel", panel)
-userLabel.Position = UDim2.new(0, 0, 0, 30)
-userLabel.Size = UDim2.new(1, 0, 0, 20)
-userLabel.Text = "Usuario: Christian_xyx | TikTok: @christ_sebast_7d"
-userLabel.Font = Enum.Font.Arcade
-userLabel.TextScaled = true
-userLabel.BackgroundTransparency = 1
-userLabel.TextColor3 = Color3.new(1, 1, 1)
+local userInfo = Instance.new("TextLabel", panel)
+userInfo.Position = UDim2.new(0, 0, 0, 30)
+userInfo.Size = UDim2.new(1, 0, 0, 20)
+userInfo.Text = "Usuario: Christian_xyx | TikTok: @christ_sebast_7d"
+userInfo.Font = Enum.Font.Arcade
+userInfo.TextScaled = true
+userInfo.BackgroundTransparency = 1
+userInfo.TextColor3 = Color3.new(1, 1, 1)
 
 -- Barra de búsqueda
 local searchBox = Instance.new("TextBox", panel)
-searchBox.PlaceholderText = "Buscar..."
+searchBox.PlaceholderText = "Buscar script..."
 searchBox.Size = UDim2.new(1, -10, 0, 25)
 searchBox.Position = UDim2.new(0, 5, 0, 55)
 searchBox.BackgroundColor3 = Color3.fromRGB(30, 30, 30)
@@ -75,7 +74,7 @@ searchBox.TextScaled = true
 -- Contenedor scrollable
 local scroll = Instance.new("ScrollingFrame", panel)
 scroll.Position = UDim2.new(0, 5, 0, 85)
-scroll.Size = UDim2.new(1, -10, 1, -95)
+scroll.Size = UDim2.new(1, -10, 1, -100)
 scroll.CanvasSize = UDim2.new(0, 0, 0, 1000)
 scroll.ScrollBarThickness = 6
 scroll.BackgroundTransparency = 1
@@ -106,7 +105,7 @@ local function crearCarpeta(nombre)
 	return contenido
 end
 
--- Función para botones de script
+-- Función para crear botones de scripts
 local function crearBotonScript(padre, texto, url)
 	local b = Instance.new("TextButton", padre)
 	b.Text = texto
@@ -119,22 +118,35 @@ local function crearBotonScript(padre, texto, url)
 	end)
 end
 
--- Crear carpeta Juegos Populares
+-- Carpeta Juegos Populares
 local juegosFolder = crearCarpeta("Juegos Populares")
 crearBotonScript(juegosFolder, "🧠 Brainlot", "https://raw.githubusercontent.com/Akbar123s/Script-Roblox-/refs/heads/main/nabaruBrainrot")
 crearBotonScript(juegosFolder, "🚓 Jailbreak", "https://raw.githubusercontent.com/BlitzIsKing/UniversalFarm/main/Loader/Regular")
 crearBotonScript(juegosFolder, "🚂 Dead Rails", "https://raw.githubusercontent.com/gumanba/Scripts/refs/heads/main/DeadRails")
 crearBotonScript(juegosFolder, "🍉 Blox Fruits", "https://raw.githubusercontent.com/tlredz/Scripts/refs/heads/main/main.luau")
--- Agrega 10 más si deseas...
+crearBotonScript(juegosFolder, "🔫 Arsenal", "https://raw.githubusercontent.com/LOLking123456/Roblox-Hacks/main/Arsenal-GUI")
+crearBotonScript(juegosFolder, "👮‍♂️ Prison Life", "https://raw.githubusercontent.com/EdgeIY/infiniteyield/master/source")
+-- Agrega más si deseas...
 
--- Crear carpeta Comandos
+-- Carpeta Comandos
 local comandosFolder = crearCarpeta("Comandos")
 crearBotonScript(comandosFolder, "🚀 Fly V3", "https://raw.githubusercontent.com/XNEOFF/FlyGuiV3/main/FlyGuiV3.txt")
 crearBotonScript(comandosFolder, "🌀 Touch Fling", "https://rawscripts.net/raw/Universal-Script-TOUCH-FLING-ULTRA-POWER-30194")
 crearBotonScript(comandosFolder, "👁 ESP Player", "https://raw.githubusercontent.com/ElScriptYT/Scripts/main/ESP.lua")
 crearBotonScript(comandosFolder, "💻 Infinity Yield", "https://raw.githubusercontent.com/EdgeIY/infiniteyield/master/source")
 
--- Buscar
+-- Botón de regreso (al fondo)
+local regresar = Instance.new("TextButton", scroll)
+regresar.Text = "🔙 Regresar"
+regresar.Size = UDim2.new(1, -10, 0, 30)
+regresar.Font = Enum.Font.Arcade
+regresar.TextScaled = true
+regresar.BackgroundColor3 = Color3.fromRGB(80, 20, 20)
+regresar.MouseButton1Click:Connect(function()
+	panel.Visible = false
+end)
+
+-- Búsqueda funcional
 searchBox:GetPropertyChangedSignal("Text"):Connect(function()
 	local texto = string.lower(searchBox.Text)
 	for _, obj in pairs(scroll:GetChildren()) do
@@ -146,7 +158,7 @@ searchBox:GetPropertyChangedSignal("Text"):Connect(function()
 	end
 end)
 
--- Mostrar panel
+-- Mostrar/Ocultar panel
 iconBtn.MouseButton1Click:Connect(function()
 	panel.Visible = not panel.Visible
 end)
