@@ -25,7 +25,7 @@ mainFrame.Visible = false
 mainFrame.Active = true
 mainFrame.Draggable = true
 
--- UIListLayout para organización vertical
+-- Layout vertical general
 local uiList = Instance.new("UIListLayout", mainFrame)
 uiList.SortOrder = Enum.SortOrder.LayoutOrder
 uiList.Padding = UDim.new(0, 8)
@@ -62,13 +62,13 @@ searchBox.BackgroundColor3 = Color3.fromRGB(40,40,40)
 searchBox.ClearTextOnFocus = false
 searchBox.LayoutOrder = 3
 
--- Scrolling Frame para carpetas y scripts
+-- ScrollingFrame para carpetas y scripts
 local scrollFrame = Instance.new("ScrollingFrame", mainFrame)
-scrollFrame.Size = UDim2.new(1, 0, 1, -100)
+scrollFrame.Size = UDim2.new(1, 0, 1, -120)
 scrollFrame.Position = UDim2.new(0, 0, 0, 95)
 scrollFrame.BackgroundTransparency = 1
 scrollFrame.BorderSizePixel = 0
-scrollFrame.CanvasSize = UDim2.new(0,0,0,0)
+scrollFrame.CanvasSize = UDim2.new(0, 0, 0, 0)
 scrollFrame.ScrollBarThickness = 8
 scrollFrame.VerticalScrollBarInset = Enum.ScrollBarInset.Always
 scrollFrame.LayoutOrder = 4
@@ -210,4 +210,29 @@ searchBox:GetPropertyChangedSignal("Text"):Connect(function()
     local text = searchBox.Text:lower()
     -- Filtrar Juegos Populares
     for _, btn in pairs(contenidoJuegos:GetChildren()) do
-        if btn:IsA("TextButton")
+        if btn:IsA("TextButton") then
+            btn.Visible = btn.Text:lower():find(text) ~= nil
+        end
+    end
+    -- Filtrar Comandos
+    for _, btn in pairs(contenidoComandos:GetChildren()) do
+        if btn:IsA("TextButton") then
+            btn.Visible = btn.Text:lower():find(text) ~= nil
+        end
+    end
+    -- Actualizar altura carpetas abiertas
+    if carpetaJuegos.Contenido.Size.Y.Offset > 0 then
+        actualizarAltura(carpetaJuegos, contenidoJuegos)
+    end
+    if carpetaComandos.Contenido.Size.Y.Offset > 0 then
+        actualizarAltura(carpetaComandos, contenidoComandos)
+    end
+
+    wait(0.35)
+    scrollFrame.CanvasSize = UDim2.new(0, 0, 0, carpetaLayout.AbsoluteContentSize.Y + 10)
+end)
+
+-- Toggle abrir/cerrar panel con botón "C"
+toggleBtn.MouseButton1Click:Connect(function()
+    mainFrame.Visible = not mainFrame.Visible
+end)
