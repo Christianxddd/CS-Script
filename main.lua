@@ -13,7 +13,6 @@ openButton.TextColor3 = Color3.new(1, 1, 1)
 openButton.Font = Enum.Font.GothamBold
 openButton.TextScaled = true
 openButton.Draggable = true
-openButton.AutoButtonColor = true
 
 -- Panel Principal
 local main = Instance.new("Frame", gui)
@@ -54,13 +53,17 @@ userInfo.Font = Enum.Font.Gotham
 userInfo.TextScaled = true
 userInfo.BackgroundTransparency = 1
 
--- ScrollingFrame para las carpetas
+-- ScrollingFrame para carpetas
 local scroll = Instance.new("ScrollingFrame", main)
 scroll.Position = UDim2.new(0, 0, 0, 60)
 scroll.Size = UDim2.new(1, 0, 1, -60)
-scroll.CanvasSize = UDim2.new(0, 0, 3, 0)
+scroll.CanvasSize = UDim2.new(0, 0, 0, 700)
 scroll.ScrollBarThickness = 6
 scroll.BackgroundTransparency = 1
+
+local layoutScroll = Instance.new("UIListLayout", scroll)
+layoutScroll.Padding = UDim.new(0, 10)
+layoutScroll.SortOrder = Enum.SortOrder.LayoutOrder
 
 -- Rainbow animación
 game:GetService("RunService").RenderStepped:Connect(function()
@@ -75,6 +78,7 @@ local function crearCarpeta(nombre, scripts)
 	folder.Size = UDim2.new(1, 0, 0, 30)
 	folder.BackgroundColor3 = Color3.fromRGB(30, 30, 30)
 	folder.BorderSizePixel = 0
+	folder.LayoutOrder = 1
 
 	local btn = Instance.new("TextButton", folder)
 	btn.Size = UDim2.new(1, 0, 1, 0)
@@ -88,6 +92,7 @@ local function crearCarpeta(nombre, scripts)
 	content.Size = UDim2.new(1, 0, 0, #scripts * 35 + 40)
 	content.BackgroundTransparency = 1
 	content.Visible = false
+	content.LayoutOrder = 2
 
 	local layout = Instance.new("UIListLayout", content)
 	layout.Padding = UDim.new(0, 5)
@@ -142,7 +147,7 @@ local comandos = {
 crearCarpeta("🎮 Juegos Populares", juegosPopulares)
 crearCarpeta("🧰 Comandos", comandos)
 
--- Abrir/cerrar panel
+-- Abrir panel
 openButton.MouseButton1Click:Connect(function()
 	main.Visible = not main.Visible
 end)
