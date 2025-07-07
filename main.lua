@@ -3,6 +3,7 @@ local gui = Instance.new("ScreenGui", player:WaitForChild("PlayerGui"))
 gui.Name = "ChristianSebasGamerUI"
 gui.ResetOnSpawn = false
 
+-- Rainbow efecto
 local function rainbow()
 	local t = tick()
 	return Color3.fromRGB(
@@ -12,6 +13,7 @@ local function rainbow()
 	)
 end
 
+-- Botón flotante con "C"
 local cBtn = Instance.new("TextButton", gui)
 cBtn.Size = UDim2.new(0, 60, 0, 60)
 cBtn.Position = UDim2.new(0, 20, 0, 20)
@@ -23,29 +25,35 @@ cBtn.TextScaled = true
 cBtn.Font = Enum.Font.Arcade
 cBtn.Draggable = true
 
+-- PANEL PRINCIPAL GRANDE Y MOVIBLE
 local menu = Instance.new("Frame", gui)
-menu.Size = UDim2.new(0, 900, 0, 150)
-menu.Position = UDim2.new(0.5, -450, 0.5, -75)
+menu.Size = UDim2.new(0.95, 0, 0.65, 0) -- GRANDE
+menu.Position = UDim2.new(0.025, 0, 0.15, 0)
 menu.BackgroundColor3 = Color3.fromRGB(20, 20, 20)
 menu.BackgroundTransparency = 0.4
 menu.Visible = false
+menu.Active = true
+menu.Draggable = true
 Instance.new("UICorner", menu)
 local stroke = Instance.new("UIStroke", menu)
 stroke.Thickness = 2
 
+-- Título
 local title = Instance.new("TextLabel", menu)
-title.Size = UDim2.new(0.15, 0, 1, 0)
+title.Size = UDim2.new(1, 0, 0, 40)
 title.Position = UDim2.new(0, 0, 0, 0)
-title.Text = "🎮 ChristianSebas Menu"
+title.Text = "🎮 ChristianSebas Panel Gamer"
 title.TextScaled = true
 title.Font = Enum.Font.Arcade
 title.TextColor3 = Color3.new(1,1,1)
 title.BackgroundTransparency = 1
 
+-- Mostrar/Ocultar menú
 cBtn.MouseButton1Click:Connect(function()
 	menu.Visible = not menu.Visible
 end)
 
+-- Variables
 local velocidad = 16
 local salto = 50
 local velON = false
@@ -59,10 +67,11 @@ local function actualizarHumanoid()
 	end
 end
 
-local function crearSeccionHorizontal(texto, posX, aumentar, disminuir, toggleVar, valor)
+-- Crear controles de velocidad/salto
+local function crearSeccion(texto, posY, aumentar, disminuir, toggleVar, valor)
 	local label = Instance.new("TextLabel", menu)
-	label.Position = UDim2.new(posX, 0, 0.1, 0)
-	label.Size = UDim2.new(0.1, 0, 0.3, 0)
+	label.Position = UDim2.new(0.02, 0, posY, 0)
+	label.Size = UDim2.new(0.1, 0, 0.05, 0)
 	label.Text = texto
 	label.TextScaled = true
 	label.Font = Enum.Font.Arcade
@@ -70,8 +79,8 @@ local function crearSeccionHorizontal(texto, posX, aumentar, disminuir, toggleVa
 	label.BackgroundTransparency = 1
 
 	local toggle = Instance.new("TextButton", menu)
-	toggle.Position = UDim2.new(posX + 0.11, 0, 0.1, 0)
-	toggle.Size = UDim2.new(0.06, 0, 0.3, 0)
+	toggle.Position = UDim2.new(0.14, 0, posY, 0)
+	toggle.Size = UDim2.new(0.06, 0, 0.05, 0)
 	toggle.Text = "OFF"
 	toggle.TextScaled = true
 	toggle.Font = Enum.Font.Arcade
@@ -79,8 +88,8 @@ local function crearSeccionHorizontal(texto, posX, aumentar, disminuir, toggleVa
 	toggle.TextColor3 = Color3.fromRGB(255, 0, 0)
 
 	local valLabel = Instance.new("TextLabel", menu)
-	valLabel.Position = UDim2.new(posX + 0.18, 0, 0.1, 0)
-	valLabel.Size = UDim2.new(0.05, 0, 0.3, 0)
+	valLabel.Position = UDim2.new(0.22, 0, posY, 0)
+	valLabel.Size = UDim2.new(0.05, 0, 0.05, 0)
 	valLabel.Text = tostring(valor)
 	valLabel.TextScaled = true
 	valLabel.Font = Enum.Font.Arcade
@@ -88,8 +97,8 @@ local function crearSeccionHorizontal(texto, posX, aumentar, disminuir, toggleVa
 	valLabel.BackgroundTransparency = 1
 
 	local plus = Instance.new("TextButton", menu)
-	plus.Position = UDim2.new(posX + 0.24, 0, 0.1, 0)
-	plus.Size = UDim2.new(0.05, 0, 0.3, 0)
+	plus.Position = UDim2.new(0.28, 0, posY, 0)
+	plus.Size = UDim2.new(0.05, 0, 0.05, 0)
 	plus.Text = "+"
 	plus.TextScaled = true
 	plus.Font = Enum.Font.Arcade
@@ -97,8 +106,8 @@ local function crearSeccionHorizontal(texto, posX, aumentar, disminuir, toggleVa
 	plus.TextColor3 = Color3.new(1,1,1)
 
 	local minus = Instance.new("TextButton", menu)
-	minus.Position = UDim2.new(posX + 0.3, 0, 0.1, 0)
-	minus.Size = UDim2.new(0.05, 0, 0.3, 0)
+	minus.Position = UDim2.new(0.34, 0, posY, 0)
+	minus.Size = UDim2.new(0.05, 0, 0.05, 0)
 	minus.Text = "-"
 	minus.TextScaled = true
 	minus.Font = Enum.Font.Arcade
@@ -125,23 +134,23 @@ local function crearSeccionHorizontal(texto, posX, aumentar, disminuir, toggleVa
 	end)
 end
 
-crearSeccionHorizontal("Velocidad", 0.16,
+crearSeccion("Velocidad", 0.15,
 	function() velocidad += 1 end,
 	function() velocidad = math.max(1, velocidad - 1) end,
 	"velON", velocidad
 )
 
-crearSeccionHorizontal("Salto", 0.36,
+crearSeccion("Salto", 0.25,
 	function() salto += 1 end,
 	function() salto = math.max(1, salto - 1) end,
 	"saltoON", salto
 )
 
--- Botones de scripts
-local function crearBoton(texto, posX)
+-- Función para crear botón normal
+local function crearBoton(texto, posX, posY)
 	local btn = Instance.new("TextButton", menu)
-	btn.Size = UDim2.new(0.12, 0, 0.5, 0)
-	btn.Position = UDim2.new(posX, 0, 0.5, 0)
+	btn.Size = UDim2.new(0.12, 0, 0.06, 0)
+	btn.Position = UDim2.new(posX, 0, posY, 0)
 	btn.Text = texto
 	btn.TextScaled = true
 	btn.Font = Enum.Font.Arcade
@@ -150,15 +159,15 @@ local function crearBoton(texto, posX)
 	return btn
 end
 
-local fly = crearBoton("🚀 Fly V3", 0.56)
-local esp = crearBoton("👁 ESP Player (OFF)", 0.69)
-local fling = crearBoton("🌀 Touch Fling (OFF)", 0.82)
-local steal = crearBoton("🧠 Brainlot", 0.10)
-local jail = crearBoton("🚓 Jailbreak", 0.23)
-local dead = crearBoton("🚂 Rieles Muertos", 0.36)
-local blox = crearBoton("🍉 Blox Fruits", 0.49)
+-- BOTONES DE FUNCIONES
+local fly = crearBoton("🚀 Fly V3", 0.02, 0.38)
+local esp = crearBoton("👁 ESP Player (OFF)", 0.18, 0.38)
+local fling = crearBoton("🌀 Touch Fling (OFF)", 0.35, 0.38)
+local steal = crearBoton("🧠 Brainlot", 0.52, 0.38)
+local jail = crearBoton("🚓 Jailbreak", 0.68, 0.38)
+local dead = crearBoton("🚂 Rieles Muertos", 0.02, 0.48)
+local blox = crearBoton("🍉 Blox Fruits", 0.18, 0.48)
 
--- Funciones
 fly.MouseButton1Click:Connect(function()
 	loadstring(game:HttpGet("https://raw.githubusercontent.com/XNEOFF/FlyGuiV3/main/FlyGuiV3.txt"))()
 end)
@@ -214,9 +223,10 @@ blox.MouseButton1Click:Connect(function()
 	loadstring(game:HttpGet("https://raw.githubusercontent.com/tlredz/Scripts/refs/heads/main/main.luau"))()
 end)
 
+-- Botón cerrar
 local cerrar = Instance.new("TextButton", menu)
-cerrar.Position = UDim2.new(0.93, 0, 0.1, 0)
-cerrar.Size = UDim2.new(0.05, 0, 0.8, 0)
+cerrar.Position = UDim2.new(0.9, 0, 0.9, 0)
+cerrar.Size = UDim2.new(0.08, 0, 0.07, 0)
 cerrar.Text = "❌"
 cerrar.TextScaled = true
 cerrar.Font = Enum.Font.Arcade
@@ -226,6 +236,7 @@ cerrar.MouseButton1Click:Connect(function()
 	menu.Visible = false
 end)
 
+-- Rainbow en tiempo real
 game:GetService("RunService").RenderStepped:Connect(function()
 	local color = rainbow()
 	stroke.Color = color
@@ -236,6 +247,7 @@ game:GetService("RunService").RenderStepped:Connect(function()
 	end
 end)
 
+-- Reset humanoide al reaparecer
 player.CharacterAdded:Connect(function(char)
 	char:WaitForChild("Humanoid").WalkSpeed = velON and velocidad or 16
 	char:WaitForChild("Humanoid").JumpPower = saltoON and salto or 50
