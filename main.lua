@@ -3,20 +3,20 @@ local gui = Instance.new("ScreenGui", player:WaitForChild("PlayerGui"))
 gui.Name = "ChristianSebasUI"
 gui.ResetOnSpawn = false
 
--- BOTÓN FLOTANTE (logo de la C)
+-- BOTÓN FLOTANTE
 local cBtn = Instance.new("ImageButton")
 cBtn.Size = UDim2.new(0, 60, 0, 60)
 cBtn.Position = UDim2.new(0, 20, 0, 20)
 cBtn.BackgroundColor3 = Color3.new(0, 0, 0)
 cBtn.BorderSizePixel = 0
-cBtn.Image = "rbxassetid://94777373855263" -- Tu logo "C"
+cBtn.Image = "rbxassetid://94777373855263"
 cBtn.Draggable = true
 cBtn.Parent = gui
 
 -- MENÚ
 local menu = Instance.new("Frame", gui)
-menu.Size = UDim2.new(0, 300, 0, 370)
-menu.Position = UDim2.new(0.5, -150, 0.5, -185)
+menu.Size = UDim2.new(0, 320, 0, 370)
+menu.Position = UDim2.new(0.5, -160, 0.5, -185)
 menu.BackgroundColor3 = Color3.fromRGB(25, 25, 25)
 menu.Visible = false
 
@@ -32,30 +32,26 @@ cBtn.MouseButton1Click:Connect(function()
     menu.Visible = not menu.Visible
 end)
 
--- VARIABLES
-local velocidadGUI = 0
-local saltoGUI = 0
-local velocidadActiva = false
-local saltoActivo = false
+-- VALORES INICIALES
+local velocidad = 16
+local salto = 50
+local velON = false
+local saltoON = false
 
-local defaultWalkSpeed = 16
-local defaultJumpPower = 50
-
--- FUNCIONES
-local function aplicarVelocidad()
-    if velocidadActiva then
+local function actualizarVelocidad()
+    if velON then
         local hum = player.Character and player.Character:FindFirstChild("Humanoid")
-        if hum then hum.WalkSpeed = velocidadGUI end
+        if hum then hum.WalkSpeed = velocidad end
     end
-    velValor.Text = tostring(velocidadGUI)
+    velValor.Text = tostring(velocidad)
 end
 
-local function aplicarSalto()
-    if saltoActivo then
+local function actualizarSalto()
+    if saltoON then
         local hum = player.Character and player.Character:FindFirstChild("Humanoid")
-        if hum then hum.JumpPower = saltoGUI end
+        if hum then hum.JumpPower = salto end
     end
-    saltoValor.Text = tostring(saltoGUI)
+    saltoValor.Text = tostring(salto)
 end
 
 -- VELOCIDAD
@@ -68,45 +64,55 @@ velLabel.Font = Enum.Font.GothamBold
 velLabel.TextColor3 = Color3.new(1,1,1)
 velLabel.BackgroundTransparency = 1
 
+local velToggle = Instance.new("TextButton", menu)
+velToggle.Position = UDim2.new(0.47, 0, 0.15, 0)
+velToggle.Size = UDim2.new(0.13, 0, 0, 30)
+velToggle.Text = "OFF"
+velToggle.TextScaled = true
+velToggle.Font = Enum.Font.GothamBold
+velToggle.BackgroundColor3 = Color3.fromRGB(45, 45, 45)
+velToggle.TextColor3 = Color3.fromRGB(255, 50, 50)
+
+velToggle.MouseButton1Click:Connect(function()
+    velON = not velON
+    velToggle.Text = velON and "ON" or "OFF"
+    velToggle.TextColor3 = velON and Color3.fromRGB(0, 255, 0) or Color3.fromRGB(255, 50, 50)
+    actualizarVelocidad()
+end)
+
 velValor = Instance.new("TextLabel", menu)
-velValor.Position = UDim2.new(0.45, 0, 0.15, 0)
-velValor.Size = UDim2.new(0.15, 0, 0, 30)
-velValor.Text = tostring(velocidadGUI)
+velValor.Position = UDim2.new(0.61, 0, 0.15, 0)
+velValor.Size = UDim2.new(0.1, 0, 0, 30)
+velValor.Text = tostring(velocidad)
 velValor.TextScaled = true
 velValor.Font = Enum.Font.GothamBold
 velValor.TextColor3 = Color3.new(1,1,1)
 velValor.BackgroundTransparency = 1
 
 local velMas = Instance.new("TextButton", menu)
-velMas.Position = UDim2.new(0.62, 0, 0.15, 0)
-velMas.Size = UDim2.new(0.15, 0, 0, 30)
+velMas.Position = UDim2.new(0.72, 0, 0.15, 0)
+velMas.Size = UDim2.new(0.13, 0, 0, 30)
 velMas.Text = "+"
 velMas.TextScaled = true
 velMas.BackgroundColor3 = Color3.fromRGB(45, 45, 45)
 velMas.TextColor3 = Color3.new(1,1,1)
 
 local velMenos = Instance.new("TextButton", menu)
-velMenos.Position = UDim2.new(0.8, 0, 0.15, 0)
-velMenos.Size = UDim2.new(0.15, 0, 0, 30)
+velMenos.Position = UDim2.new(0.86, 0, 0.15, 0)
+velMenos.Size = UDim2.new(0.13, 0, 0, 30)
 velMenos.Text = "-"
 velMenos.TextScaled = true
 velMenos.BackgroundColor3 = Color3.fromRGB(45, 45, 45)
 velMenos.TextColor3 = Color3.new(1,1,1)
 
 velMas.MouseButton1Click:Connect(function()
-    velocidadGUI += 1
-    if not velocidadActiva then
-        velocidadActiva = true
-    end
-    aplicarVelocidad()
+    velocidad += 1
+    actualizarVelocidad()
 end)
 
 velMenos.MouseButton1Click:Connect(function()
-    velocidadGUI = math.max(0, velocidadGUI - 1)
-    if not velocidadActiva then
-        velocidadActiva = true
-    end
-    aplicarVelocidad()
+    velocidad = math.max(0, velocidad - 1)
+    actualizarVelocidad()
 end)
 
 -- SALTO
@@ -119,48 +125,58 @@ saltoLabel.Font = Enum.Font.GothamBold
 saltoLabel.TextColor3 = Color3.new(1,1,1)
 saltoLabel.BackgroundTransparency = 1
 
+local saltoToggle = Instance.new("TextButton", menu)
+saltoToggle.Position = UDim2.new(0.47, 0, 0.28, 0)
+saltoToggle.Size = UDim2.new(0.13, 0, 0, 30)
+saltoToggle.Text = "OFF"
+saltoToggle.TextScaled = true
+saltoToggle.Font = Enum.Font.GothamBold
+saltoToggle.BackgroundColor3 = Color3.fromRGB(45, 45, 45)
+saltoToggle.TextColor3 = Color3.fromRGB(255, 50, 50)
+
+saltoToggle.MouseButton1Click:Connect(function()
+    saltoON = not saltoON
+    saltoToggle.Text = saltoON and "ON" or "OFF"
+    saltoToggle.TextColor3 = saltoON and Color3.fromRGB(0, 255, 0) or Color3.fromRGB(255, 50, 50)
+    actualizarSalto()
+end)
+
 saltoValor = Instance.new("TextLabel", menu)
-saltoValor.Position = UDim2.new(0.45, 0, 0.28, 0)
-saltoValor.Size = UDim2.new(0.15, 0, 0, 30)
-saltoValor.Text = tostring(saltoGUI)
+saltoValor.Position = UDim2.new(0.61, 0, 0.28, 0)
+saltoValor.Size = UDim2.new(0.1, 0, 0, 30)
+saltoValor.Text = tostring(salto)
 saltoValor.TextScaled = true
 saltoValor.Font = Enum.Font.GothamBold
 saltoValor.TextColor3 = Color3.new(1,1,1)
 saltoValor.BackgroundTransparency = 1
 
 local saltoMas = Instance.new("TextButton", menu)
-saltoMas.Position = UDim2.new(0.62, 0, 0.28, 0)
-saltoMas.Size = UDim2.new(0.15, 0, 0, 30)
+saltoMas.Position = UDim2.new(0.72, 0, 0.28, 0)
+saltoMas.Size = UDim2.new(0.13, 0, 0, 30)
 saltoMas.Text = "+"
 saltoMas.TextScaled = true
 saltoMas.BackgroundColor3 = Color3.fromRGB(45, 45, 45)
 saltoMas.TextColor3 = Color3.new(1,1,1)
 
 local saltoMenos = Instance.new("TextButton", menu)
-saltoMenos.Position = UDim2.new(0.8, 0, 0.28, 0)
-saltoMenos.Size = UDim2.new(0.15, 0, 0, 30)
+saltoMenos.Position = UDim2.new(0.86, 0, 0.28, 0)
+saltoMenos.Size = UDim2.new(0.13, 0, 0, 30)
 saltoMenos.Text = "-"
 saltoMenos.TextScaled = true
 saltoMenos.BackgroundColor3 = Color3.fromRGB(45, 45, 45)
 saltoMenos.TextColor3 = Color3.new(1,1,1)
 
 saltoMas.MouseButton1Click:Connect(function()
-    saltoGUI += 1
-    if not saltoActivo then
-        saltoActivo = true
-    end
-    aplicarSalto()
+    salto += 1
+    actualizarSalto()
 end)
 
 saltoMenos.MouseButton1Click:Connect(function()
-    saltoGUI = math.max(0, saltoGUI - 1)
-    if not saltoActivo then
-        saltoActivo = true
-    end
-    aplicarSalto()
+    salto = math.max(0, salto - 1)
+    actualizarSalto()
 end)
 
--- FLY V3
+-- FLY
 local flyBtn = Instance.new("TextButton", menu)
 flyBtn.Position = UDim2.new(0.05, 0, 0.42, 0)
 flyBtn.Size = UDim2.new(0.9, 0, 0, 35)
@@ -190,7 +206,6 @@ espBtn.MouseButton1Click:Connect(function()
             esp.Size = UDim2.new(0, 200, 0, 50)
             esp.Adornee = v.Character.Head
             esp.AlwaysOnTop = true
-
             local text = Instance.new("TextLabel", esp)
             text.Size = UDim2.new(1, 0, 1, 0)
             text.BackgroundTransparency = 1
@@ -214,9 +229,11 @@ cerrarBtn.MouseButton1Click:Connect(function()
     menu.Visible = false
 end)
 
--- AL RESPAWNEAR, mantener normal
+-- RESETEAR AL MORIR
 player.CharacterAdded:Connect(function(char)
     local hum = char:WaitForChild("Humanoid")
-    hum.WalkSpeed = defaultWalkSpeed
-    hum.JumpPower = defaultJumpPower
+    hum.WalkSpeed = 16
+    hum.JumpPower = 50
+    if velON then hum.WalkSpeed = velocidad end
+    if saltoON then hum.JumpPower = salto end
 end)
