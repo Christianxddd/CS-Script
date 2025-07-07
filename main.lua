@@ -18,17 +18,14 @@ local function rainbow()
 	)
 end
 
--- Botón flotante con "C"
-local cBtn = Instance.new("TextButton", gui)
+-- 🟩 Botón flotante con cara de Creeper
+local cBtn = Instance.new("ImageButton", gui)
 cBtn.Size = UDim2.new(0, 60, 0, 60)
 cBtn.Position = UDim2.new(0, 20, 0, 20)
 cBtn.BackgroundColor3 = Color3.fromRGB(0, 0, 0)
-cBtn.Text = "C"
-cBtn.Font = Enum.Font.Arcade
-cBtn.TextScaled = true
-cBtn.TextColor3 = Color3.new(1, 1, 1)
-cBtn.Draggable = true
 cBtn.BorderSizePixel = 0
+cBtn.Image = "rbxassetid://7414394011"
+cBtn.Draggable = true
 
 -- PANEL VERTICAL
 local panel = Instance.new("Frame", gui)
@@ -44,7 +41,7 @@ stroke.Thickness = 2
 
 -- Título
 local title = Instance.new("TextLabel", panel)
-title.Size = UDim2.new(1, 0, 0, 40)
+title.Size = UDim2.new(1, 0, 0, 30)
 title.Position = UDim2.new(0, 0, 0, 0)
 title.Text = "I'm Christian Sebast"
 title.Font = Enum.Font.Arcade
@@ -54,8 +51,8 @@ title.BackgroundTransparency = 1
 
 -- Sección scroll vertical
 local scroll = Instance.new("ScrollingFrame", panel)
-scroll.Size = UDim2.new(1, 0, 1, -45)
-scroll.Position = UDim2.new(0, 0, 0, 45)
+scroll.Size = UDim2.new(1, 0, 1, -35)
+scroll.Position = UDim2.new(0, 0, 0, 30)
 scroll.CanvasSize = UDim2.new(0, 0, 10, 0)
 scroll.ScrollBarThickness = 6
 scroll.BackgroundTransparency = 1
@@ -126,7 +123,7 @@ cBtn.MouseButton1Click:Connect(function()
 	if panel.Visible then miau:Play() end
 end)
 
--- Efecto rainbow dinámico
+-- 🌈 Efecto rainbow dinámico
 game:GetService("RunService").RenderStepped:Connect(function()
 	local color = rainbow()
 	stroke.Color = color
