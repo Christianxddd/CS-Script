@@ -25,7 +25,7 @@ cBtn.TextScaled = true
 cBtn.Font = Enum.Font.Arcade
 cBtn.Draggable = true
 
--- 🧱 Panel horizontal y más bajo
+-- 🧱 Panel principal horizontal
 local menu = Instance.new("Frame", gui)
 menu.Size = UDim2.new(0.95, 0, 0.55, 0)
 menu.Position = UDim2.new(0.025, 0, 0.25, 0)
@@ -38,28 +38,27 @@ Instance.new("UICorner", menu)
 local stroke = Instance.new("UIStroke", menu)
 stroke.Thickness = 2
 
--- 📝 Título arriba del todo
-local title = Instance.new("TextLabel", gui)
+-- 📝 Título dentro del panel
+local title = Instance.new("TextLabel", menu)
 title.Size = UDim2.new(1, 0, 0, 40)
-title.Position = UDim2.new(0, 0, 0.18, 0)
+title.Position = UDim2.new(0, 0, 0, 0)
 title.Text = "Im Christian Sebast"
 title.Font = Enum.Font.Arcade
 title.TextScaled = true
 title.BackgroundTransparency = 1
 title.TextColor3 = Color3.new(1, 1, 1)
 
--- Toggle panel
+-- Mostrar/ocultar panel
 cBtn.MouseButton1Click:Connect(function()
 	menu.Visible = not menu.Visible
 end)
 
--- 🔧 Variables iniciales
+-- 🔧 Variables
 _G.velocidad = 16
 _G.salto = 50
 _G.velON = false
 _G.saltoON = false
 
--- 🛠 Función actualizar Humanoid
 local function actualizarHumanoid()
 	local hum = player.Character and player.Character:FindFirstChild("Humanoid")
 	if hum then
@@ -68,7 +67,7 @@ local function actualizarHumanoid()
 	end
 end
 
--- ⚙️ Crear controles de Velocidad / Salto
+-- ⚙️ Crear control (velocidad/salto)
 local function crearControl(nombre, y, variable, toggleVar)
 	local label = Instance.new("TextLabel", menu)
 	label.Position = UDim2.new(0.02, 0, y, 0)
@@ -135,10 +134,11 @@ local function crearControl(nombre, y, variable, toggleVar)
 	end)
 end
 
-crearControl("Velocidad", 0.12, "velocidad", "velON")
-crearControl("Salto", 0.24, "salto", "saltoON")
+-- Posiciones ajustadas (más abajo del título)
+crearControl("Velocidad", 0.15, "velocidad", "velON")
+crearControl("Salto", 0.28, "salto", "saltoON")
 
--- 🎮 Botones de funciones
+-- 🎮 Botones de scripts
 local function crearBoton(nombre, posX, posY, url)
 	local btn = Instance.new("TextButton", menu)
 	btn.Size = UDim2.new(0.13, 0, 0.08, 0)
@@ -153,16 +153,16 @@ local function crearBoton(nombre, posX, posY, url)
 	end)
 end
 
-crearBoton("🚀 Fly V3", 0.45, 0.12, "https://raw.githubusercontent.com/XNEOFF/FlyGuiV3/main/FlyGuiV3.txt")
-crearBoton("🧠 Brainlot", 0.6, 0.12, "https://raw.githubusercontent.com/Akbar123s/Script-Roblox-/refs/heads/main/nabaruBrainrot")
-crearBoton("🚓 Jailbreak", 0.75, 0.12, "https://raw.githubusercontent.com/BlitzIsKing/UniversalFarm/main/Loader/Regular")
-crearBoton("🚂 Dead Rails", 0.45, 0.25, "https://raw.githubusercontent.com/gumanba/Scripts/refs/heads/main/DeadRails")
-crearBoton("🍉 Blox Fruits", 0.6, 0.25, "https://raw.githubusercontent.com/tlredz/Scripts/refs/heads/main/main.luau")
+crearBoton("🚀 Fly V3", 0.45, 0.15, "https://raw.githubusercontent.com/XNEOFF/FlyGuiV3/main/FlyGuiV3.txt")
+crearBoton("🧠 Brainlot", 0.6, 0.15, "https://raw.githubusercontent.com/Akbar123s/Script-Roblox-/refs/heads/main/nabaruBrainrot")
+crearBoton("🚓 Jailbreak", 0.75, 0.15, "https://raw.githubusercontent.com/BlitzIsKing/UniversalFarm/main/Loader/Regular")
+crearBoton("🚂 Dead Rails", 0.45, 0.28, "https://raw.githubusercontent.com/gumanba/Scripts/refs/heads/main/DeadRails")
+crearBoton("🍉 Blox Fruits", 0.6, 0.28, "https://raw.githubusercontent.com/tlredz/Scripts/refs/heads/main/main.luau")
 
 -- 👁 ESP TOGGLE
 local espBtn = Instance.new("TextButton", menu)
 espBtn.Size = UDim2.new(0.13, 0, 0.08, 0)
-espBtn.Position = UDim2.new(0.75, 0, 0.25, 0)
+espBtn.Position = UDim2.new(0.75, 0, 0.28, 0)
 espBtn.Text = "👁 ESP (OFF)"
 espBtn.Font = Enum.Font.Arcade
 espBtn.TextScaled = true
@@ -194,7 +194,7 @@ espBtn.MouseButton1Click:Connect(function()
 	end
 end)
 
--- ❌ Botón cerrar
+-- ❌ Cerrar menú
 local cerrar = Instance.new("TextButton", menu)
 cerrar.Position = UDim2.new(0.9, 0, 0.9, 0)
 cerrar.Size = UDim2.new(0.08, 0, 0.08, 0)
@@ -207,7 +207,7 @@ cerrar.MouseButton1Click:Connect(function()
 	menu.Visible = false
 end)
 
--- 🌈 Efecto rainbow animado
+-- 🌈 Rainbow efecto animado
 game:GetService("RunService").RenderStepped:Connect(function()
 	local color = rainbow()
 	stroke.Color = color
