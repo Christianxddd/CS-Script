@@ -1,4 +1,4 @@
--- 🎮 PANEL GAMER COMPLETO MEJOR ORDENADO
+-- 🎮 PANEL GAMER - ChristianSebas
 local player = game.Players.LocalPlayer
 local gui = Instance.new("ScreenGui", player:WaitForChild("PlayerGui"))
 gui.Name = "ChristianSebasGamerUI"
@@ -14,7 +14,7 @@ local function rainbow()
 	)
 end
 
--- 🔘 Botón flotante con "C"
+-- 🔘 Botón flotante con letra "C"
 local cBtn = Instance.new("TextButton", gui)
 cBtn.Size = UDim2.new(0, 60, 0, 60)
 cBtn.Position = UDim2.new(0, 20, 0, 20)
@@ -39,11 +39,11 @@ Instance.new("UICorner", menu)
 local stroke = Instance.new("UIStroke", menu)
 stroke.Thickness = 2
 
--- 🎯 Título
+-- 📝 Nuevo título
 local title = Instance.new("TextLabel", menu)
-title.Size = UDim2.new(1, 0, 0, 30)
+title.Size = UDim2.new(1, 0, 0, 40)
 title.Position = UDim2.new(0, 0, 0, 0)
-title.Text = "🎮 ChristianSebas - Panel Gamer"
+title.Text = "Im Christian Sebast"
 title.Font = Enum.Font.Arcade
 title.TextScaled = true
 title.BackgroundTransparency = 1
@@ -54,21 +54,22 @@ cBtn.MouseButton1Click:Connect(function()
 	menu.Visible = not menu.Visible
 end)
 
--- 🔧 Variables
-local velocidad = 16
-local salto = 50
-local velON = false
-local saltoON = false
+-- 🔧 Variables Globales
+_G.velocidad = 16
+_G.salto = 50
+_G.velON = false
+_G.saltoON = false
 
+-- 🛠 Actualizar Humanoid
 local function actualizarHumanoid()
 	local hum = player.Character and player.Character:FindFirstChild("Humanoid")
 	if hum then
-		hum.WalkSpeed = velON and velocidad or 16
-		hum.JumpPower = saltoON and salto or 50
+		hum.WalkSpeed = _G.velON and _G.velocidad or 16
+		hum.JumpPower = _G.saltoON and _G.salto or 50
 	end
 end
 
--- ⚙️ Crear control de velocidad/salto
+-- ⚙️ Crear control de velocidad y salto
 local function crearControl(nombre, y, variable, toggleVar)
 	local label = Instance.new("TextLabel", menu)
 	label.Position = UDim2.new(0.02, 0, y, 0)
@@ -135,16 +136,11 @@ local function crearControl(nombre, y, variable, toggleVar)
 	end)
 end
 
--- 📌 Inicializar controles
-_G["velocidad"] = velocidad
-_G["salto"] = salto
-_G["velON"] = velON
-_G["saltoON"] = saltoON
+-- ✨ Ligeramente más abajo que antes
+crearControl("Velocidad", 0.13, "velocidad", "velON")
+crearControl("Salto", 0.25, "salto", "saltoON")
 
-crearControl("Velocidad", 0.15, "velocidad", "velON")
-crearControl("Salto", 0.28, "salto", "saltoON")
-
--- 🧱 Crear botón de script
+-- 🎮 Crear botones de scripts
 local function crearBoton(nombre, posX, posY, scriptUrl)
 	local btn = Instance.new("TextButton", menu)
 	btn.Size = UDim2.new(0.13, 0, 0.08, 0)
@@ -166,18 +162,17 @@ local function crearBoton(nombre, posX, posY, scriptUrl)
 	end)
 end
 
--- 🚀 Scripts
-crearBoton("🚀 Fly V3", 0.45, 0.15, "https://raw.githubusercontent.com/XNEOFF/FlyGuiV3/main/FlyGuiV3.txt")
-crearBoton("🌀 Touch Fling", 0.6, 0.15, "https://rawscripts.net/raw/Universal-Script-TOUCH-FLING-ULTRA-POWER-30194")
-crearBoton("🧠 Brainlot", 0.75, 0.15, "https://raw.githubusercontent.com/Akbar123s/Script-Roblox-/refs/heads/main/nabaruBrainrot")
-crearBoton("🚓 Jailbreak", 0.45, 0.28, "https://raw.githubusercontent.com/BlitzIsKing/UniversalFarm/main/Loader/Regular")
-crearBoton("🚂 Dead Rails", 0.6, 0.28, "https://raw.githubusercontent.com/gumanba/Scripts/refs/heads/main/DeadRails")
-crearBoton("🍉 Blox Fruits", 0.75, 0.28, "https://raw.githubusercontent.com/tlredz/Scripts/refs/heads/main/main.luau")
+crearBoton("🚀 Fly V3", 0.45, 0.13, "https://raw.githubusercontent.com/XNEOFF/FlyGuiV3/main/FlyGuiV3.txt")
+crearBoton("🌀 Touch Fling", 0.6, 0.13, "https://rawscripts.net/raw/Universal-Script-TOUCH-FLING-ULTRA-POWER-30194")
+crearBoton("🧠 Brainlot", 0.75, 0.13, "https://raw.githubusercontent.com/Akbar123s/Script-Roblox-/refs/heads/main/nabaruBrainrot")
+crearBoton("🚓 Jailbreak", 0.45, 0.26, "https://raw.githubusercontent.com/BlitzIsKing/UniversalFarm/main/Loader/Regular")
+crearBoton("🚂 Dead Rails", 0.6, 0.26, "https://raw.githubusercontent.com/gumanba/Scripts/refs/heads/main/DeadRails")
+crearBoton("🍉 Blox Fruits", 0.75, 0.26, "https://raw.githubusercontent.com/tlredz/Scripts/refs/heads/main/main.luau")
 
--- 👁 ESP TOGGLE
+-- 👁 ESP toggle
 local espBtn = Instance.new("TextButton", menu)
 espBtn.Size = UDim2.new(0.13, 0, 0.08, 0)
-espBtn.Position = UDim2.new(0.45, 0, 0.42, 0)
+espBtn.Position = UDim2.new(0.45, 0, 0.39, 0)
 espBtn.Text = "👁 ESP (OFF)"
 espBtn.Font = Enum.Font.Arcade
 espBtn.TextScaled = true
@@ -209,7 +204,7 @@ espBtn.MouseButton1Click:Connect(function()
 	end
 end)
 
--- ❌ Botón cerrar
+-- ❌ Cerrar panel
 local cerrar = Instance.new("TextButton", menu)
 cerrar.Position = UDim2.new(0.9, 0, 0.9, 0)
 cerrar.Size = UDim2.new(0.08, 0, 0.08, 0)
@@ -222,7 +217,7 @@ cerrar.MouseButton1Click:Connect(function()
 	menu.Visible = false
 end)
 
--- 🌈 Efecto rainbow en loop
+-- 🌈 Rainbow animado en todo
 game:GetService("RunService").RenderStepped:Connect(function()
 	local color = rainbow()
 	stroke.Color = color
@@ -233,8 +228,8 @@ game:GetService("RunService").RenderStepped:Connect(function()
 	end
 end)
 
--- 🧍 Al respawnear personaje
+-- Reset velocidad y salto al morir
 player.CharacterAdded:Connect(function(char)
-	char:WaitForChild("Humanoid").WalkSpeed = velON and velocidad or 16
-	char:WaitForChild("Humanoid").JumpPower = saltoON and salto or 50
+	char:WaitForChild("Humanoid").WalkSpeed = _G.velON and _G.velocidad or 16
+	char:WaitForChild("Humanoid").JumpPower = _G.saltoON and _G.salto or 50
 end)
