@@ -41,12 +41,14 @@ local salto = 50
 local velON = false
 local saltoON = false
 
+local velValor, saltoValor
+
 local function actualizarVelocidad()
     local hum = player.Character and player.Character:FindFirstChild("Humanoid")
     if hum then
         hum.WalkSpeed = velON and velocidad or 16
     end
-    velValor.Text = tostring(velocidad)
+    if velValor then velValor.Text = tostring(velocidad) end
 end
 
 local function actualizarSalto()
@@ -54,10 +56,10 @@ local function actualizarSalto()
     if hum then
         hum.JumpPower = saltoON and salto or 50
     end
-    saltoValor.Text = tostring(salto)
+    if saltoValor then saltoValor.Text = tostring(salto) end
 end
 
--- SECCIÓN: VELOCIDAD
+-- VELOCIDAD
 local velLabel = Instance.new("TextLabel", menu)
 velLabel.Position = UDim2.new(0.05, 0, 0.15, 0)
 velLabel.Size = UDim2.new(0.4, 0, 0, 30)
@@ -116,7 +118,7 @@ velMenos.MouseButton1Click:Connect(function()
     actualizarVelocidad()
 end)
 
--- SECCIÓN: SALTO
+-- SALTO
 local saltoLabel = Instance.new("TextLabel", menu)
 saltoLabel.Position = UDim2.new(0.05, 0, 0.28, 0)
 saltoLabel.Size = UDim2.new(0.4, 0, 0, 30)
@@ -228,7 +230,7 @@ cerrarBtn.MouseButton1Click:Connect(function()
     menu.Visible = false
 end)
 
--- RESTAURAR VALORES AL MORIR
+-- RESTAURAR AL MORIR
 player.CharacterAdded:Connect(function(char)
     local hum = char:WaitForChild("Humanoid")
     hum.WalkSpeed = velON and velocidad or 16
