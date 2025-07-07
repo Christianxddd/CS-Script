@@ -1,152 +1,195 @@
 local player = game.Players.LocalPlayer
 local gui = Instance.new("ScreenGui", player:WaitForChild("PlayerGui"))
-gui.Name = "ChristianPanelV2"
+gui.Name = "ChristianHub"
 gui.ResetOnSpawn = false
 
--- BOTÓN DE LA "C"
+-- Rainbow
+local function rainbow()
+	local t = tick()
+	return Color3.fromRGB(
+		math.sin(t) * 127 + 128,
+		math.sin(t + 2 * math.pi / 3) * 127 + 128,
+		math.sin(t + 4 * math.pi / 3) * 127 + 128
+	)
+end
+
+-- Botón "C"
 local toggleBtn = Instance.new("TextButton", gui)
-toggleBtn.Size = UDim2.new(0, 60, 0, 60)
-toggleBtn.Position = UDim2.new(0, 20, 0, 20)
+toggleBtn.Size = UDim2.new(0, 50, 0, 50)
+toggleBtn.Position = UDim2.new(0, 10, 0, 10)
 toggleBtn.Text = "C"
-toggleBtn.Font = Enum.Font.Arcade
 toggleBtn.TextScaled = true
-toggleBtn.BackgroundColor3 = Color3.fromRGB(30, 30, 30)
+toggleBtn.Font = Enum.Font.Arcade
+toggleBtn.BackgroundColor3 = Color3.fromRGB(0, 0, 0)
 toggleBtn.TextColor3 = Color3.new(1, 1, 1)
-toggleBtn.ZIndex = 5
 toggleBtn.Draggable = true
 
--- PANEL PRINCIPAL
-local mainFrame = Instance.new("Frame", gui)
-mainFrame.Size = UDim2.new(0.6, 0, 0.8, 0)
-mainFrame.Position = UDim2.new(0.2, 0, 0.1, 0)
-mainFrame.BackgroundColor3 = Color3.fromRGB(20, 20, 20)
-mainFrame.BackgroundTransparency = 0.3
-mainFrame.Visible = false
-mainFrame.Active = true
-mainFrame.Draggable = true
+-- Panel principal
+local panel = Instance.new("Frame", gui)
+panel.Size = UDim2.new(0, 350, 0, 500)
+panel.Position = UDim2.new(0.5, -175, 0.5, -250)
+panel.BackgroundColor3 = Color3.fromRGB(25, 25, 25)
+panel.BackgroundTransparency = 0.2
+panel.Visible = false
+panel.Active = true
+panel.Draggable = true
 
-local uiList = Instance.new("UIListLayout", mainFrame)
-uiList.SortOrder = Enum.SortOrder.LayoutOrder
-uiList.Padding = UDim.new(0, 6)
+-- Stroke rainbow
+local stroke = Instance.new("UIStroke", panel)
+stroke.Thickness = 2
 
--- TÍTULO Y DATOS
-local title = Instance.new("TextLabel", mainFrame)
-title.Size = UDim2.new(1, 0, 0, 40)
+-- Título
+local title = Instance.new("TextLabel", panel)
+title.Size = UDim2.new(1, 0, 0, 35)
 title.Text = "By Christian"
 title.TextScaled = true
 title.Font = Enum.Font.Arcade
-title.TextColor3 = Color3.new(1, 1, 1)
 title.BackgroundTransparency = 1
+title.TextColor3 = Color3.new(1,1,1)
 
-local datos = Instance.new("TextLabel", mainFrame)
-datos.Size = UDim2.new(1, 0, 0, 30)
-datos.Text = "Usuario: Christian_xyx | TikTok: @christ_sebast_7d"
-datos.TextScaled = true
-datos.Font = Enum.Font.Arcade
-datos.TextColor3 = Color3.new(1, 1, 1)
-datos.BackgroundTransparency = 1
+-- Datos personales
+local userInfo = Instance.new("TextLabel", panel)
+userInfo.Position = UDim2.new(0, 0, 0, 35)
+userInfo.Size = UDim2.new(1, 0, 0, 25)
+userInfo.Text = "Usuario: Christian_xyx | TikTok: @christ_sebast_7d"
+userInfo.TextScaled = true
+userInfo.Font = Enum.Font.Gotham
+userInfo.TextColor3 = Color3.new(1, 1, 1)
+userInfo.BackgroundTransparency = 1
 
--- SCROLL DE SECCIONES
-local scroll = Instance.new("ScrollingFrame", mainFrame)
-scroll.Size = UDim2.new(1, 0, 1, -80)
-scroll.CanvasSize = UDim2.new(0, 0, 5, 0)
+-- Botón minimizar
+local minimizeBtn = Instance.new("TextButton", panel)
+minimizeBtn.Size = UDim2.new(0, 30, 0, 30)
+minimizeBtn.Position = UDim2.new(1, -35, 0, 5)
+minimizeBtn.Text = "-"
+minimizeBtn.Font = Enum.Font.Arcade
+minimizeBtn.TextScaled = true
+minimizeBtn.BackgroundColor3 = Color3.fromRGB(50, 50, 50)
+minimizeBtn.TextColor3 = Color3.new(1, 1, 1)
+
+-- Contenedor scrollable
+local scroll = Instance.new("ScrollingFrame", panel)
+scroll.Position = UDim2.new(0, 10, 0, 70)
+scroll.Size = UDim2.new(1, -20, 1, -80)
+scroll.CanvasSize = UDim2.new(0, 0, 0, 800)
+scroll.ScrollBarThickness = 6
 scroll.BackgroundTransparency = 1
-scroll.ScrollBarThickness = 5
-scroll.AutomaticCanvasSize = Enum.AutomaticSize.Y
-local sectionList = Instance.new("UIListLayout", scroll)
-sectionList.SortOrder = Enum.SortOrder.LayoutOrder
-sectionList.Padding = UDim.new(0, 4)
 
--- FUNCIÓN: CREAR CARPETA SECCIÓN
-local function crearCarpeta(nombre)
-	local carpeta = Instance.new("Frame")
-	carpeta.Size = UDim2.new(1, 0, 0, 30)
-	carpeta.BackgroundColor3 = Color3.fromRGB(35, 35, 35)
+-- UIList para ordenar
+local list = Instance.new("UIListLayout", scroll)
+list.Padding = UDim.new(0, 10)
+list.SortOrder = Enum.SortOrder.LayoutOrder
 
-	local title = Instance.new("TextButton", carpeta)
-	title.Size = UDim2.new(1, 0, 1, 0)
-	title.Text = "📁 "..nombre
-	title.TextScaled = true
-	title.Font = Enum.Font.Arcade
-	title.TextColor3 = Color3.new(1,1,1)
-	title.BackgroundTransparency = 1
+-- Búsqueda
+local searchBox = Instance.new("TextBox", panel)
+searchBox.PlaceholderText = "Buscar..."
+searchBox.Position = UDim2.new(0, 10, 0, 45)
+searchBox.Size = UDim2.new(0.7, 0, 0, 20)
+searchBox.BackgroundColor3 = Color3.fromRGB(40, 40, 40)
+searchBox.TextColor3 = Color3.new(1, 1, 1)
+searchBox.TextScaled = true
+searchBox.Font = Enum.Font.Gotham
 
-	local contenedor = Instance.new("Frame", carpeta)
-	contenedor.Name = "Contenido"
-	contenedor.Size = UDim2.new(1, 0, 0, 0)
-	contenedor.ClipsDescendants = true
-	contenedor.BackgroundTransparency = 1
-	contenedor.LayoutOrder = 2
-
-	local lista = Instance.new("UIListLayout", contenedor)
-	lista.SortOrder = Enum.SortOrder.LayoutOrder
-	lista.Padding = UDim.new(0, 4)
-
-	local abierto = false
-	title.MouseButton1Click:Connect(function()
-		abierto = not abierto
-		contenedor.Size = abierto and UDim2.new(1,0,0, #contenedor:GetChildren()*40) or UDim2.new(1,0,0,0)
-	end)
-
-	return carpeta, contenedor
+-- Función para crear secciones
+local function crearSeccion(nombre)
+	local frame = Instance.new("Frame")
+	frame.Size = UDim2.new(1, -10, 0, 25)
+	frame.BackgroundColor3 = Color3.fromRGB(40, 40, 40)
+	
+	local label = Instance.new("TextLabel", frame)
+	label.Size = UDim2.new(1, 0, 1, 0)
+	label.Text = "🔹 " .. nombre
+	label.TextScaled = true
+	label.Font = Enum.Font.GothamBold
+	label.TextColor3 = Color3.new(1,1,1)
+	label.BackgroundTransparency = 1
+	
+	return frame
 end
 
--- FUNCIÓN: CREAR BOTÓN DE SCRIPT
-local function crearScript(nombre, link)
+-- Función para crear botones
+local function crearBoton(nombre, scriptUrl)
 	local btn = Instance.new("TextButton")
-	btn.Size = UDim2.new(1, 0, 0, 35)
-	btn.Text = "▶️ "..nombre
-	btn.Font = Enum.Font.Arcade
+	btn.Size = UDim2.new(1, -10, 0, 35)
+	btn.Text = nombre
 	btn.TextScaled = true
+	btn.Font = Enum.Font.Gotham
 	btn.TextColor3 = Color3.new(1,1,1)
-	btn.BackgroundColor3 = Color3.fromRGB(45,45,45)
+	btn.BackgroundColor3 = Color3.fromRGB(50, 50, 50)
 	btn.MouseButton1Click:Connect(function()
-		loadstring(game:HttpGet(link))()
+		loadstring(game:HttpGet(scriptUrl))()
 	end)
 	return btn
 end
 
--- 📂 JUEGOS POPULARES
-local carpetaJuegos, contenidoJuegos = crearCarpeta("Juegos Populares")
-carpetaJuegos.Parent = scroll
+-- Agregar secciones y scripts
+local seccionJuegos = crearSeccion("🎮 Juegos Populares")
+seccionJuegos.LayoutOrder = 1
+seccionJuegos.Name = "Juegos"
+seccionJuegos.Parent = scroll
 
-contenidoJuegos:AddChild(crearScript("🧠 Brainlot", "https://raw.githubusercontent.com/Akbar123s/Script-Roblox-/refs/heads/main/nabaruBrainrot"))
-contenidoJuegos:AddChild(crearScript("🚓 Jailbreak", "https://raw.githubusercontent.com/BlitzIsKing/UniversalFarm/main/Loader/Regular"))
-contenidoJuegos:AddChild(crearScript("🚂 Dead Rails", "https://raw.githubusercontent.com/gumanba/Scripts/refs/heads/main/DeadRails"))
-contenidoJuegos:AddChild(crearScript("🍉 Blox Fruits", "https://raw.githubusercontent.com/tlredz/Scripts/refs/heads/main/main.luau"))
--- Agrega más juegos aquí...
+local scriptsJuegos = {
+	{"🧠 Brainlot", "https://raw.githubusercontent.com/Akbar123s/Script-Roblox-/refs/heads/main/nabaruBrainrot"},
+	{"🚓 Jailbreak", "https://raw.githubusercontent.com/BlitzIsKing/UniversalFarm/main/Loader/Regular"},
+	{"🚂 Dead Rails", "https://raw.githubusercontent.com/gumanba/Scripts/refs/heads/main/DeadRails"},
+	{"🍉 Blox Fruits", "https://raw.githubusercontent.com/tlredz/Scripts/refs/heads/main/main.luau"},
+}
 
--- 📂 COMANDOS
-local carpetaComandos, contenidoComandos = crearCarpeta("Comandos")
-carpetaComandos.Parent = scroll
+for _, data in pairs(scriptsJuegos) do
+	local btn = crearBoton(data[1], data[2])
+	btn.Parent = scroll
+end
 
-contenidoComandos:AddChild(crearScript("🚀 Fly V3", "https://raw.githubusercontent.com/XNEOFF/FlyGuiV3/main/FlyGuiV3.txt"))
-contenidoComandos:AddChild(crearScript("🌀 Touch Fling", "https://rawscripts.net/raw/Universal-Script-TOUCH-FLING-ULTRA-POWER-30194"))
-contenidoComandos:AddChild(crearScript("👁 ESP Player", "https://raw.githubusercontent.com/zekewaze/ESP-NameTags/main/main.lua"))
-contenidoComandos:AddChild(crearScript("📜 Infinity Yield", "https://raw.githubusercontent.com/EdgeIY/infiniteyield/master/source"))
+local seccionComandos = crearSeccion("🛠️ Comandos")
+seccionComandos.LayoutOrder = 2
+seccionComandos.Name = "Comandos"
+seccionComandos.Parent = scroll
 
--- BOTÓN DE REGRESAR EN SECCIONES EXPANDIDAS (solo visible si lo necesitas)
-local function crearRegresar()
-	local btn = Instance.new("TextButton")
-	btn.Size = UDim2.new(1, 0, 0, 30)
-	btn.Text = "⬅️ Regresar"
-	btn.Font = Enum.Font.Arcade
-	btn.TextScaled = true
-	btn.TextColor3 = Color3.new(1,1,1)
-	btn.BackgroundColor3 = Color3.fromRGB(30, 30, 30)
-	btn.MouseButton1Click:Connect(function()
-		for _, v in pairs(scroll:GetChildren()) do
-			if v:IsA("Frame") and v:FindFirstChild("Contenido") then
-				v.Contenido.Size = UDim2.new(1, 0, 0, 0)
-			end
+local scriptsComandos = {
+	{"🚀 Fly V3", "https://raw.githubusercontent.com/XNEOFF/FlyGuiV3/main/FlyGuiV3.txt"},
+	{"🌀 Touch Fling", "https://rawscripts.net/raw/Universal-Script-TOUCH-FLING-ULTRA-POWER-30194"},
+	{"👁 ESP Player", "https://raw.githubusercontent.com/RandomScripter123456/ESP-Gui/main/ESP.lua"},
+	{"⚙ Infinity Yield", "https://raw.githubusercontent.com/EdgeIY/infiniteyield/master/source"},
+}
+
+for _, data in pairs(scriptsComandos) do
+	local btn = crearBoton(data[1], data[2])
+	btn.Parent = scroll
+end
+
+-- Filtrar con búsqueda
+searchBox:GetPropertyChangedSignal("Text"):Connect(function()
+	local filtro = searchBox.Text:lower()
+	for _, item in ipairs(scroll:GetChildren()) do
+		if item:IsA("TextButton") then
+			item.Visible = item.Text:lower():find(filtro) ~= nil
+		elseif item:IsA("Frame") then
+			item.Visible = true
 		end
-	end)
-	return btn
-end
+	end
+end)
 
-scroll:AddChild(crearRegresar())
-
--- MOSTRAR PANEL CON BOTÓN "C"
+-- Mostrar panel
 toggleBtn.MouseButton1Click:Connect(function()
-	mainFrame.Visible = not mainFrame.Visible
+	panel.Visible = not panel.Visible
+end)
+
+-- Minimizar
+minimizeBtn.MouseButton1Click:Connect(function()
+	panel.Visible = false
+end)
+
+-- Rainbow efecto
+game:GetService("RunService").RenderStepped:Connect(function()
+	local color = rainbow()
+	stroke.Color = color
+	title.TextColor3 = color
+	for _, item in ipairs(scroll:GetChildren()) do
+		if item:IsA("TextButton") then
+			item.TextColor3 = color
+		elseif item:IsA("Frame") then
+			local label = item:FindFirstChildWhichIsA("TextLabel")
+			if label then label.TextColor3 = color end
+		end
+	end
 end)
