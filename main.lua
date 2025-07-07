@@ -1,34 +1,37 @@
--- GUI Profesional by ChristianSebast - Juegos Populares con pestaña y botón de regreso
-
 local player = game.Players.LocalPlayer
 local gui = Instance.new("ScreenGui", player:WaitForChild("PlayerGui"))
-gui.Name = "ChristianSebastUI"
+gui.Name = "ChristianSebastPanel"
 gui.ResetOnSpawn = false
 
--- Rainbow dinámico
+-- Sonido de maullido
+local miau = Instance.new("Sound", gui)
+miau.SoundId = "rbxassetid://9120470040"
+miau.Volume = 1
+
+-- Rainbow
 local function rainbow()
 	local t = tick()
-	return Color3.fromHSV(t % 5 / 5, 1, 1)
+	return Color3.fromHSV((t % 5) / 5, 1, 1)
 end
 
--- Botón flotante
-local cBtn = Instance.new("TextButton", gui)
-cBtn.Size = UDim2.new(0, 60, 0, 60)
-cBtn.Position = UDim2.new(0, 20, 0, 20)
-cBtn.BackgroundColor3 = Color3.fromRGB(20, 20, 20)
-cBtn.BorderSizePixel = 0
-cBtn.Text = "C"
-cBtn.TextColor3 = Color3.new(1, 1, 1)
-cBtn.TextScaled = true
-cBtn.Font = Enum.Font.GothamBold
-cBtn.Draggable = true
+-- Botón flotante "C"
+local openBtn = Instance.new("TextButton", gui)
+openBtn.Size = UDim2.new(0, 50, 0, 50)
+openBtn.Position = UDim2.new(0, 20, 0.5, -25)
+openBtn.BackgroundColor3 = Color3.new(0, 0, 0)
+openBtn.BorderSizePixel = 0
+openBtn.Text = "C"
+openBtn.TextScaled = true
+openBtn.Font = Enum.Font.GothamBlack
+openBtn.TextColor3 = Color3.new(1, 1, 1)
+openBtn.Draggable = true
 
 -- Panel principal
 local panel = Instance.new("Frame", gui)
-panel.Size = UDim2.new(0, 320, 0, 450)
-panel.Position = UDim2.new(0, 100, 0, 80)
+panel.Size = UDim2.new(0, 450, 0, 580)
+panel.Position = UDim2.new(0.5, -225, 0.5, -290)
 panel.BackgroundColor3 = Color3.fromRGB(15, 15, 15)
-panel.BackgroundTransparency = 0.3
+panel.BackgroundTransparency = 0.2
 panel.Visible = false
 panel.Active = true
 panel.Draggable = true
@@ -36,109 +39,128 @@ Instance.new("UICorner", panel)
 local stroke = Instance.new("UIStroke", panel)
 stroke.Thickness = 2
 
+-- Título
 local title = Instance.new("TextLabel", panel)
-title.Size = UDim2.new(1, 0, 0, 40)
+title.Size = UDim2.new(1, 0, 0, 35)
 title.Text = "Im Christian Sebast"
-title.TextColor3 = Color3.new(1, 1, 1)
-title.Font = Enum.Font.GothamBold
 title.TextScaled = true
+title.Font = Enum.Font.GothamBold
+title.TextColor3 = Color3.new(1, 1, 1)
 title.BackgroundTransparency = 1
 
--- Panel secundario (pestaña de juegos)
-local gamePanel = Instance.new("Frame", gui)
-gamePanel.Size = UDim2.new(0, 320, 0, 450)
-gamePanel.Position = panel.Position
-gamePanel.BackgroundColor3 = Color3.fromRGB(15, 15, 15)
-gamePanel.BackgroundTransparency = 0.3
-gamePanel.Visible = false
-gamePanel.Active = true
-gamePanel.Draggable = true
-Instance.new("UICorner", gamePanel)
-local stroke2 = Instance.new("UIStroke", gamePanel)
-stroke2.Thickness = 2
+-- Barra de búsqueda
+local searchBox = Instance.new("TextBox", panel)
+searchBox.PlaceholderText = "🔍 Buscar script..."
+searchBox.Size = UDim2.new(0.95, 0, 0, 30)
+searchBox.Position = UDim2.new(0.025, 0, 0, 40)
+searchBox.TextScaled = true
+searchBox.Font = Enum.Font.Gotham
+searchBox.TextColor3 = Color3.new(1,1,1)
+searchBox.BackgroundColor3 = Color3.fromRGB(30,30,30)
 
-local gameTitle = Instance.new("TextLabel", gamePanel)
-gameTitle.Size = UDim2.new(1, 0, 0, 40)
-gameTitle.Text = "🎮 Juegos Populares"
-gameTitle.TextColor3 = Color3.new(1, 1, 1)
-gameTitle.Font = Enum.Font.GothamBold
-gameTitle.TextScaled = true
-gameTitle.BackgroundTransparency = 1
+-- Contenedor scroll
+local scroll = Instance.new("ScrollingFrame", panel)
+scroll.Position = UDim2.new(0, 0, 0, 80)
+scroll.Size = UDim2.new(1, 0, 1, -120)
+scroll.CanvasSize = UDim2.new(0, 0, 2, 0)
+scroll.ScrollBarThickness = 6
+scroll.BackgroundTransparency = 1
 
--- Función para crear botones de script
-local function crearBoton(nombre, posY, scriptUrl, parent)
-	local btn = Instance.new("TextButton", parent)
-	btn.Size = UDim2.new(0.9, 0, 0, 35)
-	btn.Position = UDim2.new(0.05, 0, 0, posY)
+local layout = Instance.new("UIListLayout", scroll)
+layout.Padding = UDim.new(0, 8)
+
+-- Crear sección
+local function crearSeccion(nombre)
+	local frame = Instance.new("Frame")
+	frame.Size = UDim2.new(1, -20, 0, 30)
+	frame.BackgroundColor3 = Color3.fromRGB(30, 30, 30)
+	frame.BorderSizePixel = 0
+
+	local label = Instance.new("TextLabel", frame)
+	label.Size = UDim2.new(1, 0, 1, 0)
+	label.Text = nombre
+	label.TextScaled = true
+	label.Font = Enum.Font.GothamBold
+	label.TextColor3 = Color3.new(1, 1, 1)
+	label.BackgroundTransparency = 1
+
+	return frame
+end
+
+-- Crear botón de script
+local function crearBoton(nombre, scriptURL)
+	local btn = Instance.new("TextButton")
+	btn.Size = UDim2.new(1, -40, 0, 35)
+	btn.BackgroundColor3 = Color3.fromRGB(40, 40, 40)
 	btn.Text = nombre
-	btn.TextColor3 = Color3.new(1, 1, 1)
-	btn.Font = Enum.Font.GothamBold
 	btn.TextScaled = true
-	btn.BackgroundColor3 = Color3.fromRGB(30, 30, 30)
+	btn.Font = Enum.Font.GothamBold
+	btn.TextColor3 = Color3.new(1,1,1)
 	btn.MouseButton1Click:Connect(function()
-		loadstring(game:HttpGet(scriptUrl))()
+		loadstring(game:HttpGet(scriptURL))()
 	end)
+	return btn
 end
 
--- Scripts en el panel de juegos
-local juegos = {
-	{"🧠 Steal Brainlot", "https://raw.githubusercontent.com/Akbar123s/Script-Roblox-/refs/heads/main/nabaruBrainrot"},
-	{"🚓 Jailbreak", "https://raw.githubusercontent.com/BlitzIsKing/UniversalFarm/main/Loader/Regular"},
-	{"🚂 Dead Rails", "https://raw.githubusercontent.com/gumanba/Scripts/refs/heads/main/DeadRails"},
-	{"🍉 Blox Fruits", "https://raw.githubusercontent.com/tlredz/Scripts/refs/heads/main/main.luau"},
-	-- Puedes agregar más aquí
-}
+-- Juegos Populares
+scroll:AddChild(crearSeccion("🎮 Juegos Populares"))
+scroll:AddChild(crearBoton("🧠 Brainlot", "https://raw.githubusercontent.com/Akbar123s/Script-Roblox-/refs/heads/main/nabaruBrainrot"))
+scroll:AddChild(crearBoton("🚓 Jailbreak", "https://raw.githubusercontent.com/BlitzIsKing/UniversalFarm/main/Loader/Regular"))
+scroll:AddChild(crearBoton("🚂 Dead Rails", "https://raw.githubusercontent.com/gumanba/Scripts/refs/heads/main/DeadRails"))
+scroll:AddChild(crearBoton("🍉 Blox Fruits", "https://raw.githubusercontent.com/tlredz/Scripts/refs/heads/main/main.luau"))
+scroll:AddChild(crearBoton("🔥 Anime Fighters", "https://raw.githubusercontent.com/synolope/robloxscripts/main/animefighters.lua"))
+scroll:AddChild(crearBoton("🌀 Slap Battles", "https://raw.githubusercontent.com/zaeburYT/RobloxScripts/main/SlapBattles.lua"))
+scroll:AddChild(crearBoton("🕹️ Bedwars", "https://raw.githubusercontent.com/KinqzScripts/Free/main/bedwars.lua"))
+scroll:AddChild(crearBoton("💣 Arsenal", "https://raw.githubusercontent.com/EdgeIY/infiniteyield/master/source"))
+scroll:AddChild(crearBoton("🔫 Phantom Forces", "https://raw.githubusercontent.com/FilteringEnabled/FE/main/Phantom.lua"))
+scroll:AddChild(crearBoton("⛏️ Mining Simulator", "https://raw.githubusercontent.com/GenesisRoblox/Roblox-Scripts/main/MiningSimulator.lua"))
 
-for i, data in ipairs(juegos) do
-	crearBoton(data[1], 50 + (i - 1) * 45, data[2], gamePanel)
-end
+-- Utilidades
+scroll:AddChild(crearSeccion("🛠️ Utilidades"))
+scroll:AddChild(crearBoton("🚀 Fly V3", "https://raw.githubusercontent.com/XNEOFF/FlyGuiV3/main/FlyGuiV3.txt"))
+scroll:AddChild(crearBoton("👁 ESP Player", "https://rawscripts.net/raw/ESP-Script-Advanced-Player-30201"))
+scroll:AddChild(crearBoton("🌀 Touch Fling", "https://rawscripts.net/raw/Universal-Script-TOUCH-FLING-ULTRA-POWER-30194"))
+scroll:AddChild(crearBoton("🧠 Steal Brain", "https://raw.githubusercontent.com/Akbar123s/Script-Roblox-/refs/heads/main/nabaruBrainrot"))
+scroll:AddChild(crearBoton("📜 Comandos (Infinity Yield)", "https://raw.githubusercontent.com/EdgeIY/infiniteyield/master/source"))
 
--- Botón de regresar
-local backBtn = Instance.new("TextButton", gamePanel)
-backBtn.Size = UDim2.new(0.5, 0, 0, 35)
-backBtn.Position = UDim2.new(0.25, 0, 1, -45)
+-- Botón Regresar
+local backBtn = Instance.new("TextButton", panel)
+backBtn.Size = UDim2.new(1, 0, 0, 35)
+backBtn.Position = UDim2.new(0, 0, 1, -35)
 backBtn.Text = "🔙 Regresar"
-backBtn.TextColor3 = Color3.new(1, 1, 1)
-backBtn.Font = Enum.Font.GothamBold
 backBtn.TextScaled = true
-backBtn.BackgroundColor3 = Color3.fromRGB(40, 40, 40)
+backBtn.Font = Enum.Font.GothamBlack
+backBtn.TextColor3 = Color3.new(1, 0.2, 0.2)
+backBtn.BackgroundColor3 = Color3.fromRGB(25, 25, 25)
 backBtn.MouseButton1Click:Connect(function()
-	gamePanel.Visible = false
-	panel.Visible = true
-end)
-
--- Botón para ir a juegos populares
-local juegosBtn = Instance.new("TextButton", panel)
-juegosBtn.Size = UDim2.new(0.9, 0, 0, 35)
-juegosBtn.Position = UDim2.new(0.05, 0, 0, 60)
-juegosBtn.Text = "🎮 Juegos Populares"
-juegosBtn.TextColor3 = Color3.new(1, 1, 1)
-juegosBtn.Font = Enum.Font.GothamBold
-juegosBtn.TextScaled = true
-juegosBtn.BackgroundColor3 = Color3.fromRGB(40, 40, 40)
-juegosBtn.MouseButton1Click:Connect(function()
 	panel.Visible = false
-	gamePanel.Visible = true
 end)
 
--- Mostrar/ocultar panel principal
-cBtn.MouseButton1Click:Connect(function()
+-- Mostrar panel con sonido
+openBtn.MouseButton1Click:Connect(function()
 	panel.Visible = not panel.Visible
-	gamePanel.Visible = false
+	if panel.Visible then miau:Play() end
 end)
 
--- Rainbow dinámico en tiempo real
+-- Rainbow efecto
 game:GetService("RunService").RenderStepped:Connect(function()
 	local color = rainbow()
 	stroke.Color = color
-	stroke2.Color = color
 	title.TextColor3 = color
-	gameTitle.TextColor3 = color
-	juegosBtn.TextColor3 = color
-	backBtn.TextColor3 = color
-	for _, v in pairs(gamePanel:GetChildren()) do
-		if v:IsA("TextButton") then
+	for _, v in pairs(scroll:GetChildren()) do
+		if v:IsA("TextButton") or v:IsA("TextLabel") then
 			v.TextColor3 = color
+		end
+	end
+end)
+
+-- Barra de búsqueda
+searchBox:GetPropertyChangedSignal("Text"):Connect(function()
+	local term = searchBox.Text:lower()
+	for _, btn in pairs(scroll:GetChildren()) do
+		if btn:IsA("TextButton") then
+			local match = btn.Text:lower():find(term)
+			btn.Visible = match ~= nil
 		end
 	end
 end)
