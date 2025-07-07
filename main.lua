@@ -1,17 +1,17 @@
--- Panel Profesional Básico by ChristianSebast
+-- GUI Profesional by ChristianSebast - Juegos Populares con pestaña y botón de regreso
 
 local player = game.Players.LocalPlayer
 local gui = Instance.new("ScreenGui", player:WaitForChild("PlayerGui"))
 gui.Name = "ChristianSebastUI"
 gui.ResetOnSpawn = false
 
--- Función para efecto rainbow suave
+-- Rainbow dinámico
 local function rainbow()
 	local t = tick()
-	return Color3.fromHSV((t * 0.5) % 1, 1, 1)
+	return Color3.fromHSV(t % 5 / 5, 1, 1)
 end
 
--- Botón flotante "C"
+-- Botón flotante
 local cBtn = Instance.new("TextButton", gui)
 cBtn.Size = UDim2.new(0, 60, 0, 60)
 cBtn.Position = UDim2.new(0, 20, 0, 20)
@@ -21,123 +21,124 @@ cBtn.Text = "C"
 cBtn.TextColor3 = Color3.new(1, 1, 1)
 cBtn.TextScaled = true
 cBtn.Font = Enum.Font.GothamBold
-cBtn.AutoButtonColor = true
 cBtn.Draggable = true
-cBtn.Name = "ToggleButton"
 
 -- Panel principal
 local panel = Instance.new("Frame", gui)
-panel.Size = UDim2.new(0, 300, 0, 400)
-panel.Position = UDim2.new(0, 20, 0, 90)
+panel.Size = UDim2.new(0, 320, 0, 450)
+panel.Position = UDim2.new(0, 100, 0, 80)
 panel.BackgroundColor3 = Color3.fromRGB(15, 15, 15)
 panel.BackgroundTransparency = 0.3
 panel.Visible = false
 panel.Active = true
 panel.Draggable = true
+Instance.new("UICorner", panel)
+local stroke = Instance.new("UIStroke", panel)
+stroke.Thickness = 2
 
-local uiCorner = Instance.new("UICorner", panel)
-uiCorner.CornerRadius = UDim.new(0, 8)
-
-local uiStroke = Instance.new("UIStroke", panel)
-uiStroke.Thickness = 2
-uiStroke.Color = Color3.fromRGB(255, 255, 255)
-
--- Título
 local title = Instance.new("TextLabel", panel)
-title.Size = UDim2.new(1, 0, 0, 50)
-title.Position = UDim2.new(0, 0, 0, 0)
-title.BackgroundTransparency = 1
+title.Size = UDim2.new(1, 0, 0, 40)
 title.Text = "Im Christian Sebast"
 title.TextColor3 = Color3.new(1, 1, 1)
 title.Font = Enum.Font.GothamBold
 title.TextScaled = true
+title.BackgroundTransparency = 1
 
--- Separador (línea)
-local separator = Instance.new("Frame", panel)
-separator.Size = UDim2.new(1, -20, 0, 2)
-separator.Position = UDim2.new(0, 10, 0, 52)
-separator.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
-separator.BackgroundTransparency = 0.5
+-- Panel secundario (pestaña de juegos)
+local gamePanel = Instance.new("Frame", gui)
+gamePanel.Size = UDim2.new(0, 320, 0, 450)
+gamePanel.Position = panel.Position
+gamePanel.BackgroundColor3 = Color3.fromRGB(15, 15, 15)
+gamePanel.BackgroundTransparency = 0.3
+gamePanel.Visible = false
+gamePanel.Active = true
+gamePanel.Draggable = true
+Instance.new("UICorner", gamePanel)
+local stroke2 = Instance.new("UIStroke", gamePanel)
+stroke2.Thickness = 2
 
--- Función para crear botones de scripts
-local function createButton(text, y)
-	local btn = Instance.new("TextButton", panel)
-	btn.Size = UDim2.new(0.9, 0, 0, 40)
-	btn.Position = UDim2.new(0.05, 0, y, 0)
-	btn.BackgroundColor3 = Color3.fromRGB(40, 40, 40)
+local gameTitle = Instance.new("TextLabel", gamePanel)
+gameTitle.Size = UDim2.new(1, 0, 0, 40)
+gameTitle.Text = "🎮 Juegos Populares"
+gameTitle.TextColor3 = Color3.new(1, 1, 1)
+gameTitle.Font = Enum.Font.GothamBold
+gameTitle.TextScaled = true
+gameTitle.BackgroundTransparency = 1
+
+-- Función para crear botones de script
+local function crearBoton(nombre, posY, scriptUrl, parent)
+	local btn = Instance.new("TextButton", parent)
+	btn.Size = UDim2.new(0.9, 0, 0, 35)
+	btn.Position = UDim2.new(0.05, 0, 0, posY)
+	btn.Text = nombre
 	btn.TextColor3 = Color3.new(1, 1, 1)
 	btn.Font = Enum.Font.GothamBold
 	btn.TextScaled = true
-	btn.Text = text
-	btn.AutoButtonColor = true
-	btn.Name = text:gsub(" ", ""):gsub("[%(%)]", "") -- nombre limpio
-	local corner = Instance.new("UICorner", btn)
-	corner.CornerRadius = UDim.new(0, 5)
-	return btn
-end
-
--- Lista de scripts con sus nombres y links
-local scriptsList = {
-	{
-		name = "Fly V3 (Original)",
-		url = "https://raw.githubusercontent.com/XNEOFF/FlyGuiV3/main/FlyGuiV3.txt"
-	},
-	{
-		name = "Infinity Yield (Comandos)",
-		url = "https://raw.githubusercontent.com/EdgeIY/infiniteyield/master/source"
-	},
-	{
-		name = "Touch Fling",
-		url = "https://rawscripts.net/raw/Universal-Script-TOUCH-FLING-ULTRA-POWER-30194"
-	},
-	{
-		name = "Brainlot Steal",
-		url = "https://raw.githubusercontent.com/Akbar123s/Script-Roblox-/refs/heads/main/nabaruBrainrot"
-	},
-	{
-		name = "Jailbreak",
-		url = "https://raw.githubusercontent.com/BlitzIsKing/UniversalFarm/main/Loader/Regular"
-	},
-	{
-		name = "Dead Rails",
-		url = "https://raw.githubusercontent.com/gumanba/Scripts/refs/heads/main/DeadRails"
-	},
-	{
-		name = "Blox Fruits",
-		url = "https://raw.githubusercontent.com/tlredz/Scripts/refs/heads/main/main.luau"
-	},
-	-- Puedes agregar más aquí si quieres
-}
-
--- Botones para scripts
-for i, data in ipairs(scriptsList) do
-	local btn = createButton(data.name, 0.13 + (i-1)*0.07)
-	btn.Parent = panel
+	btn.BackgroundColor3 = Color3.fromRGB(30, 30, 30)
 	btn.MouseButton1Click:Connect(function()
-		local success, err = pcall(function()
-			loadstring(game:HttpGet(data.url))()
-		end)
-		if not success then
-			warn("Error al ejecutar script: ".. err)
-		end
+		loadstring(game:HttpGet(scriptUrl))()
 	end)
 end
 
--- Función para actualizar colores rainbow
-game:GetService("RunService").RenderStepped:Connect(function()
-	local color = rainbow()
-	cBtn.BackgroundColor3 = color
-	title.TextColor3 = color
-	uiStroke.Color = color
-	for _, btn in pairs(panel:GetChildren()) do
-		if btn:IsA("TextButton") then
-			btn.TextColor3 = color
-			btn.BackgroundColor3 = Color3.fromRGB(30, 30, 30)
-		end
-	end
+-- Scripts en el panel de juegos
+local juegos = {
+	{"🧠 Steal Brainlot", "https://raw.githubusercontent.com/Akbar123s/Script-Roblox-/refs/heads/main/nabaruBrainrot"},
+	{"🚓 Jailbreak", "https://raw.githubusercontent.com/BlitzIsKing/UniversalFarm/main/Loader/Regular"},
+	{"🚂 Dead Rails", "https://raw.githubusercontent.com/gumanba/Scripts/refs/heads/main/DeadRails"},
+	{"🍉 Blox Fruits", "https://raw.githubusercontent.com/tlredz/Scripts/refs/heads/main/main.luau"},
+	-- Puedes agregar más aquí
+}
+
+for i, data in ipairs(juegos) do
+	crearBoton(data[1], 50 + (i - 1) * 45, data[2], gamePanel)
+end
+
+-- Botón de regresar
+local backBtn = Instance.new("TextButton", gamePanel)
+backBtn.Size = UDim2.new(0.5, 0, 0, 35)
+backBtn.Position = UDim2.new(0.25, 0, 1, -45)
+backBtn.Text = "🔙 Regresar"
+backBtn.TextColor3 = Color3.new(1, 1, 1)
+backBtn.Font = Enum.Font.GothamBold
+backBtn.TextScaled = true
+backBtn.BackgroundColor3 = Color3.fromRGB(40, 40, 40)
+backBtn.MouseButton1Click:Connect(function()
+	gamePanel.Visible = false
+	panel.Visible = true
 end)
 
--- Mostrar/Ocultar panel al presionar "C"
+-- Botón para ir a juegos populares
+local juegosBtn = Instance.new("TextButton", panel)
+juegosBtn.Size = UDim2.new(0.9, 0, 0, 35)
+juegosBtn.Position = UDim2.new(0.05, 0, 0, 60)
+juegosBtn.Text = "🎮 Juegos Populares"
+juegosBtn.TextColor3 = Color3.new(1, 1, 1)
+juegosBtn.Font = Enum.Font.GothamBold
+juegosBtn.TextScaled = true
+juegosBtn.BackgroundColor3 = Color3.fromRGB(40, 40, 40)
+juegosBtn.MouseButton1Click:Connect(function()
+	panel.Visible = false
+	gamePanel.Visible = true
+end)
+
+-- Mostrar/ocultar panel principal
 cBtn.MouseButton1Click:Connect(function()
 	panel.Visible = not panel.Visible
+	gamePanel.Visible = false
+end)
+
+-- Rainbow dinámico en tiempo real
+game:GetService("RunService").RenderStepped:Connect(function()
+	local color = rainbow()
+	stroke.Color = color
+	stroke2.Color = color
+	title.TextColor3 = color
+	gameTitle.TextColor3 = color
+	juegosBtn.TextColor3 = color
+	backBtn.TextColor3 = color
+	for _, v in pairs(gamePanel:GetChildren()) do
+		if v:IsA("TextButton") then
+			v.TextColor3 = color
+		end
+	end
 end)
