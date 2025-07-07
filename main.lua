@@ -1,192 +1,219 @@
--- BIENVENIDA ÉPICA (Pantalla completa, sin fondo, solo texto)
-local player = game.Players.LocalPlayer
+local Players = game:GetService("Players")
+local RunService = game:GetService("RunService")
+local player = Players.LocalPlayer
+
+-- GUI base
 local gui = Instance.new("ScreenGui", player:WaitForChild("PlayerGui"))
-gui.Name = "ChristianWelcome"
-gui.IgnoreGuiInset = true
+gui.Name = "ChristianHub"
 gui.ResetOnSpawn = false
 
-local bienvenida = Instance.new("TextLabel", gui)
-bienvenida.Size = UDim2.new(1, 0, 1, 0)
-bienvenida.BackgroundTransparency = 1
-bienvenida.Text = "By Christian"
-bienvenida.TextColor3 = Color3.fromRGB(255, 255, 255)
-bienvenida.TextScaled = true
-bienvenida.Font = Enum.Font.Arcade
-bienvenida.TextStrokeTransparency = 0.3
-bienvenida.TextStrokeColor3 = Color3.fromRGB(0, 255, 0)
-
--- Fade In
-bienvenida.TextTransparency = 1
-for i = 1, 0, -0.05 do
-	task.wait(0.02)
-	bienvenida.TextTransparency = i
+-- Rainbow Function
+local function rainbow()
+	local t = tick()
+	return Color3.fromRGB(
+		math.sin(t) * 127 + 128,
+		math.sin(t + 2) * 127 + 128,
+		math.sin(t + 4) * 127 + 128
+	)
 end
 
-wait(2.5) -- Tiempo visible
+-- Intro (pantalla completa con texto)
+local intro = Instance.new("TextLabel", gui)
+intro.Size = UDim2.new(1, 0, 1, 0)
+intro.BackgroundColor3 = Color3.new(0, 0, 0)
+intro.Text = "By Christian"
+intro.Font = Enum.Font.Arcade
+intro.TextScaled = true
+intro.TextColor3 = Color3.new(1,1,1)
+intro.ZIndex = 10
 
--- Fade Out
-for i = 0, 1, 0.05 do
-	task.wait(0.02)
-	bienvenida.TextTransparency = i
-end
-
-bienvenida:Destroy()
-
--- PANEL PRINCIPAL
-local mainGui = Instance.new("ScreenGui", player:WaitForChild("PlayerGui"))
-mainGui.Name = "ChristianPanel"
-mainGui.ResetOnSpawn = false
-
--- BOTÓN FLOTANTE "C"
-local iconBtn = Instance.new("TextButton", mainGui)
-iconBtn.Name = "OpenButton"
-iconBtn.Size = UDim2.new(0, 50, 0, 50)
-iconBtn.Position = UDim2.new(0, 20, 0, 20)
-iconBtn.BackgroundColor3 = Color3.new(0, 0, 0)
-iconBtn.Text = "C"
-iconBtn.Font = Enum.Font.Arcade
-iconBtn.TextColor3 = Color3.new(1, 1, 1)
-iconBtn.TextScaled = true
-iconBtn.Active = true
-iconBtn.Draggable = true
-iconBtn.BackgroundTransparency = 0.3
-
--- PANEL PRINCIPAL
-local panel = Instance.new("Frame", mainGui)
-panel.Name = "MainPanel"
-panel.Size = UDim2.new(0, 500, 0, 400)
-panel.Position = UDim2.new(0.5, -250, 0.5, -200)
-panel.BackgroundColor3 = Color3.fromRGB(20, 20, 20)
-panel.BackgroundTransparency = 0.4
-panel.Visible = false
-panel.Active = true
-panel.Draggable = true
-local panelCorner = Instance.new("UICorner", panel)
-panelCorner.CornerRadius = UDim.new(0, 8)
-
--- TITULO
-local title = Instance.new("TextLabel", panel)
-title.Size = UDim2.new(1, 0, 0, 40)
-title.Position = UDim2.new(0, 0, 0, 0)
-title.Text = "By Christian"
-title.Font = Enum.Font.Arcade
-title.TextScaled = true
-title.TextColor3 = Color3.new(1, 1, 1)
-title.BackgroundTransparency = 1
-
--- DATOS DE USUARIO
-local datos = Instance.new("TextLabel", panel)
-datos.Size = UDim2.new(1, 0, 0, 30)
-datos.Position = UDim2.new(0, 0, 0, 40)
-datos.Text = "Usuario: Christian_xyx | TikTok: @christ_sebast_7d"
-datos.Font = Enum.Font.Arcade
-datos.TextScaled = true
-datos.TextColor3 = Color3.new(1, 1, 1)
-datos.BackgroundTransparency = 1
-
--- CARPETA DE "SCRIPTS"
-local scriptsBtn = Instance.new("TextButton", panel)
-scriptsBtn.Size = UDim2.new(0.4, 0, 0, 40)
-scriptsBtn.Position = UDim2.new(0.05, 0, 0, 80)
-scriptsBtn.Text = "📁 Scripts"
-scriptsBtn.Font = Enum.Font.Arcade
-scriptsBtn.TextScaled = true
-scriptsBtn.TextColor3 = Color3.new(1, 1, 1)
-scriptsBtn.BackgroundColor3 = Color3.fromRGB(40, 40, 40)
-Instance.new("UICorner", scriptsBtn)
-
--- CARPETA DE "COMANDOS"
-local comandosBtn = Instance.new("TextButton", panel)
-comandosBtn.Size = UDim2.new(0.4, 0, 0, 40)
-comandosBtn.Position = UDim2.new(0.55, 0, 0, 80)
-comandosBtn.Text = "⚙️ Comandos"
-comandosBtn.Font = Enum.Font.Arcade
-comandosBtn.TextScaled = true
-comandosBtn.TextColor3 = Color3.new(1, 1, 1)
-comandosBtn.BackgroundColor3 = Color3.fromRGB(40, 40, 40)
-Instance.new("UICorner", comandosBtn)
-
--- EVENTO PARA MOSTRAR PANEL
-iconBtn.MouseButton1Click:Connect(function()
-	panel.Visible = not panel.Visible
+-- Desaparece después de 2 segundos
+task.delay(2, function()
+	intro:Destroy()
 end)
 
--- FUNCIONALIDAD DE CARPETAS (scripts ejemplo)
-local function abrirSubPanel(nombre, scripts)
-	local subPanel = Instance.new("Frame", mainGui)
-	subPanel.Size = UDim2.new(0, 500, 0, 400)
-	subPanel.Position = UDim2.new(0.5, -250, 0.5, -200)
-	subPanel.BackgroundColor3 = Color3.fromRGB(20, 20, 20)
-	subPanel.BackgroundTransparency = 0.4
-	subPanel.Active = true
-	subPanel.Draggable = true
+-- Pantalla de contraseña
+local passFrame = Instance.new("Frame", gui)
+passFrame.Size = UDim2.new(0, 350, 0, 150)
+passFrame.Position = UDim2.new(0.5, -175, 0.4, -75)
+passFrame.BackgroundColor3 = Color3.fromRGB(30, 30, 30)
+Instance.new("UICorner", passFrame)
 
-	local titulo = Instance.new("TextLabel", subPanel)
-	titulo.Size = UDim2.new(1, 0, 0, 40)
-	titulo.Text = "📂 " .. nombre
-	titulo.Font = Enum.Font.Arcade
-	titulo.TextScaled = true
-	titulo.TextColor3 = Color3.new(1, 1, 1)
-	titulo.BackgroundTransparency = 1
+local passLabel = Instance.new("TextLabel", passFrame)
+passLabel.Size = UDim2.new(1, 0, 0.4, 0)
+passLabel.Position = UDim2.new(0, 0, 0, 0)
+passLabel.Text = "Ingrese la contraseña"
+passLabel.Font = Enum.Font.Arcade
+passLabel.TextColor3 = Color3.new(1,1,1)
+passLabel.TextScaled = true
+passLabel.BackgroundTransparency = 1
 
-	local scroll = Instance.new("ScrollingFrame", subPanel)
-	scroll.Size = UDim2.new(1, 0, 1, -60)
-	scroll.Position = UDim2.new(0, 0, 0, 40)
-	scroll.CanvasSize = UDim2.new(0, 0, 0, #scripts * 50)
-	scroll.ScrollBarThickness = 6
-	scroll.BackgroundTransparency = 1
+local input = Instance.new("TextBox", passFrame)
+input.Size = UDim2.new(0.8, 0, 0.3, 0)
+input.Position = UDim2.new(0.1, 0, 0.45, 0)
+input.PlaceholderText = "Código"
+input.Font = Enum.Font.Arcade
+input.TextScaled = true
+input.BackgroundColor3 = Color3.fromRGB(50, 50, 50)
+input.TextColor3 = Color3.new(1,1,1)
+Instance.new("UICorner", input)
 
-	for i, s in ipairs(scripts) do
-		local b = Instance.new("TextButton", scroll)
-		b.Size = UDim2.new(0.9, 0, 0, 40)
-		b.Position = UDim2.new(0.05, 0, 0, (i - 1) * 45)
-		b.Text = s.nombre
-		b.Font = Enum.Font.Arcade
-		b.TextScaled = true
-		b.TextColor3 = Color3.new(1, 1, 1)
-		b.BackgroundColor3 = Color3.fromRGB(40, 40, 40)
-		b.MouseButton1Click:Connect(function()
-			loadstring(game:HttpGet(s.url))()
-		end)
-		Instance.new("UICorner", b)
-	end
+local check = Instance.new("TextButton", passFrame)
+check.Size = UDim2.new(0.5, 0, 0.2, 0)
+check.Position = UDim2.new(0.25, 0, 0.8, 0)
+check.Text = "Entrar"
+check.Font = Enum.Font.Arcade
+check.TextScaled = true
+check.BackgroundColor3 = Color3.fromRGB(80, 80, 80)
+check.TextColor3 = Color3.new(1,1,1)
+Instance.new("UICorner", check)
 
-	local back = Instance.new("TextButton", subPanel)
-	back.Size = UDim2.new(0.2, 0, 0, 35)
-	back.Position = UDim2.new(0.75, 0, 0.91, 0)
-	back.Text = "🔙 Regresar"
-	back.Font = Enum.Font.Arcade
-	back.TextScaled = true
-	back.TextColor3 = Color3.new(1, 1, 1)
-	back.BackgroundColor3 = Color3.fromRGB(40, 40, 40)
-	Instance.new("UICorner", back)
-	back.MouseButton1Click:Connect(function()
-		subPanel:Destroy()
+-- Panel principal (oculto al inicio)
+local panel = Instance.new("Frame")
+panel.Size = UDim2.new(0, 450, 0, 500)
+panel.Position = UDim2.new(0.5, -225, 0.5, -250)
+panel.BackgroundColor3 = Color3.fromRGB(20, 20, 20)
+panel.BackgroundTransparency = 0.3
+panel.Visible = false
+panel.Parent = gui
+panel.Active = true
+panel.Draggable = true
+Instance.new("UICorner", panel)
+local stroke = Instance.new("UIStroke", panel)
+stroke.Thickness = 2
+
+-- Título
+local title = Instance.new("TextLabel", panel)
+title.Size = UDim2.new(1, 0, 0.08, 0)
+title.Position = UDim2.new(0, 0, 0, 0)
+title.Text = "Im Christian Sebast"
+title.Font = Enum.Font.Arcade
+title.TextScaled = true
+title.BackgroundTransparency = 1
+title.TextColor3 = Color3.new(1,1,1)
+
+-- Info
+local userLabel = Instance.new("TextLabel", panel)
+userLabel.Size = UDim2.new(1, 0, 0.05, 0)
+userLabel.Position = UDim2.new(0, 0, 0.08, 0)
+userLabel.Text = "Usuario de Roblox: Christian_xyx | TikTok: @christ_sebast_7d"
+userLabel.Font = Enum.Font.Arcade
+userLabel.TextScaled = true
+userLabel.BackgroundTransparency = 1
+userLabel.TextColor3 = Color3.new(1,1,1)
+
+-- Botón de carpeta Scripts
+local scriptsBtn = Instance.new("TextButton", panel)
+scriptsBtn.Size = UDim2.new(0.8, 0, 0.07, 0)
+scriptsBtn.Position = UDim2.new(0.1, 0, 0.16, 0)
+scriptsBtn.Text = "📂 Scripts"
+scriptsBtn.Font = Enum.Font.Arcade
+scriptsBtn.TextScaled = true
+scriptsBtn.BackgroundColor3 = Color3.fromRGB(40,40,40)
+scriptsBtn.TextColor3 = Color3.new(1,1,1)
+Instance.new("UICorner", scriptsBtn)
+
+-- SUBPANEL de scripts
+local subPanel = Instance.new("ScrollingFrame", panel)
+subPanel.Size = UDim2.new(0.9, 0, 0.6, 0)
+subPanel.Position = UDim2.new(0.05, 0, 0.25, 0)
+subPanel.CanvasSize = UDim2.new(0, 0, 5, 0)
+subPanel.Visible = false
+subPanel.BackgroundTransparency = 0.2
+subPanel.BackgroundColor3 = Color3.fromRGB(30, 30, 30)
+subPanel.ScrollBarThickness = 6
+Instance.new("UICorner", subPanel)
+
+-- Botón de regresar
+local backBtn = Instance.new("TextButton", panel)
+backBtn.Size = UDim2.new(0.3, 0, 0.07, 0)
+backBtn.Position = UDim2.new(0.35, 0, 0.88, 0)
+backBtn.Text = "🔙 Regresar"
+backBtn.Font = Enum.Font.Arcade
+backBtn.TextScaled = true
+backBtn.Visible = false
+backBtn.BackgroundColor3 = Color3.fromRGB(50,50,50)
+backBtn.TextColor3 = Color3.new(1,1,1)
+Instance.new("UICorner", backBtn)
+
+-- Scripts para General (puedes añadir más)
+local scripts = {
+	{"Fly V3", "https://raw.githubusercontent.com/XNEOFF/FlyGuiV3/main/FlyGuiV3.txt"},
+	{"ESP Player", "https://rawscripts.net/raw/Universal-Script-ESP-PLAYER-1919"},
+	{"Touch Fling", "https://rawscripts.net/raw/Universal-Script-TOUCH-FLING-ULTRA-POWER-30194"},
+	{"Infinity Yield", "https://raw.githubusercontent.com/EdgeIY/infinityyield/master/source"},
+	{"Brainlot", "https://raw.githubusercontent.com/Akbar123s/Script-Roblox-/refs/heads/main/nabaruBrainrot"},
+	{"Jailbreak", "https://raw.githubusercontent.com/BlitzIsKing/UniversalFarm/main/Loader/Regular"},
+	{"Dead Rails", "https://raw.githubusercontent.com/gumanba/Scripts/refs/heads/main/DeadRails"},
+	{"Blox Fruits", "https://raw.githubusercontent.com/tlredz/Scripts/refs/heads/main/main.luau"},
+}
+
+-- Crear botones dentro de subPanel
+for i, data in pairs(scripts) do
+	local btn = Instance.new("TextButton", subPanel)
+	btn.Size = UDim2.new(0.9, 0, 0, 35)
+	btn.Position = UDim2.new(0.05, 0, 0, (i-1) * 40)
+	btn.Text = "▶️ " .. data[1]
+	btn.Font = Enum.Font.Arcade
+	btn.TextScaled = true
+	btn.BackgroundColor3 = Color3.fromRGB(40, 40, 40)
+	btn.TextColor3 = Color3.new(1,1,1)
+	btn.MouseButton1Click:Connect(function()
+		loadstring(game:HttpGet(data[2]))()
 	end)
 end
 
--- SCRIPTS DE JUEGOS POPULARES
-local juegosPopulares = {
-	{nombre = "🧠 Brainlot", url = "https://raw.githubusercontent.com/Akbar123s/Script-Roblox-/refs/heads/main/nabaruBrainrot"},
-	{nombre = "🚓 Jailbreak", url = "https://raw.githubusercontent.com/BlitzIsKing/UniversalFarm/main/Loader/Regular"},
-	{nombre = "🚂 Dead Rails", url = "https://raw.githubusercontent.com/gumanba/Scripts/refs/heads/main/DeadRails"},
-	{nombre = "🍉 Blox Fruits", url = "https://raw.githubusercontent.com/tlredz/Scripts/refs/heads/main/main.luau"},
-	-- Agrega más si deseas
-}
-
--- COMANDOS (Fly, ESP, etc.)
-local comandos = {
-	{nombre = "🚀 Fly V3", url = "https://raw.githubusercontent.com/XNEOFF/FlyGuiV3/main/FlyGuiV3.txt"},
-	{nombre = "👁 ESP Player", url = "https://raw.githubusercontent.com/ic3w0lf22/ESP-Library/main/ESP.lua"},
-	{nombre = "🌀 Touch Fling", url = "https://rawscripts.net/raw/Universal-Script-TOUCH-FLING-ULTRA-POWER-30194"},
-	{nombre = "📜 Infinity Yield", url = "https://raw.githubusercontent.com/EdgeIY/infiniteyield/master/source"},
-}
-
--- ACCIONES de los botones
+-- Activar subpanel
 scriptsBtn.MouseButton1Click:Connect(function()
-	abrirSubPanel("Juegos Populares", juegosPopulares)
+	scriptsBtn.Visible = false
+	subPanel.Visible = true
+	backBtn.Visible = true
 end)
 
-comandosBtn.MouseButton1Click:Connect(function()
-	abrirSubPanel("Comandos", comandos)
+-- Regresar
+backBtn.MouseButton1Click:Connect(function()
+	scriptsBtn.Visible = true
+	subPanel.Visible = false
+	backBtn.Visible = false
+end)
+
+-- Botón flotante "C"
+local floatBtn = Instance.new("TextButton", gui)
+floatBtn.Size = UDim2.new(0, 50, 0, 50)
+floatBtn.Position = UDim2.new(0, 20, 0, 20)
+floatBtn.Text = "C"
+floatBtn.Font = Enum.Font.Arcade
+floatBtn.TextScaled = true
+floatBtn.BackgroundColor3 = Color3.fromRGB(0,0,0)
+floatBtn.TextColor3 = Color3.new(1,1,1)
+floatBtn.Draggable = true
+floatBtn.Active = true
+Instance.new("UICorner", floatBtn)
+
+floatBtn.MouseButton1Click:Connect(function()
+	panel.Visible = not panel.Visible
+end)
+
+-- Efecto Rainbow
+RunService.RenderStepped:Connect(function()
+	local color = rainbow()
+	stroke.Color = color
+	title.TextColor3 = color
+	userLabel.TextColor3 = color
+	scriptsBtn.TextColor3 = color
+	backBtn.TextColor3 = color
+	for _, v in pairs(subPanel:GetChildren()) do
+		if v:IsA("TextButton") then
+			v.TextColor3 = color
+		end
+	end
+end)
+
+-- Comprobar contraseña
+check.MouseButton1Click:Connect(function()
+	if input.Text == "AYAM" then
+		passFrame:Destroy()
+	else
+		passLabel.Text = "❌ Código incorrecto"
+	end
 end)
