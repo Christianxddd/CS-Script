@@ -3,10 +3,10 @@ local gui = Instance.new("ScreenGui", player:WaitForChild("PlayerGui"))
 gui.Name = "GhostHubV2"
 gui.ResetOnSpawn = false
 
--- Sonido de maullido
-local sound = Instance.new("Sound", gui)
-sound.SoundId = "rbxassetid://9123471643"
-sound.Volume = 1
+-- Sonido al abrir
+local miau = Instance.new("Sound", gui)
+miau.SoundId = "rbxassetid://9123471643"
+miau.Volume = 1
 
 -- Rainbow color
 local function rainbow()
@@ -30,54 +30,55 @@ cBtn.TextColor3 = Color3.new(1, 1, 1)
 cBtn.Draggable = true
 cBtn.BorderSizePixel = 0
 
--- Panel horizontal y grande
-local frame = Instance.new("Frame", gui)
-frame.Size = UDim2.new(0.95, 0, 0.75, 0)
-frame.Position = UDim2.new(0.025, 0, 0.2, 0)
-frame.BackgroundColor3 = Color3.fromRGB(25, 25, 25)
-frame.BackgroundTransparency = 0.2
-frame.Visible = false
-frame.Active = true
-frame.Draggable = true
-local stroke = Instance.new("UIStroke", frame)
+-- Panel vertical
+local panel = Instance.new("Frame", gui)
+panel.Size = UDim2.new(0.3, 0, 0.9, 0)
+panel.Position = UDim2.new(0.02, 0, 0.05, 0)
+panel.BackgroundColor3 = Color3.fromRGB(25, 25, 25)
+panel.BackgroundTransparency = 0.2
+panel.Visible = false
+panel.Active = true
+panel.Draggable = true
+local stroke = Instance.new("UIStroke", panel)
 stroke.Thickness = 2
 
--- Título principal
-local title = Instance.new("TextLabel", frame)
-title.Size = UDim2.new(1, 0, 0.08, 0)
+-- Título
+local title = Instance.new("TextLabel", panel)
+title.Size = UDim2.new(1, 0, 0, 40)
+title.Position = UDim2.new(0, 0, 0, 0)
 title.Text = "I'm Christian Sebast"
 title.Font = Enum.Font.Arcade
 title.TextScaled = true
 title.TextColor3 = Color3.new(1, 1, 1)
 title.BackgroundTransparency = 1
 
--- ScrollFrame para scripts
-local scroll = Instance.new("ScrollingFrame", frame)
-scroll.Position = UDim2.new(0, 0, 0.09, 0)
-scroll.Size = UDim2.new(1, 0, 0.91, 0)
+-- ScrollFrame para los scripts
+local scroll = Instance.new("ScrollingFrame", panel)
+scroll.Position = UDim2.new(0, 0, 0, 45)
+scroll.Size = UDim2.new(1, 0, 1, -50)
 scroll.CanvasSize = UDim2.new(0, 0, 10, 0)
 scroll.ScrollBarThickness = 6
 scroll.BackgroundTransparency = 1
 local layout = Instance.new("UIListLayout", scroll)
-layout.Padding = UDim.new(0.015, 0)
+layout.Padding = UDim.new(0.01, 0)
 layout.SortOrder = Enum.SortOrder.LayoutOrder
 
--- Función crear título de sección
-local function newSection(text)
-	local label = Instance.new("TextLabel", scroll)
-	label.Size = UDim2.new(0.95, 0, 0, 35)
-	label.Text = text
-	label.Font = Enum.Font.Arcade
-	label.TextScaled = true
-	label.TextColor3 = Color3.new(1,1,1)
-	label.BackgroundTransparency = 1
+-- Crear sección
+local function newSection(name)
+	local sec = Instance.new("TextLabel", scroll)
+	sec.Size = UDim2.new(1, -10, 0, 30)
+	sec.Text = name
+	sec.Font = Enum.Font.Arcade
+	sec.TextScaled = true
+	sec.TextColor3 = Color3.new(1, 1, 1)
+	sec.BackgroundTransparency = 1
 end
 
--- Función crear botón de script
-local function newBtn(text, url)
+-- Crear botón
+local function newBtn(name, url)
 	local btn = Instance.new("TextButton", scroll)
-	btn.Size = UDim2.new(0.95, 0, 0, 45)
-	btn.Text = text
+	btn.Size = UDim2.new(1, -10, 0, 40)
+	btn.Text = name
 	btn.Font = Enum.Font.Arcade
 	btn.TextScaled = true
 	btn.TextColor3 = Color3.new(1, 1, 1)
@@ -87,9 +88,9 @@ local function newBtn(text, url)
 	end)
 end
 
--- ======================
--- 📂 SECCIONES Y SCRIPTS
--- ======================
+-- ========================
+-- 📂 SECCIONES Y FUNCIONES
+-- ========================
 
 newSection("🎮 Juegos Populares")
 newBtn("Blox Fruits", "https://raw.githubusercontent.com/tlredz/Scripts/refs/heads/main/main.luau")
@@ -105,14 +106,14 @@ newBtn("ESP Player", "https://pastebin.com/raw/1b4gkR6F")
 newBtn("Speed + Jump", "https://pastebin.com/raw/qEzpWY3x")
 newBtn("Anti AFK", "https://pastebin.com/raw/ygzvH9qL")
 
-newSection("🔒 Comandos y Administración")
-newBtn("Infinity Yield (Comandos)", "https://raw.githubusercontent.com/EdgeIY/infiniteyield/master/source")
-newBtn("Admin Commands GUI", "https://pastebin.com/raw/tzTXmYf2")
-newBtn("Anti-Ban Detector", "https://pastebin.com/raw/ZzHkQs1T")
+newSection("🔒 Comandos / Admin")
+newBtn("Infinity Yield", "https://raw.githubusercontent.com/EdgeIY/infiniteyield/master/source")
+newBtn("Admin GUI", "https://pastebin.com/raw/tzTXmYf2")
+newBtn("Anti-Ban", "https://pastebin.com/raw/ZzHkQs1T")
 
-newSection("📱 Redes Sociales")
+newSection("📱 Mi TikTok")
 local tiktokBtn = Instance.new("TextButton", scroll)
-tiktokBtn.Size = UDim2.new(0.95, 0, 0, 45)
+tiktokBtn.Size = UDim2.new(1, -10, 0, 40)
 tiktokBtn.Text = "TikTok: @christ_sebast_7d"
 tiktokBtn.Font = Enum.Font.Arcade
 tiktokBtn.TextScaled = true
@@ -122,19 +123,21 @@ tiktokBtn.MouseButton1Click:Connect(function()
 	setclipboard("https://www.tiktok.com/@christ_sebast_7d")
 end)
 
--- Mostrar/ocultar GUI
+scroll.Parent = panel
+
+-- Mostrar/ocultar
 cBtn.MouseButton1Click:Connect(function()
-	frame.Visible = not frame.Visible
-	if frame.Visible then sound:Play() end
+	panel.Visible = not panel.Visible
+	if panel.Visible then miau:Play() end
 end)
 
--- Rainbow dinámico
+-- Rainbow efecto
 game:GetService("RunService").RenderStepped:Connect(function()
 	local color = rainbow()
 	stroke.Color = color
 	title.TextColor3 = color
 	for _, v in pairs(scroll:GetChildren()) do
-		if v:IsA("TextButton") or v:IsA("TextLabel") then
+		if v:IsA("TextLabel") or v:IsA("TextButton") then
 			v.TextColor3 = color
 		end
 	end
