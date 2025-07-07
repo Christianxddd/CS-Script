@@ -3,128 +3,193 @@ local gui = Instance.new("ScreenGui", player:WaitForChild("PlayerGui"))
 gui.Name = "ChristianHub"
 gui.ResetOnSpawn = false
 
--- Botón con "C"
-local openBtn = Instance.new("TextButton", gui)
-openBtn.Size = UDim2.new(0, 50, 0, 50)
-openBtn.Position = UDim2.new(0, 10, 0, 10)
-openBtn.Text = "C"
-openBtn.TextScaled = true
-openBtn.Font = Enum.Font.GothamBold
-openBtn.BackgroundColor3 = Color3.fromRGB(0, 0, 0)
-openBtn.TextColor3 = Color3.new(1, 1, 1)
-openBtn.Draggable = true
-
--- Panel principal vertical
-local main = Instance.new("Frame", gui)
-main.Size = UDim2.new(0, 300, 0, 500)
-main.Position = UDim2.new(0.5, -150, 0.5, -250)
-main.BackgroundColor3 = Color3.fromRGB(25, 25, 25)
-main.Visible = false
-main.Draggable = true
-main.Active = true
-
--- Rainbow efecto
-local stroke = Instance.new("UIStroke", main)
-stroke.Thickness = 2
-
+-- Rainbow
 local function rainbow()
 	local t = tick()
-	return Color3.fromHSV((t % 5) / 5, 1, 1)
+	return Color3.fromRGB(
+		math.sin(t) * 127 + 128,
+		math.sin(t + 2 * math.pi / 3) * 127 + 128,
+		math.sin(t + 4 * math.pi / 3) * 127 + 128
+	)
 end
 
+-- Botón "C"
+local toggleBtn = Instance.new("TextButton", gui)
+toggleBtn.Size = UDim2.new(0, 50, 0, 50)
+toggleBtn.Position = UDim2.new(0, 10, 0, 10)
+toggleBtn.Text = "C"
+toggleBtn.TextScaled = true
+toggleBtn.Font = Enum.Font.Arcade
+toggleBtn.BackgroundColor3 = Color3.fromRGB(0, 0, 0)
+toggleBtn.TextColor3 = Color3.new(1, 1, 1)
+toggleBtn.Draggable = true
+
+-- Panel principal
+local panel = Instance.new("Frame", gui)
+panel.Size = UDim2.new(0, 350, 0, 500)
+panel.Position = UDim2.new(0.5, -175, 0.5, -250)
+panel.BackgroundColor3 = Color3.fromRGB(25, 25, 25)
+panel.BackgroundTransparency = 0.2
+panel.Visible = false
+panel.Active = true
+panel.Draggable = true
+
+-- Stroke rainbow
+local stroke = Instance.new("UIStroke", panel)
+stroke.Thickness = 2
+
 -- Título
-local title = Instance.new("TextLabel", main)
-title.Size = UDim2.new(1, 0, 0, 40)
+local title = Instance.new("TextLabel", panel)
+title.Size = UDim2.new(1, 0, 0, 35)
 title.Text = "By Christian"
-title.Font = Enum.Font.GothamBold
 title.TextScaled = true
-title.TextColor3 = Color3.new(1, 1, 1)
+title.Font = Enum.Font.Arcade
 title.BackgroundTransparency = 1
+title.TextColor3 = Color3.new(1,1,1)
 
--- Datos
-local info = Instance.new("TextLabel", main)
-info.Size = UDim2.new(1, -10, 0, 40)
-info.Position = UDim2.new(0, 5, 0, 40)
-info.Text = "Usuario: Christian_xyx\nTikTok: @christ_sebast_7d"
-info.TextColor3 = Color3.new(1, 1, 1)
-info.TextScaled = true
-info.BackgroundTransparency = 1
-info.Font = Enum.Font.Gotham
+-- Datos personales
+local userInfo = Instance.new("TextLabel", panel)
+userInfo.Position = UDim2.new(0, 0, 0, 35)
+userInfo.Size = UDim2.new(1, 0, 0, 25)
+userInfo.Text = "Usuario: Christian_xyx | TikTok: @christ_sebast_7d"
+userInfo.TextScaled = true
+userInfo.Font = Enum.Font.Gotham
+userInfo.TextColor3 = Color3.new(1, 1, 1)
+userInfo.BackgroundTransparency = 1
 
--- ScrollingFrame
-local scroll = Instance.new("ScrollingFrame", main)
-scroll.Size = UDim2.new(1, -10, 1, -90)
-scroll.Position = UDim2.new(0, 5, 0, 90)
-scroll.CanvasSize = UDim2.new(0, 0, 2, 0)
-scroll.ScrollBarThickness = 4
+-- Botón minimizar
+local minimizeBtn = Instance.new("TextButton", panel)
+minimizeBtn.Size = UDim2.new(0, 30, 0, 30)
+minimizeBtn.Position = UDim2.new(1, -35, 0, 5)
+minimizeBtn.Text = "-"
+minimizeBtn.Font = Enum.Font.Arcade
+minimizeBtn.TextScaled = true
+minimizeBtn.BackgroundColor3 = Color3.fromRGB(50, 50, 50)
+minimizeBtn.TextColor3 = Color3.new(1, 1, 1)
+
+-- Contenedor scrollable
+local scroll = Instance.new("ScrollingFrame", panel)
+scroll.Position = UDim2.new(0, 10, 0, 70)
+scroll.Size = UDim2.new(1, -20, 1, -80)
+scroll.CanvasSize = UDim2.new(0, 0, 0, 800)
+scroll.ScrollBarThickness = 6
 scroll.BackgroundTransparency = 1
 
+-- UIList para ordenar
+local list = Instance.new("UIListLayout", scroll)
+list.Padding = UDim.new(0, 10)
+list.SortOrder = Enum.SortOrder.LayoutOrder
+
+-- Búsqueda
+local searchBox = Instance.new("TextBox", panel)
+searchBox.PlaceholderText = "Buscar..."
+searchBox.Position = UDim2.new(0, 10, 0, 45)
+searchBox.Size = UDim2.new(0.7, 0, 0, 20)
+searchBox.BackgroundColor3 = Color3.fromRGB(40, 40, 40)
+searchBox.TextColor3 = Color3.new(1, 1, 1)
+searchBox.TextScaled = true
+searchBox.Font = Enum.Font.Gotham
+
 -- Función para crear secciones
-local function crearSeccion(nombre, y)
-	local label = Instance.new("TextLabel", scroll)
-	label.Position = UDim2.new(0, 0, 0, y)
-	label.Size = UDim2.new(1, 0, 0, 30)
-	label.Text = "📂 " .. nombre
+local function crearSeccion(nombre)
+	local frame = Instance.new("Frame")
+	frame.Size = UDim2.new(1, -10, 0, 25)
+	frame.BackgroundColor3 = Color3.fromRGB(40, 40, 40)
+	
+	local label = Instance.new("TextLabel", frame)
+	label.Size = UDim2.new(1, 0, 1, 0)
+	label.Text = "🔹 " .. nombre
 	label.TextScaled = true
 	label.Font = Enum.Font.GothamBold
 	label.TextColor3 = Color3.new(1,1,1)
 	label.BackgroundTransparency = 1
-	return label
+	
+	return frame
 end
 
--- Función para crear botón de script
-local function crearScript(nombre, y, url)
-	local btn = Instance.new("TextButton", scroll)
-	btn.Position = UDim2.new(0.05, 0, 0, y)
-	btn.Size = UDim2.new(0.9, 0, 0, 30)
+-- Función para crear botones
+local function crearBoton(nombre, scriptUrl)
+	local btn = Instance.new("TextButton")
+	btn.Size = UDim2.new(1, -10, 0, 35)
 	btn.Text = nombre
 	btn.TextScaled = true
 	btn.Font = Enum.Font.Gotham
-	btn.TextColor3 = Color3.new(1, 1, 1)
-	btn.BackgroundColor3 = Color3.fromRGB(40, 40, 40)
+	btn.TextColor3 = Color3.new(1,1,1)
+	btn.BackgroundColor3 = Color3.fromRGB(50, 50, 50)
 	btn.MouseButton1Click:Connect(function()
-		loadstring(game:HttpGet(url))()
+		loadstring(game:HttpGet(scriptUrl))()
 	end)
 	return btn
 end
 
--- Sección: Juegos Populares
-local y = 0
-crearSeccion("Juegos Populares", y)
-y += 35
-crearScript("🧠 Brainlot", y, "https://raw.githubusercontent.com/Akbar123s/Script-Roblox-/refs/heads/main/nabaruBrainrot")
-y += 35
-crearScript("🚓 Jailbreak", y, "https://raw.githubusercontent.com/BlitzIsKing/UniversalFarm/main/Loader/Regular")
-y += 35
-crearScript("🍉 Blox Fruits", y, "https://raw.githubusercontent.com/tlredz/Scripts/refs/heads/main/main.luau")
-y += 35
-crearScript("🚂 Dead Rails", y, "https://raw.githubusercontent.com/gumanba/Scripts/refs/heads/main/DeadRails")
+-- Agregar secciones y scripts
+local seccionJuegos = crearSeccion("🎮 Juegos Populares")
+seccionJuegos.LayoutOrder = 1
+seccionJuegos.Name = "Juegos"
+seccionJuegos.Parent = scroll
 
--- Sección: Comandos
-y += 45
-crearSeccion("Comandos", y)
-y += 35
-crearScript("🚀 Fly V3", y, "https://raw.githubusercontent.com/XNEOFF/FlyGuiV3/main/FlyGuiV3.txt")
-y += 35
-crearScript("👁 ESP Player", y, "https://raw.githubusercontent.com/YourESPLinkHere") -- ← Puedes personalizar si quieres
-y += 35
-crearScript("🌀 Touch Fling", y, "https://rawscripts.net/raw/Universal-Script-TOUCH-FLING-ULTRA-POWER-30194")
-y += 35
-crearScript("💻 Infinity Yield", y, "https://raw.githubusercontent.com/EdgeIY/infiniteyield/master/source")
+local scriptsJuegos = {
+	{"🧠 Brainlot", "https://raw.githubusercontent.com/Akbar123s/Script-Roblox-/refs/heads/main/nabaruBrainrot"},
+	{"🚓 Jailbreak", "https://raw.githubusercontent.com/BlitzIsKing/UniversalFarm/main/Loader/Regular"},
+	{"🚂 Dead Rails", "https://raw.githubusercontent.com/gumanba/Scripts/refs/heads/main/DeadRails"},
+	{"🍉 Blox Fruits", "https://raw.githubusercontent.com/tlredz/Scripts/refs/heads/main/main.luau"},
+}
 
--- Mostrar/ocultar panel
-openBtn.MouseButton1Click:Connect(function()
-	main.Visible = not main.Visible
+for _, data in pairs(scriptsJuegos) do
+	local btn = crearBoton(data[1], data[2])
+	btn.Parent = scroll
+end
+
+local seccionComandos = crearSeccion("🛠️ Comandos")
+seccionComandos.LayoutOrder = 2
+seccionComandos.Name = "Comandos"
+seccionComandos.Parent = scroll
+
+local scriptsComandos = {
+	{"🚀 Fly V3", "https://raw.githubusercontent.com/XNEOFF/FlyGuiV3/main/FlyGuiV3.txt"},
+	{"🌀 Touch Fling", "https://rawscripts.net/raw/Universal-Script-TOUCH-FLING-ULTRA-POWER-30194"},
+	{"👁 ESP Player", "https://raw.githubusercontent.com/RandomScripter123456/ESP-Gui/main/ESP.lua"},
+	{"⚙ Infinity Yield", "https://raw.githubusercontent.com/EdgeIY/infiniteyield/master/source"},
+}
+
+for _, data in pairs(scriptsComandos) do
+	local btn = crearBoton(data[1], data[2])
+	btn.Parent = scroll
+end
+
+-- Filtrar con búsqueda
+searchBox:GetPropertyChangedSignal("Text"):Connect(function()
+	local filtro = searchBox.Text:lower()
+	for _, item in ipairs(scroll:GetChildren()) do
+		if item:IsA("TextButton") then
+			item.Visible = item.Text:lower():find(filtro) ~= nil
+		elseif item:IsA("Frame") then
+			item.Visible = true
+		end
+	end
 end)
 
--- Efecto Rainbow dinámico
+-- Mostrar panel
+toggleBtn.MouseButton1Click:Connect(function()
+	panel.Visible = not panel.Visible
+end)
+
+-- Minimizar
+minimizeBtn.MouseButton1Click:Connect(function()
+	panel.Visible = false
+end)
+
+-- Rainbow efecto
 game:GetService("RunService").RenderStepped:Connect(function()
 	local color = rainbow()
 	stroke.Color = color
 	title.TextColor3 = color
-	for _, child in pairs(scroll:GetChildren()) do
-		if child:IsA("TextButton") or child:IsA("TextLabel") then
-			child.TextColor3 = color
+	for _, item in ipairs(scroll:GetChildren()) do
+		if item:IsA("TextButton") then
+			item.TextColor3 = color
+		elseif item:IsA("Frame") then
+			local label = item:FindFirstChildWhichIsA("TextLabel")
+			if label then label.TextColor3 = color end
 		end
 	end
 end)
