@@ -3,40 +3,45 @@ local player = Players.LocalPlayer
 local PlayerGui = player:WaitForChild("PlayerGui")
 local RunService = game:GetService("RunService")
 
--- Función rainbow para efectos
 local function rainbowColor()
-	local t = tick()
-	return Color3.fromHSV((t * 0.5) % 1, 1, 1)
+    local t = tick()
+    return Color3.fromHSV((t * 0.5) % 1, 1, 1)
 end
 
--- Crear ScreenGui
 local gui = Instance.new("ScreenGui")
-gui.Name = "ChristianSebasGamerPanelV2"
+gui.Name = "ChristianSebasProPanel"
 gui.ResetOnSpawn = false
 gui.Parent = PlayerGui
 
--- Sonido miau
 local sound = Instance.new("Sound", gui)
-sound.SoundId = "rbxassetid://145069956" -- Sonido miau
-sound.Volume = 0.7
+sound.SoundId = "rbxassetid://145069956"
+sound.Volume = 0.6
 
--- Botón flotante "C"
-local iconBtn = Instance.new("TextButton", gui)
+-- Botón flotante ImageButton
+local iconBtn = Instance.new("ImageButton")
 iconBtn.Name = "IconCButton"
 iconBtn.Size = UDim2.new(0, 60, 0, 60)
 iconBtn.Position = UDim2.new(0, 20, 0, 20)
 iconBtn.BackgroundColor3 = Color3.new(0, 0, 0)
 iconBtn.BorderSizePixel = 0
-iconBtn.Text = "C"
-iconBtn.TextColor3 = Color3.new(1, 1, 1)
-iconBtn.Font = Enum.Font.Arcade
-iconBtn.TextScaled = true
 iconBtn.AutoButtonColor = true
-iconBtn.ZIndex = 5
+iconBtn.Parent = gui
 iconBtn.Active = true
 iconBtn.Draggable = true
+iconBtn.ZIndex = 10
 
--- Panel principal vertical
+-- Texto “C” encima
+local iconText = Instance.new("TextLabel", iconBtn)
+iconText.Size = UDim2.new(1, 0, 1, 0)
+iconText.BackgroundTransparency = 1
+iconText.Text = "C"
+iconText.TextColor3 = Color3.new(1, 1, 1)
+iconText.Font = Enum.Font.Arcade
+iconText.TextScaled = true
+iconText.ZIndex = 11
+iconText.TextStrokeTransparency = 0
+
+-- Panel vertical
 local panel = Instance.new("Frame", gui)
 panel.Name = "MainPanel"
 panel.Size = UDim2.new(0, 320, 0.75, 0)
@@ -46,7 +51,7 @@ panel.BackgroundTransparency = 0.35
 panel.Visible = false
 panel.Active = true
 panel.Draggable = true
-panel.ZIndex = 10 -- Muy arriba para que no quede atrás
+panel.ZIndex = 9
 
 local panelCorner = Instance.new("UICorner", panel)
 panelCorner.CornerRadius = UDim.new(0, 10)
@@ -55,7 +60,6 @@ local panelStroke = Instance.new("UIStroke", panel)
 panelStroke.Thickness = 2
 panelStroke.Color = Color3.new(1, 0, 0)
 
--- Título
 local title = Instance.new("TextLabel", panel)
 title.Size = UDim2.new(1, 0, 0, 40)
 title.Position = UDim2.new(0, 0, 0, 5)
@@ -66,18 +70,18 @@ title.Font = Enum.Font.Arcade
 title.TextScaled = true
 title.ZIndex = 11
 
--- Función para mostrar/ocultar panel y reproducir sonido
+-- Toggle panel y sonido
 iconBtn.MouseButton1Click:Connect(function()
-	panel.Visible = not panel.Visible
-	if panel.Visible then
-		sound:Play()
-	end
+    panel.Visible = not panel.Visible
+    if panel.Visible then
+        sound:Play()
+    end
 end)
 
--- Efecto rainbow en texto y borde del panel
+-- Rainbow efecto en texto y bordes
 RunService.RenderStepped:Connect(function()
-	local color = rainbowColor()
-	panelStroke.Color = color
-	title.TextColor3 = color
-	iconBtn.TextColor3 = color
+    local c = rainbowColor()
+    panelStroke.Color = c
+    title.TextColor3 = c
+    iconText.TextColor3 = c
 end)
