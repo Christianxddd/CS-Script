@@ -24,10 +24,10 @@ cBtn.TextScaled = true
 cBtn.Font = Enum.Font.Arcade
 cBtn.Draggable = true
 
--- Menú principal
+-- Menú principal (ajustado para todos los botones)
 local menu = Instance.new("Frame", gui)
-menu.Size = UDim2.new(0, 330, 0, 430)
-menu.Position = UDim2.new(0.5, -165, 0.5, -215)
+menu.Size = UDim2.new(0, 330, 0, 620) -- altura ajustada para nuevo botón
+menu.Position = UDim2.new(0.5, -165, 0.5, -310)
 menu.BackgroundColor3 = Color3.fromRGB(20, 20, 20)
 menu.Visible = false
 Instance.new("UICorner", menu)
@@ -61,7 +61,7 @@ local function actualizarHumanoid()
 	end
 end
 
--- Sección general
+-- Función para crear secciones (velocidad, salto)
 local function crearSeccion(texto, posicionY, callbackAdd, callbackSub, toggle, valor)
 	local label = Instance.new("TextLabel", menu)
 	label.Position = UDim2.new(0.05, 0, posicionY, 0)
@@ -128,7 +128,7 @@ local function crearSeccion(texto, posicionY, callbackAdd, callbackSub, toggle, 
 	end)
 end
 
--- Secciones de velocidad y salto
+-- Secciones velocidad y salto
 crearSeccion("Velocidad", 0.15,
 	function() velocidad += 1 end,
 	function() velocidad = math.max(1, velocidad - 1) end,
@@ -200,7 +200,7 @@ esp.MouseButton1Click:Connect(function()
 	end
 end)
 
--- Touch Fling toggle
+-- Touch Fling toggle una sola vez
 local fling = Instance.new("TextButton", menu)
 fling.Position = UDim2.new(0.05, 0, 0.69, 0)
 fling.Size = UDim2.new(0.9, 0, 0, 35)
@@ -213,19 +213,75 @@ fling.BackgroundColor3 = Color3.fromRGB(40, 40, 40)
 local flingOn = false
 
 fling.MouseButton1Click:Connect(function()
-	flingOn = not flingOn
-	if flingOn then
+	if not flingOn then
+		flingOn = true
 		loadstring(game:HttpGet("https://rawscripts.net/raw/Universal-Script-TOUCH-FLING-ULTRA-POWER-30194"))()
 		fling.Text = "🌀 Touch Fling (ON)"
 	else
-		player.Character:BreakJoints()
+		-- No se apaga ni reinicia, solo cambia texto para parecer toggle
 		fling.Text = "🌀 Touch Fling (OFF)"
 	end
 end)
 
+-- Steal Brainlot script
+local stealBtn = Instance.new("TextButton", menu)
+stealBtn.Position = UDim2.new(0.05, 0, 0.77, 0)
+stealBtn.Size = UDim2.new(0.9, 0, 0, 35)
+stealBtn.Text = "🧠 Steal Brainlot"
+stealBtn.TextScaled = true
+stealBtn.Font = Enum.Font.Arcade
+stealBtn.TextColor3 = Color3.new(1, 1, 1)
+stealBtn.BackgroundColor3 = Color3.fromRGB(40, 40, 40)
+
+stealBtn.MouseButton1Click:Connect(function()
+	loadstring(game:HttpGet("https://raw.githubusercontent.com/Akbar123s/Script-Roblox-/refs/heads/main/nabaruBrainrot"))()
+end)
+
+-- Jailbreak script
+local jailbreakBtn = Instance.new("TextButton", menu)
+jailbreakBtn.Position = UDim2.new(0.05, 0, 0.85, 0)
+jailbreakBtn.Size = UDim2.new(0.9, 0, 0, 35)
+jailbreakBtn.Text = "🚓 Jailbreak"
+jailbreakBtn.TextScaled = true
+jailbreakBtn.Font = Enum.Font.Arcade
+jailbreakBtn.TextColor3 = Color3.new(1, 1, 1)
+jailbreakBtn.BackgroundColor3 = Color3.fromRGB(40, 40, 40)
+
+jailbreakBtn.MouseButton1Click:Connect(function()
+	loadstring(game:HttpGet("https://raw.githubusercontent.com/BlitzIsKing/UniversalFarm/main/Loader/Regular"))()
+end)
+
+-- Dead Rails script
+local deadRailsBtn = Instance.new("TextButton", menu)
+deadRailsBtn.Position = UDim2.new(0.05, 0, 0.93, 0)
+deadRailsBtn.Size = UDim2.new(0.9, 0, 0, 35)
+deadRailsBtn.Text = "🚂 Rieles Muertos"
+deadRailsBtn.TextScaled = true
+deadRailsBtn.Font = Enum.Font.Arcade
+deadRailsBtn.TextColor3 = Color3.new(1, 1, 1)
+deadRailsBtn.BackgroundColor3 = Color3.fromRGB(40, 40, 40)
+
+deadRailsBtn.MouseButton1Click:Connect(function()
+	loadstring(game:HttpGet("https://raw.githubusercontent.com/gumanba/Scripts/refs/heads/main/DeadRails", true))()
+end)
+
+-- Blox Fruits script
+local bloxFruitsBtn = Instance.new("TextButton", menu)
+bloxFruitsBtn.Position = UDim2.new(0.05, 0, 1.01, 0)
+bloxFruitsBtn.Size = UDim2.new(0.9, 0, 0, 35)
+bloxFruitsBtn.Text = "🍉 Blox Fruits"
+bloxFruitsBtn.TextScaled = true
+bloxFruitsBtn.Font = Enum.Font.Arcade
+bloxFruitsBtn.TextColor3 = Color3.new(1, 1, 1)
+bloxFruitsBtn.BackgroundColor3 = Color3.fromRGB(40, 40, 40)
+
+bloxFruitsBtn.MouseButton1Click:Connect(function()
+	loadstring(game:HttpGet("https://raw.githubusercontent.com/tlredz/Scripts/refs/heads/main/main.luau"))()
+end)
+
 -- Botón cerrar
 local cerrar = Instance.new("TextButton", menu)
-cerrar.Position = UDim2.new(0.05, 0, 0.84, 0)
+cerrar.Position = UDim2.new(0.05, 0, 1.09, 0)
 cerrar.Size = UDim2.new(0.9, 0, 0, 35)
 cerrar.Text = "❌ Cerrar"
 cerrar.TextScaled = true
@@ -242,6 +298,10 @@ game:GetService("RunService").RenderStepped:Connect(function()
 	stroke.Color = color
 	esp.TextColor3 = color
 	fling.TextColor3 = color
+	stealBtn.TextColor3 = color
+	jailbreakBtn.TextColor3 = color
+	deadRailsBtn.TextColor3 = color
+	bloxFruitsBtn.TextColor3 = color
 	for _, lbl in ipairs(espLabels) do
 		lbl.TextColor3 = color
 	end
