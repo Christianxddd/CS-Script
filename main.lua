@@ -9,9 +9,9 @@ local function rainbow()
 	return Color3.fromHSV((t % 5) / 5, 1, 1)
 end
 
--- Botón Icono C
+-- Botón flotante "C"
 local icon = Instance.new("TextButton", gui)
-icon.Size = UDim2.new(0, 45, 0, 45)
+icon.Size = UDim2.new(0, 40, 0, 40)
 icon.Position = UDim2.new(0, 20, 0, 20)
 icon.Text = "C"
 icon.TextScaled = true
@@ -20,10 +20,10 @@ icon.BackgroundColor3 = Color3.fromRGB(0, 0, 0)
 icon.TextColor3 = Color3.new(1, 1, 1)
 icon.Draggable = true
 
--- Panel Principal REDUCIDO
+-- Panel reducido
 local panel = Instance.new("Frame", gui)
-panel.Size = UDim2.new(0, 350, 0, 470) -- 🔽 reducido
-panel.Position = UDim2.new(0.5, -175, 0.5, -235)
+panel.Size = UDim2.new(0, 280, 0, 400) -- 🔽 AÚN MÁS PEQUEÑO
+panel.Position = UDim2.new(0.5, -140, 0.5, -200)
 panel.BackgroundColor3 = Color3.fromRGB(20, 20, 20)
 panel.BackgroundTransparency = 0.5
 panel.Active = true
@@ -35,7 +35,7 @@ stroke.Thickness = 2
 
 -- Título
 local title = Instance.new("TextLabel", panel)
-title.Size = UDim2.new(1, 0, 0, 35)
+title.Size = UDim2.new(1, 0, 0, 30)
 title.Position = UDim2.new(0, 0, 0, 0)
 title.Text = "By Christian"
 title.Font = Enum.Font.Arcade
@@ -43,31 +43,31 @@ title.TextScaled = true
 title.TextColor3 = Color3.new(1, 1, 1)
 title.BackgroundTransparency = 1
 
--- Datos del usuario
+-- Datos
 local datos = Instance.new("TextLabel", panel)
-datos.Size = UDim2.new(1, 0, 0, 22)
-datos.Position = UDim2.new(0, 0, 0, 35)
+datos.Size = UDim2.new(1, 0, 0, 20)
+datos.Position = UDim2.new(0, 0, 0, 30)
 datos.Text = "Usuario: Christian_xyx | TikTok: @christ_sebast_7d"
-datos.TextScaled = true
 datos.Font = Enum.Font.Gotham
+datos.TextScaled = true
 datos.TextColor3 = Color3.fromRGB(255, 255, 255)
 datos.BackgroundTransparency = 1
 
 -- Barra de búsqueda
 local search = Instance.new("TextBox", panel)
-search.Size = UDim2.new(0.9, 0, 0, 25)
-search.Position = UDim2.new(0.05, 0, 0, 60)
+search.Size = UDim2.new(0.9, 0, 0, 22)
+search.Position = UDim2.new(0.05, 0, 0, 52)
 search.PlaceholderText = "Buscar scripts..."
 search.Text = ""
-search.TextScaled = true
 search.Font = Enum.Font.Gotham
+search.TextScaled = true
 search.BackgroundColor3 = Color3.fromRGB(35, 35, 35)
 search.TextColor3 = Color3.new(1, 1, 1)
 
--- Scroll principal
+-- Área Scroll
 local scroll = Instance.new("ScrollingFrame", panel)
 scroll.Size = UDim2.new(0.9, 0, 0.7, 0)
-scroll.Position = UDim2.new(0.05, 0, 0, 95)
+scroll.Position = UDim2.new(0.05, 0, 0, 80)
 scroll.CanvasSize = UDim2.new(0, 0, 5, 0)
 scroll.ScrollBarThickness = 4
 scroll.BackgroundTransparency = 1
@@ -75,10 +75,10 @@ scroll.BackgroundTransparency = 1
 local layout = Instance.new("UIListLayout", scroll)
 layout.Padding = UDim.new(0, 5)
 
--- Crear carpeta
+-- Crear carpetas
 local function crearCarpeta(nombre, scripts)
 	local folderBtn = Instance.new("TextButton", scroll)
-	folderBtn.Size = UDim2.new(1, 0, 0, 35)
+	folderBtn.Size = UDim2.new(1, 0, 0, 30)
 	folderBtn.Text = "📁 " .. nombre
 	folderBtn.TextScaled = true
 	folderBtn.Font = Enum.Font.Arcade
@@ -101,8 +101,8 @@ local function crearCarpeta(nombre, scripts)
 	titulo.Parent = subFrame
 
 	local backBtn = Instance.new("TextButton", subFrame)
-	backBtn.Size = UDim2.new(0.3, 0, 0, 25)
-	backBtn.Position = UDim2.new(0.35, 0, 1, -35)
+	backBtn.Size = UDim2.new(0.6, 0, 0, 22)
+	backBtn.Position = UDim2.new(0.2, 0, 1, -30)
 	backBtn.Text = "⬅ Regresar"
 	backBtn.TextScaled = true
 	backBtn.Font = Enum.Font.Arcade
@@ -115,11 +115,11 @@ local function crearCarpeta(nombre, scripts)
 
 	local subScroll = scroll:Clone()
 	subScroll.Parent = subFrame
-	subScroll.Position = UDim2.new(0.05, 0, 0.2, 0)
-	subScroll.Size = UDim2.new(0.9, 0, 0.75, 0)
+	subScroll.Position = UDim2.new(0.05, 0, 0, 50)
+	subScroll.Size = UDim2.new(0.9, 0, 0.7, 0)
 	for _, data in pairs(scripts) do
 		local sBtn = Instance.new("TextButton", subScroll)
-		sBtn.Size = UDim2.new(1, 0, 0, 35)
+		sBtn.Size = UDim2.new(1, 0, 0, 28)
 		sBtn.Text = data.nombre
 		sBtn.TextScaled = true
 		sBtn.Font = Enum.Font.Arcade
@@ -129,14 +129,9 @@ local function crearCarpeta(nombre, scripts)
 			loadstring(game:HttpGet(data.url))()
 		end)
 	end
-
-	folderBtn.MouseButton1Click:Connect(function()
-		panel.Visible = false
-		subFrame.Visible = true
-	end)
 end
 
--- Lista de scripts
+-- Scripts por categoría
 local juegosPopulares = {
 	{nombre = "🧠 Brainlot", url = "https://raw.githubusercontent.com/Akbar123s/Script-Roblox-/refs/heads/main/nabaruBrainrot"},
 	{nombre = "🚓 Jailbreak", url = "https://raw.githubusercontent.com/BlitzIsKing/UniversalFarm/main/Loader/Regular"},
@@ -151,15 +146,16 @@ local comandos = {
 	{nombre = "👁 ESP Player", url = "https://raw.githubusercontent.com/kickz2/Roblox-Scripts/main/ESP.lua"},
 }
 
+-- Crear carpetas
 crearCarpeta("🎮 Juegos Populares", juegosPopulares)
 crearCarpeta("🧰 Comandos", comandos)
 
--- Mostrar panel
+-- Mostrar / Ocultar panel
 icon.MouseButton1Click:Connect(function()
 	panel.Visible = not panel.Visible
 end)
 
--- Rainbow dinámico
+-- Efecto rainbow
 game:GetService("RunService").RenderStepped:Connect(function()
 	local color = rainbow()
 	stroke.Color = color
