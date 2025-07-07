@@ -25,6 +25,7 @@ mainFrame.Visible = false
 mainFrame.Active = true
 mainFrame.Draggable = true
 
+-- UIListLayout para organización vertical
 local uiList = Instance.new("UIListLayout", mainFrame)
 uiList.SortOrder = Enum.SortOrder.LayoutOrder
 uiList.Padding = UDim.new(0, 8)
@@ -61,7 +62,7 @@ searchBox.BackgroundColor3 = Color3.fromRGB(40,40,40)
 searchBox.ClearTextOnFocus = false
 searchBox.LayoutOrder = 3
 
--- Scrolling Frame para carpetas
+-- Scrolling Frame para carpetas y scripts
 local scrollFrame = Instance.new("ScrollingFrame", mainFrame)
 scrollFrame.Size = UDim2.new(1, 0, 1, -100)
 scrollFrame.Position = UDim2.new(0, 0, 0, 95)
@@ -69,18 +70,20 @@ scrollFrame.BackgroundTransparency = 1
 scrollFrame.BorderSizePixel = 0
 scrollFrame.CanvasSize = UDim2.new(0,0,0,0)
 scrollFrame.ScrollBarThickness = 8
+scrollFrame.VerticalScrollBarInset = Enum.ScrollBarInset.Always
+scrollFrame.LayoutOrder = 4
 
 local carpetaLayout = Instance.new("UIListLayout", scrollFrame)
 carpetaLayout.SortOrder = Enum.SortOrder.LayoutOrder
 carpetaLayout.Padding = UDim.new(0, 6)
 
--- Función para crear una carpeta expandible
+-- Función para crear carpeta expandible
 local function crearCarpeta(nombre)
     local carpeta = Instance.new("Frame")
-    carpeta.Size = UDim2.new(1, 0, 0, 35) -- tamaño inicial (solo título)
+    carpeta.Size = UDim2.new(1, 0, 0, 35)
     carpeta.BackgroundColor3 = Color3.fromRGB(40, 40, 40)
-    carpeta.LayoutOrder = 1
     carpeta.ClipsDescendants = true
+    carpeta.LayoutOrder = 1
 
     local titulo = Instance.new("TextButton", carpeta)
     titulo.Size = UDim2.new(1, 0, 0, 35)
@@ -93,7 +96,7 @@ local function crearCarpeta(nombre)
 
     local contenido = Instance.new("Frame", carpeta)
     contenido.Name = "Contenido"
-    contenido.Size = UDim2.new(1, 0, 0, 0) -- contenido oculto al inicio
+    contenido.Size = UDim2.new(1, 0, 0, 0)
     contenido.Position = UDim2.new(0, 0, 0, 35)
     contenido.BackgroundTransparency = 1
     contenido.LayoutOrder = 2
@@ -109,7 +112,7 @@ local function crearCarpeta(nombre)
         if abierto then
             local btnCount = 0
             for _, child in pairs(contenido:GetChildren()) do
-                if child:IsA("TextButton") then
+                if child:IsA("TextButton") and child.Visible then
                     btnCount += 1
                 end
             end
@@ -120,7 +123,6 @@ local function crearCarpeta(nombre)
             contenido:TweenSize(UDim2.new(1,0,0,0), "Out", "Quad", 0.3, true)
             carpeta:TweenSize(UDim2.new(1, 0, 0, 35), "Out", "Quad", 0.3, true)
         end
-        -- Ajustar CanvasSize para scroll
         wait(0.35)
         scrollFrame.CanvasSize = UDim2.new(0, 0, 0, carpetaLayout.AbsoluteContentSize.Y + 10)
     end)
@@ -160,25 +162,27 @@ local carpetaComandos, contenidoComandos = crearCarpeta("Comandos")
 carpetaComandos.Parent = scrollFrame
 carpetaComandos.LayoutOrder = 4
 
--- Agregar scripts a "Juegos Populares"
+-- Scripts Juegos Populares
 local juegosScripts = {
     {nombre = "🧠 Brainlot", link = "https://raw.githubusercontent.com/Akbar123s/Script-Roblox-/refs/heads/main/nabaruBrainrot"},
     {nombre = "🚓 Jailbreak", link = "https://raw.githubusercontent.com/BlitzIsKing/UniversalFarm/main/Loader/Regular"},
     {nombre = "🚂 Dead Rails", link = "https://raw.githubusercontent.com/gumanba/Scripts/refs/heads/main/DeadRails"},
     {nombre = "🍉 Blox Fruits", link = "https://raw.githubusercontent.com/tlredz/Scripts/refs/heads/main/main.luau"},
 }
+
 for _, v in ipairs(juegosScripts) do
     local btn = crearBotonScript(v.nombre, v.link)
     btn.Parent = contenidoJuegos
 end
 
--- Agregar scripts a "Comandos"
+-- Scripts Comandos
 local comandosScripts = {
     {nombre = "🚀 Fly V3", link = "https://raw.githubusercontent.com/XNEOFF/FlyGuiV3/main/FlyGuiV3.txt"},
     {nombre = "🌀 Touch Fling", link = "https://rawscripts.net/raw/Universal-Script-TOUCH-FLING-ULTRA-POWER-30194"},
     {nombre = "👁 ESP Player", link = "https://raw.githubusercontent.com/zekewaze/ESP-NameTags/main/main.lua"},
     {nombre = "📜 Infinity Yield", link = "https://raw.githubusercontent.com/EdgeIY/infiniteyield/master/source"},
 }
+
 for _, v in ipairs(comandosScripts) do
     local btn = crearBotonScript(v.nombre, v.link)
     btn.Parent = contenidoComandos
@@ -188,36 +192,22 @@ end
 wait(0.2)
 scrollFrame.CanvasSize = UDim2.new(0, 0, 0, carpetaLayout.AbsoluteContentSize.Y + 10)
 
+-- Función para actualizar altura de carpeta según hijos visibles
+local function actualizarAltura(carpetaFrame, contenidoFrame)
+    local visibleCount = 0
+    for _, child in pairs(contenidoFrame:GetChildren()) do
+        if child:IsA("TextButton") and child.Visible then
+            visibleCount += 1
+        end
+    end
+    local newHeight = visibleCount * 40
+    contenidoFrame:TweenSize(UDim2.new(1,0,0,newHeight), "Out", "Quad", 0.3, true)
+    carpetaFrame:TweenSize(UDim2.new(1,0,0,35 + newHeight), "Out", "Quad", 0.3, true)
+end
+
 -- Filtrado por búsqueda
 searchBox:GetPropertyChangedSignal("Text"):Connect(function()
     local text = searchBox.Text:lower()
     -- Filtrar Juegos Populares
     for _, btn in pairs(contenidoJuegos:GetChildren()) do
-        if btn:IsA("TextButton") then
-            btn.Visible = btn.Text:lower():find(text) ~= nil
-        end
-    end
-    -- Filtrar Comandos
-    for _, btn in pairs(contenidoComandos:GetChildren()) do
-        if btn:IsA("TextButton") then
-            btn.Visible = btn.Text:lower():find(text) ~= nil
-        end
-    end
-    -- Ajustar tamaño carpetas si están abiertas para nuevo contenido visible
-    local function actualizarAltura(carpetaFrame, contenidoFrame)
-        local visibleCount = 0
-        for _, child in pairs(contenidoFrame:GetChildren()) do
-            if child:IsA("TextButton") and child.Visible then
-                visibleCount += 1
-            end
-        end
-        local newHeight = visibleCount * 40
-        if newHeight == 0 then newHeight = 0 end
-        contenidoFrame:TweenSize(UDim2.new(1,0,0,newHeight), "Out", "Quad", 0.3, true)
-        carpetaFrame:TweenSize(UDim2.new(1,0,0,35 + newHeight), "Out", "Quad", 0.3, true)
-    end
-    actualizarAltura(carpetaJuegos, contenidoJuegos)
-    actualizarAltura(carpetaComandos, contenidoComandos)
-
-    wait(0.35)
-    scrollFrame.CanvasSize = UDim2
+        if btn:IsA("TextButton")
