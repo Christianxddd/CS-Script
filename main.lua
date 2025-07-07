@@ -3,17 +3,17 @@ local gui = Instance.new("ScreenGui", player:WaitForChild("PlayerGui"))
 gui.Name = "ChristianSebasGamerUI"
 gui.ResetOnSpawn = false
 
--- Función para generar colores rainbow
 local function rainbow()
 	local t = tick()
-	local r = math.sin(t) * 127 + 128
-	local g = math.sin(t + 2 * math.pi / 3) * 127 + 128
-	local b = math.sin(t + 4 * math.pi / 3) * 127 + 128
-	return Color3.fromRGB(r, g, b)
+	return Color3.fromRGB(
+		math.sin(t) * 127 + 128,
+		math.sin(t + 2 * math.pi / 3) * 127 + 128,
+		math.sin(t + 4 * math.pi / 3) * 127 + 128
+	)
 end
 
--- BOTÓN FLOTANTE GAMER CON "C"
-local cBtn = Instance.new("TextButton")
+-- Botón flotante "C"
+local cBtn = Instance.new("TextButton", gui)
 cBtn.Size = UDim2.new(0, 60, 0, 60)
 cBtn.Position = UDim2.new(0, 20, 0, 20)
 cBtn.BackgroundColor3 = Color3.new(0, 0, 0)
@@ -23,21 +23,16 @@ cBtn.TextColor3 = Color3.new(1, 1, 1)
 cBtn.TextScaled = true
 cBtn.Font = Enum.Font.Arcade
 cBtn.Draggable = true
-cBtn.Parent = gui
 
+-- Menú principal
 local menu = Instance.new("Frame", gui)
-menu.Size = UDim2.new(0, 330, 0, 380)
-menu.Position = UDim2.new(0.5, -165, 0.5, -190)
+menu.Size = UDim2.new(0, 330, 0, 430)
+menu.Position = UDim2.new(0.5, -165, 0.5, -215)
 menu.BackgroundColor3 = Color3.fromRGB(20, 20, 20)
 menu.Visible = false
-
--- BORDES REDONDOS
 Instance.new("UICorner", menu)
-
--- Borde gamer rainbow
 local stroke = Instance.new("UIStroke", menu)
 stroke.Thickness = 2
-stroke.Color = Color3.new(1, 0, 0)
 
 -- Título
 local title = Instance.new("TextLabel", menu)
@@ -66,7 +61,7 @@ local function actualizarHumanoid()
 	end
 end
 
--- Crear sección con botones + -, ON/OFF y valor
+-- Sección general
 local function crearSeccion(texto, posicionY, callbackAdd, callbackSub, toggle, valor)
 	local label = Instance.new("TextLabel", menu)
 	label.Position = UDim2.new(0.05, 0, posicionY, 0)
@@ -131,11 +126,9 @@ local function crearSeccion(texto, posicionY, callbackAdd, callbackSub, toggle, 
 		onBtn.TextColor3 = _G[toggle] and Color3.fromRGB(0,255,0) or Color3.fromRGB(255,0,0)
 		actualizarHumanoid()
 	end)
-
-	return valLabel
 end
 
--- Crear secciones
+-- Secciones de velocidad y salto
 crearSeccion("Velocidad", 0.15,
 	function() velocidad += 1 end,
 	function() velocidad = math.max(1, velocidad - 1) end,
@@ -148,7 +141,7 @@ crearSeccion("Salto", 0.3,
 	"saltoON", salto
 )
 
--- Fly
+-- Fly V3
 local fly = Instance.new("TextButton", menu)
 fly.Position = UDim2.new(0.05, 0, 0.47, 0)
 fly.Size = UDim2.new(0.9, 0, 0, 35)
@@ -161,36 +154,78 @@ fly.MouseButton1Click:Connect(function()
 	loadstring(game:HttpGet("https://raw.githubusercontent.com/XNEOFF/FlyGuiV3/main/FlyGuiV3.txt"))()
 end)
 
--- ESP Player
+-- ESP Player toggle
 local esp = Instance.new("TextButton", menu)
 esp.Position = UDim2.new(0.05, 0, 0.61, 0)
 esp.Size = UDim2.new(0.9, 0, 0, 35)
-esp.Text = "👁 ESP Player"
+esp.Text = "👁 ESP Player (OFF)"
 esp.TextScaled = true
 esp.Font = Enum.Font.Arcade
 esp.TextColor3 = Color3.new(1, 1, 1)
 esp.BackgroundColor3 = Color3.fromRGB(40, 40, 40)
+
+local espOn = false
+local espLabels = {}
+
 esp.MouseButton1Click:Connect(function()
-	for _, v in pairs(game.Players:GetPlayers()) do
-		if v ~= player and v.Character and v.Character:FindFirstChild("Head") and not v.Character.Head:FindFirstChild("NameTag") then
-			local gui = Instance.new("BillboardGui", v.Character.Head)
-			gui.Name = "NameTag"
-			gui.Size = UDim2.new(0, 200, 0, 50)
-			gui.AlwaysOnTop = true
-			gui.Adornee = v.Character.Head
-			local txt = Instance.new("TextLabel", gui)
-			txt.Size = UDim2.new(1, 0, 1, 0)
-			txt.BackgroundTransparency = 1
-			txt.Text = v.Name
-			txt.TextColor3 = Color3.new(1, 1, 1)
-			txt.TextScaled = true
+	espOn = not espOn
+	if espOn then
+		for _, v in pairs(game.Players:GetPlayers()) do
+			if v ~= player and v.Character and v.Character:FindFirstChild("Head") and not v.Character.Head:FindFirstChild("NameTag") then
+				local gui = Instance.new("BillboardGui", v.Character.Head)
+				gui.Name = "NameTag"
+				gui.Size = UDim2.new(0, 200, 0, 50)
+				gui.AlwaysOnTop = true
+				gui.Adornee = v.Character.Head
+				local txt = Instance.new("TextLabel", gui)
+				txt.Size = UDim2.new(1, 0, 1, 0)
+				txt.BackgroundTransparency = 1
+				txt.Text = v.Name
+				txt.TextColor3 = Color3.new(1, 1, 1)
+				txt.TextScaled = true
+				txt.Font = Enum.Font.Arcade
+				table.insert(espLabels, txt)
+			end
 		end
+		esp.Text = "👁 ESP Player (ON)"
+	else
+		for _, v in pairs(game.Players:GetPlayers()) do
+			if v.Character and v.Character:FindFirstChild("Head") then
+				local tag = v.Character.Head:FindFirstChild("NameTag")
+				if tag then tag:Destroy() end
+			end
+		end
+		espLabels = {}
+		esp.Text = "👁 ESP Player (OFF)"
 	end
 end)
 
--- Cerrar menú
+-- Touch Fling toggle
+local fling = Instance.new("TextButton", menu)
+fling.Position = UDim2.new(0.05, 0, 0.69, 0)
+fling.Size = UDim2.new(0.9, 0, 0, 35)
+fling.Text = "🌀 Touch Fling (OFF)"
+fling.TextScaled = true
+fling.Font = Enum.Font.Arcade
+fling.TextColor3 = Color3.new(1, 1, 1)
+fling.BackgroundColor3 = Color3.fromRGB(40, 40, 40)
+
+local flingOn = false
+
+fling.MouseButton1Click:Connect(function()
+	flingOn = not flingOn
+	if flingOn then
+		loadstring(game:HttpGet("https://rawscripts.net/raw/Universal-Script-TOUCH-FLING-ULTRA-POWER-30194"))()
+		fling.Text = "🌀 Touch Fling (ON)"
+	else
+		player.Character:BreakJoints()
+		fling.Text = "🌀 Touch Fling (OFF)"
+	end
+end)
+
+-- Botón cerrar
 local cerrar = Instance.new("TextButton", menu)
-cerrar.Position = UDim2.new(0.05, 0, 0.76, 0)
+cerrar.Position = UDim2.new(0.05, 0, 0.84, 0)
 cerrar.Size = UDim2.new(0.9, 0, 0, 35)
 cerrar.Text = "❌ Cerrar"
 cerrar.TextScaled = true
@@ -201,12 +236,18 @@ cerrar.MouseButton1Click:Connect(function()
 	menu.Visible = false
 end)
 
--- Rainbow loop para el borde
+-- Rainbow loop
 game:GetService("RunService").RenderStepped:Connect(function()
-	stroke.Color = rainbow()
+	local color = rainbow()
+	stroke.Color = color
+	esp.TextColor3 = color
+	fling.TextColor3 = color
+	for _, lbl in ipairs(espLabels) do
+		lbl.TextColor3 = color
+	end
 end)
 
--- Restaurar valores al morir
+-- Restaurar velocidad y salto al respawn
 player.CharacterAdded:Connect(function(char)
 	char:WaitForChild("Humanoid").WalkSpeed = velON and velocidad or 16
 	char:WaitForChild("Humanoid").JumpPower = saltoON and salto or 50
