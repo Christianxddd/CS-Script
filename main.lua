@@ -1,11 +1,11 @@
--- Panel Gamer V2 Profesional by ChristianSebast
+-- ChristianSebast Panel Gamer V2
 
 local Players = game:GetService("Players")
 local player = Players.LocalPlayer
 local PlayerGui = player:WaitForChild("PlayerGui")
 local RunService = game:GetService("RunService")
 
--- Función efecto rainbow
+-- Función rainbow para efectos
 local function rainbowColor()
 	local t = tick()
 	return Color3.fromHSV((t * 0.5) % 1, 1, 1)
@@ -19,18 +19,18 @@ gui.Parent = PlayerGui
 
 -- Sonido miau
 local sound = Instance.new("Sound", gui)
-sound.SoundId = "rbxassetid://145069956" -- Sonido miau clásico
+sound.SoundId = "rbxassetid://145069956"
 sound.Volume = 0.7
 
--- Botón flotante con letra "C"
+-- Botón flotante "C"
 local iconBtn = Instance.new("TextButton", gui)
 iconBtn.Name = "IconCButton"
 iconBtn.Size = UDim2.new(0, 60, 0, 60)
 iconBtn.Position = UDim2.new(0, 20, 0, 20)
-iconBtn.BackgroundColor3 = Color3.new(0, 0, 0) -- fondo negro
+iconBtn.BackgroundColor3 = Color3.new(0, 0, 0)
 iconBtn.BorderSizePixel = 0
 iconBtn.Text = "C"
-iconBtn.TextColor3 = Color3.new(1, 1, 1) -- texto blanco
+iconBtn.TextColor3 = Color3.new(1, 1, 1)
 iconBtn.Font = Enum.Font.Arcade
 iconBtn.TextScaled = true
 iconBtn.AutoButtonColor = true
@@ -38,10 +38,10 @@ iconBtn.ZIndex = 5
 iconBtn.Active = true
 iconBtn.Draggable = true
 
--- Panel principal (vertical)
+-- Panel principal vertical
 local panel = Instance.new("Frame", gui)
 panel.Name = "MainPanel"
-panel.Size = UDim2.new(0, 300, 0.75, 0) -- vertical panel, 75% alto de pantalla
+panel.Size = UDim2.new(0, 320, 0.75, 0)
 panel.Position = UDim2.new(0, 20, 0, 90)
 panel.BackgroundColor3 = Color3.fromRGB(20, 20, 20)
 panel.BackgroundTransparency = 0.35
@@ -55,7 +55,7 @@ panelCorner.CornerRadius = UDim.new(0, 10)
 
 local panelStroke = Instance.new("UIStroke", panel)
 panelStroke.Thickness = 2
-panelStroke.Color = Color3.new(1, 0, 0) -- cambiará con rainbow
+panelStroke.Color = Color3.new(1, 0, 0)
 
 -- Título
 local title = Instance.new("TextLabel", panel)
@@ -105,7 +105,7 @@ sectionsFrame.Size = UDim2.new(0.95, 0, 1, -90)
 sectionsFrame.Position = UDim2.new(0.025, 0, 0, 80)
 sectionsFrame.BackgroundTransparency = 1
 sectionsFrame.ScrollBarThickness = 5
-sectionsFrame.CanvasSize = UDim2.new(0, 0, 2, 0) -- ajuste dinámico después
+sectionsFrame.CanvasSize = UDim2.new(0, 0, 2, 0)
 sectionsFrame.ZIndex = 5
 
 local sectionsLayout = Instance.new("UIListLayout", sectionsFrame)
@@ -114,20 +114,21 @@ sectionsLayout.Padding = UDim.new(0, 8)
 
 -- Ejemplo de listas de scripts
 local gamesPopular = {
-	{ name = "Blox Fruits", script = "https://raw.githubusercontent.com/tlredz/Scripts/refs/heads/main/main.luau", desc = "Script para Blox Fruits. Diviértete y desbloquea frutas." },
-	{ name = "Jailbreak", script = "https://raw.githubusercontent.com/BlitzIsKing/UniversalFarm/main/Loader/Regular", desc = "Script para Jailbreak con funcionalidades de farm." },
-	-- Agrega más...
+	{ name = "Blox Fruits", script = "https://raw.githubusercontent.com/tlredz/Scripts/refs/heads/main/main.luau", desc = "Script para Blox Fruits." },
+	{ name = "Jailbreak", script = "https://raw.githubusercontent.com/BlitzIsKing/UniversalFarm/main/Loader/Regular", desc = "Script para Jailbreak." },
+	{ name = "Dead Rails", script = "https://raw.githubusercontent.com/gumanba/Scripts/refs/heads/main/DeadRails", desc = "Script para Dead Rails." },
+	-- más juegos...
 }
 
 local utilities = {
-	{ name = "Fly V3", script = "https://raw.githubusercontent.com/XNEOFF/FlyGuiV3/main/FlyGuiV3.txt", desc = "Activa el modo vuelo con Fly V3." },
-	{ name = "ESP Player", script = "", desc = "Muestra nombres de jugadores sobre sus cabezas." },
-	{ name = "Touch Fling", script = "https://rawscripts.net/raw/Universal-Script-TOUCH-FLING-ULTRA-POWER-30194", desc = "Activa Touch Fling ultra power." },
-	{ name = "Brainlot", script = "https://raw.githubusercontent.com/Akbar123s/Script-Roblox-/refs/heads/main/nabaruBrainrot", desc = "Script para Brainlot." },
-	{ name = "Infinity Yield (Comandos)", script = "https://raw.githubusercontent.com/EdgeIY/infiniteyield/master/source", desc = "Panel de comandos universal." }
+	{ name = "Fly V3", script = "https://raw.githubusercontent.com/XNEOFF/FlyGuiV3/main/FlyGuiV3.txt", desc = "Modo vuelo Fly V3." },
+	{ name = "ESP Player", script = "", desc = "Mostrar nombres jugadores." },
+	{ name = "Touch Fling", script = "https://rawscripts.net/raw/Universal-Script-TOUCH-FLING-ULTRA-POWER-30194", desc = "Touch Fling ultra power." },
+	{ name = "Brainlot", script = "https://raw.githubusercontent.com/Akbar123s/Script-Roblox-/refs/heads/main/nabaruBrainrot", desc = "Brainlot script." },
+	{ name = "Infinity Yield (Comandos)", script = "https://raw.githubusercontent.com/EdgeIY/infiniteyield/master/source", desc = "Panel de comandos universal." },
 }
 
--- Función crear secciones expandibles
+-- Función para crear secciones expandibles
 local function crearSeccion(titulo, items)
 	local container = Instance.new("Frame", sectionsFrame)
 	container.Size = UDim2.new(1, 0, 0, 40)
@@ -249,58 +250,3 @@ executeCorner.CornerRadius = UDim.new(0, 8)
 
 local cancelBtn = Instance.new("TextButton", infoWindow)
 cancelBtn.Size = UDim2.new(0.4, 0, 0, 40)
-cancelBtn.Position = UDim2.new(0.55, 0, 1, -50)
-cancelBtn.Text = "Cancelar"
-cancelBtn.Font = Enum.Font.Arcade
-cancelBtn.TextScaled = true
-cancelBtn.TextColor3 = Color3.new(1,1,1)
-cancelBtn.BackgroundColor3 = Color3.fromRGB(150, 0, 0)
-cancelBtn.AutoButtonColor = false
-local cancelCorner = Instance.new("UICorner", cancelBtn)
-cancelCorner.CornerRadius = UDim.new(0, 8)
-
-local currentScript = nil
-
-function openInfoWindow(item)
-	infoTitle.Text = item.name
-	infoDesc.Text = item.desc
-	infoWindow.Visible = true
-	currentScript = item.script
-end
-
-executeBtn.MouseButton1Click:Connect(function()
-	if currentScript and currentScript ~= "" then
-		local success, err = pcall(function()
-			loadstring(game:HttpGet(currentScript))()
-		end)
-		if not success then
-			warn("Error al ejecutar script: ", err)
-		end
-	end
-	infoWindow.Visible = false
-end)
-
-cancelBtn.MouseButton1Click:Connect(function()
-	infoWindow.Visible = false
-end)
-
--- Crear las secciones
-local juegosPopularesSection = crearSeccion("🔥 Juegos Populares", gamesPopular)
-local utilidadesSection = crearSeccion("🛠️ Utilidades", utilities)
-
--- Mostrar/Ocultar panel al hacer clic en botón "C"
-iconBtn.MouseButton1Click:Connect(function()
-	panel.Visible = not panel.Visible
-	if panel.Visible then
-		sound:Play()
-	end
-end)
-
--- Efecto rainbow para bordes y título (opcional)
-RunService.Heartbeat:Connect(function()
-	local color = rainbowColor()
-	panelStroke.Color = color
-	title.TextColor3 = color
-	minimizeBtn.TextColor3 = color
-	searchBox.TextColor3 = color
-end)
