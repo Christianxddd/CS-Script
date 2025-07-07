@@ -3,7 +3,7 @@ local gui = Instance.new("ScreenGui", player:WaitForChild("PlayerGui"))
 gui.Name = "ChristianSebasGamerUI"
 gui.ResetOnSpawn = false
 
--- Rainbow efecto
+-- Rainbow efecto dinámico
 local function rainbow()
 	local t = tick()
 	return Color3.fromRGB(
@@ -13,7 +13,7 @@ local function rainbow()
 	)
 end
 
--- Botón flotante con "C"
+-- Botón flotante con letra "C"
 local cBtn = Instance.new("TextButton", gui)
 cBtn.Size = UDim2.new(0, 60, 0, 60)
 cBtn.Position = UDim2.new(0, 20, 0, 20)
@@ -25,10 +25,10 @@ cBtn.TextScaled = true
 cBtn.Font = Enum.Font.Arcade
 cBtn.Draggable = true
 
--- PANEL PRINCIPAL GRANDE Y MOVIBLE
+-- PANEL largo y menos grueso
 local menu = Instance.new("Frame", gui)
-menu.Size = UDim2.new(0.95, 0, 0.65, 0) -- GRANDE
-menu.Position = UDim2.new(0.025, 0, 0.15, 0)
+menu.Size = UDim2.new(0.95, 0, 0.55, 0)
+menu.Position = UDim2.new(0.025, 0, 0.2, 0)
 menu.BackgroundColor3 = Color3.fromRGB(20, 20, 20)
 menu.BackgroundTransparency = 0.4
 menu.Visible = false
@@ -38,22 +38,19 @@ Instance.new("UICorner", menu)
 local stroke = Instance.new("UIStroke", menu)
 stroke.Thickness = 2
 
--- Título
 local title = Instance.new("TextLabel", menu)
 title.Size = UDim2.new(1, 0, 0, 40)
-title.Position = UDim2.new(0, 0, 0, 0)
 title.Text = "🎮 ChristianSebas Panel Gamer"
 title.TextScaled = true
 title.Font = Enum.Font.Arcade
 title.TextColor3 = Color3.new(1,1,1)
 title.BackgroundTransparency = 1
 
--- Mostrar/Ocultar menú
 cBtn.MouseButton1Click:Connect(function()
 	menu.Visible = not menu.Visible
 end)
 
--- Variables
+-- Velocidad y salto variables
 local velocidad = 16
 local salto = 50
 local velON = false
@@ -67,19 +64,18 @@ local function actualizarHumanoid()
 	end
 end
 
--- Crear controles de velocidad/salto
-local function crearSeccion(texto, posY, aumentar, disminuir, toggleVar, valor)
+local function crearControl(nombre, y, variable, toggleVar)
 	local label = Instance.new("TextLabel", menu)
-	label.Position = UDim2.new(0.02, 0, posY, 0)
+	label.Position = UDim2.new(0.02, 0, y, 0)
 	label.Size = UDim2.new(0.1, 0, 0.05, 0)
-	label.Text = texto
+	label.Text = nombre
 	label.TextScaled = true
 	label.Font = Enum.Font.Arcade
 	label.TextColor3 = Color3.new(1,1,1)
 	label.BackgroundTransparency = 1
 
 	local toggle = Instance.new("TextButton", menu)
-	toggle.Position = UDim2.new(0.14, 0, posY, 0)
+	toggle.Position = UDim2.new(0.14, 0, y, 0)
 	toggle.Size = UDim2.new(0.06, 0, 0.05, 0)
 	toggle.Text = "OFF"
 	toggle.TextScaled = true
@@ -88,16 +84,16 @@ local function crearSeccion(texto, posY, aumentar, disminuir, toggleVar, valor)
 	toggle.TextColor3 = Color3.fromRGB(255, 0, 0)
 
 	local valLabel = Instance.new("TextLabel", menu)
-	valLabel.Position = UDim2.new(0.22, 0, posY, 0)
+	valLabel.Position = UDim2.new(0.22, 0, y, 0)
 	valLabel.Size = UDim2.new(0.05, 0, 0.05, 0)
-	valLabel.Text = tostring(valor)
+	valLabel.Text = tostring(_G[variable])
 	valLabel.TextScaled = true
 	valLabel.Font = Enum.Font.Arcade
 	valLabel.TextColor3 = Color3.new(1,1,1)
 	valLabel.BackgroundTransparency = 1
 
 	local plus = Instance.new("TextButton", menu)
-	plus.Position = UDim2.new(0.28, 0, posY, 0)
+	plus.Position = UDim2.new(0.28, 0, y, 0)
 	plus.Size = UDim2.new(0.05, 0, 0.05, 0)
 	plus.Text = "+"
 	plus.TextScaled = true
@@ -106,7 +102,7 @@ local function crearSeccion(texto, posY, aumentar, disminuir, toggleVar, valor)
 	plus.TextColor3 = Color3.new(1,1,1)
 
 	local minus = Instance.new("TextButton", menu)
-	minus.Position = UDim2.new(0.34, 0, posY, 0)
+	minus.Position = UDim2.new(0.34, 0, y, 0)
 	minus.Size = UDim2.new(0.05, 0, 0.05, 0)
 	minus.Text = "-"
 	minus.TextScaled = true
@@ -115,14 +111,14 @@ local function crearSeccion(texto, posY, aumentar, disminuir, toggleVar, valor)
 	minus.TextColor3 = Color3.new(1,1,1)
 
 	plus.MouseButton1Click:Connect(function()
-		aumentar()
-		valLabel.Text = tostring(valor)
+		_G[variable] += 1
+		valLabel.Text = tostring(_G[variable])
 		actualizarHumanoid()
 	end)
 
 	minus.MouseButton1Click:Connect(function()
-		disminuir()
-		valLabel.Text = tostring(valor)
+		_G[variable] = math.max(1, _G[variable] - 1)
+		valLabel.Text = tostring(_G[variable])
 		actualizarHumanoid()
 	end)
 
@@ -134,19 +130,15 @@ local function crearSeccion(texto, posY, aumentar, disminuir, toggleVar, valor)
 	end)
 end
 
-crearSeccion("Velocidad", 0.15,
-	function() velocidad += 1 end,
-	function() velocidad = math.max(1, velocidad - 1) end,
-	"velON", velocidad
-)
+_G["velocidad"] = velocidad
+_G["salto"] = salto
+_G["velON"] = velON
+_G["saltoON"] = saltoON
 
-crearSeccion("Salto", 0.25,
-	function() salto += 1 end,
-	function() salto = math.max(1, salto - 1) end,
-	"saltoON", salto
-)
+crearControl("Velocidad", 0.15, "velocidad", "velON")
+crearControl("Salto", 0.25, "salto", "saltoON")
 
--- Función para crear botón normal
+-- Crear botón
 local function crearBoton(texto, posX, posY)
 	local btn = Instance.new("TextButton", menu)
 	btn.Size = UDim2.new(0.12, 0, 0.06, 0)
@@ -159,23 +151,17 @@ local function crearBoton(texto, posX, posY)
 	return btn
 end
 
--- BOTONES DE FUNCIONES
-local fly = crearBoton("🚀 Fly V3", 0.02, 0.38)
-local esp = crearBoton("👁 ESP Player (OFF)", 0.18, 0.38)
-local fling = crearBoton("🌀 Touch Fling (OFF)", 0.35, 0.38)
-local steal = crearBoton("🧠 Brainlot", 0.52, 0.38)
-local jail = crearBoton("🚓 Jailbreak", 0.68, 0.38)
-local dead = crearBoton("🚂 Rieles Muertos", 0.02, 0.48)
-local blox = crearBoton("🍉 Blox Fruits", 0.18, 0.48)
-
+-- Funciones y scripts
+local fly = crearBoton("🚀 Fly V3", 0.02, 0.4)
 fly.MouseButton1Click:Connect(function()
 	loadstring(game:HttpGet("https://raw.githubusercontent.com/XNEOFF/FlyGuiV3/main/FlyGuiV3.txt"))()
 end)
 
+local esp = crearBoton("👁 ESP (OFF)", 0.17, 0.4)
 local espOn = false
 esp.MouseButton1Click:Connect(function()
 	espOn = not espOn
-	esp.Text = espOn and "👁 ESP Player (ON)" or "👁 ESP Player (OFF)"
+	esp.Text = espOn and "👁 ESP (ON)" or "👁 ESP (OFF)"
 	for _, v in pairs(game.Players:GetPlayers()) do
 		if v ~= player and v.Character and v.Character:FindFirstChild("Head") then
 			if espOn then
@@ -199,31 +185,31 @@ esp.MouseButton1Click:Connect(function()
 end)
 
 local flingUsed = false
+local fling = crearBoton("🌀 Touch Fling", 0.32, 0.4)
 fling.MouseButton1Click:Connect(function()
 	if not flingUsed then
 		flingUsed = true
-		fling.Text = "🌀 Touch Fling (ON)"
 		loadstring(game:HttpGet("https://rawscripts.net/raw/Universal-Script-TOUCH-FLING-ULTRA-POWER-30194"))()
 	end
 end)
 
-steal.MouseButton1Click:Connect(function()
+crearBoton("🧠 Brainlot", 0.47, 0.4).MouseButton1Click:Connect(function()
 	loadstring(game:HttpGet("https://raw.githubusercontent.com/Akbar123s/Script-Roblox-/refs/heads/main/nabaruBrainrot"))()
 end)
 
-jail.MouseButton1Click:Connect(function()
+crearBoton("🚓 Jailbreak", 0.62, 0.4).MouseButton1Click:Connect(function()
 	loadstring(game:HttpGet("https://raw.githubusercontent.com/BlitzIsKing/UniversalFarm/main/Loader/Regular"))()
 end)
 
-dead.MouseButton1Click:Connect(function()
+crearBoton("🚂 Dead Rails", 0.77, 0.4).MouseButton1Click:Connect(function()
 	loadstring(game:HttpGet("https://raw.githubusercontent.com/gumanba/Scripts/refs/heads/main/DeadRails", true))()
 end)
 
-blox.MouseButton1Click:Connect(function()
+crearBoton("🍉 Blox Fruits", 0.02, 0.5).MouseButton1Click:Connect(function()
 	loadstring(game:HttpGet("https://raw.githubusercontent.com/tlredz/Scripts/refs/heads/main/main.luau"))()
 end)
 
--- Botón cerrar
+-- Cerrar
 local cerrar = Instance.new("TextButton", menu)
 cerrar.Position = UDim2.new(0.9, 0, 0.9, 0)
 cerrar.Size = UDim2.new(0.08, 0, 0.07, 0)
@@ -236,7 +222,7 @@ cerrar.MouseButton1Click:Connect(function()
 	menu.Visible = false
 end)
 
--- Rainbow en tiempo real
+-- Rainbow dinámico
 game:GetService("RunService").RenderStepped:Connect(function()
 	local color = rainbow()
 	stroke.Color = color
@@ -247,7 +233,6 @@ game:GetService("RunService").RenderStepped:Connect(function()
 	end
 end)
 
--- Reset humanoide al reaparecer
 player.CharacterAdded:Connect(function(char)
 	char:WaitForChild("Humanoid").WalkSpeed = velON and velocidad or 16
 	char:WaitForChild("Humanoid").JumpPower = saltoON and salto or 50
