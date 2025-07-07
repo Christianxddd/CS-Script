@@ -25,9 +25,9 @@ cBtn.Font = Enum.Font.Arcade
 cBtn.TextColor3 = Color3.new(1, 1, 1)
 cBtn.Draggable = true
 
--- Panel principal
+-- Panel
 local menu = Instance.new("Frame", gui)
-menu.Size = UDim2.new(0.95, 0, 0.6, 0)
+menu.Size = UDim2.new(0.95, 0, 0.65, 0)
 menu.Position = UDim2.new(0.025, 0, 0.2, 0)
 menu.BackgroundColor3 = Color3.fromRGB(20, 20, 20)
 menu.BackgroundTransparency = 0.35
@@ -40,7 +40,7 @@ Instance.new("UICorner", menu)
 
 -- Título
 local title = Instance.new("TextLabel", menu)
-title.Size = UDim2.new(1, 0, 0, 35)
+title.Size = UDim2.new(1, 0, 0, 40)
 title.Position = UDim2.new(0, 0, 0, 0)
 title.Text = "🎮 I'm Christian Sebast"
 title.TextScaled = true
@@ -64,7 +64,7 @@ local function actualizarHumanoid()
 	end
 end
 
--- Crear controles
+-- Control personalizado
 local function crearControl(nombre, y, variable, toggleVar)
 	local label = Instance.new("TextLabel", menu)
 	label.Position = UDim2.new(0.02, 0, y, 0)
@@ -132,8 +132,8 @@ _G["salto"] = salto
 _G["velON"] = velON
 _G["saltoON"] = saltoON
 
-crearControl("Velocidad", 0.12, "velocidad", "velON")
-crearControl("Salto", 0.20, "salto", "saltoON")
+crearControl("Velocidad", 0.1, "velocidad", "velON")
+crearControl("Salto", 0.18, "salto", "saltoON")
 
 -- Botón creador
 local function crearBoton(texto, posX, posY, callback)
@@ -150,12 +150,12 @@ local function crearBoton(texto, posX, posY, callback)
 end
 
 -- Scripts
-crearBoton("🚀 Fly V3", 0.02, 0.33, function()
+crearBoton("🚀 Fly V3", 0.02, 0.3, function()
 	loadstring(game:HttpGet("https://raw.githubusercontent.com/XNEOFF/FlyGuiV3/main/FlyGuiV3.txt"))()
 end)
 
 local espOn = false
-crearBoton("👁 ESP", 0.18, 0.33, function()
+crearBoton("👁 ESP", 0.18, 0.3, function()
 	espOn = not espOn
 	for _, v in pairs(game.Players:GetPlayers()) do
 		if v ~= player and v.Character and v.Character:FindFirstChild("Head") then
@@ -179,35 +179,38 @@ crearBoton("👁 ESP", 0.18, 0.33, function()
 end)
 
 local flingUsed = false
-crearBoton("🌀 Touch Fling", 0.34, 0.33, function()
+crearBoton("🌀 Touch Fling", 0.34, 0.3, function()
 	if not flingUsed then
 		flingUsed = true
 		loadstring(game:HttpGet("https://rawscripts.net/raw/Universal-Script-TOUCH-FLING-ULTRA-POWER-30194"))()
 	end
 end)
 
-crearBoton("🧠 Brainlot", 0.5, 0.33, function()
+crearBoton("🧠 Brainlot", 0.5, 0.3, function()
 	loadstring(game:HttpGet("https://raw.githubusercontent.com/Akbar123s/Script-Roblox-/refs/heads/main/nabaruBrainrot"))()
 end)
 
-crearBoton("🚓 Jailbreak", 0.66, 0.33, function()
+crearBoton("🚓 Jailbreak", 0.66, 0.3, function()
 	loadstring(game:HttpGet("https://raw.githubusercontent.com/BlitzIsKing/UniversalFarm/main/Loader/Regular"))()
 end)
 
-crearBoton("🚂 Dead Rails", 0.02, 0.42, function()
+crearBoton("🚂 Dead Rails", 0.02, 0.39, function()
 	loadstring(game:HttpGet("https://raw.githubusercontent.com/gumanba/Scripts/refs/heads/main/DeadRails", true))()
 end)
 
-crearBoton("🍉 Blox Fruits", 0.18, 0.42, function()
+crearBoton("🍉 Blox Fruits", 0.18, 0.39, function()
 	loadstring(game:HttpGet("https://raw.githubusercontent.com/tlredz/Scripts/refs/heads/main/main.luau"))()
 end)
 
--- TikTok botón
-crearBoton("🎵 TikTok", 0.34, 0.42, function()
+crearBoton("📜 Comandos", 0.34, 0.39, function()
+	loadstring(game:HttpGet("https://raw.githubusercontent.com/EdgeIY/infiniteyield/master/source"))()
+end)
+
+crearBoton("🎵 TikTok", 0.5, 0.39, function()
 	setclipboard("https://www.tiktok.com/@christ_sebast_7d")
 	game.StarterGui:SetCore("SendNotification", {
 		Title = "Copiado ✔️",
-		Text = "Link de TikTok copiado, pégalo en tu navegador",
+		Text = "Link de TikTok copiado al portapapeles",
 		Duration = 4
 	})
 end)
