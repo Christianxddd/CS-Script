@@ -1,139 +1,238 @@
 local player = game.Players.LocalPlayer
 local gui = Instance.new("ScreenGui", player:WaitForChild("PlayerGui"))
-gui.Name = "Christian_UI"
+gui.Name = "PanelChristian"
 gui.ResetOnSpawn = false
 
--- BOTÓN "C"
-local openBtn = Instance.new("TextButton")
-openBtn.Size = UDim2.new(0, 50, 0, 50)
-openBtn.Position = UDim2.new(0, 20, 0, 20)
-openBtn.BackgroundColor3 = Color3.fromRGB(30, 30, 30)
-openBtn.Text = "C"
-openBtn.Font = Enum.Font.GothamBlack
-openBtn.TextScaled = true
-openBtn.TextColor3 = Color3.new(1,1,1)
-openBtn.Draggable = true
-openBtn.Parent = gui
+-- Botón flotante "C"
+local toggleBtn = Instance.new("TextButton", gui)
+toggleBtn.Size = UDim2.new(0, 60, 0, 60)
+toggleBtn.Position = UDim2.new(0, 20, 0, 20)
+toggleBtn.Text = "C"
+toggleBtn.Font = Enum.Font.Arcade
+toggleBtn.TextScaled = true
+toggleBtn.BackgroundColor3 = Color3.fromRGB(30, 30, 30)
+toggleBtn.TextColor3 = Color3.new(1, 1, 1)
+toggleBtn.ZIndex = 5
+toggleBtn.Draggable = true
 
--- PANEL PRINCIPAL
+-- Panel principal
 local mainFrame = Instance.new("Frame", gui)
-mainFrame.Size = UDim2.new(0, 400, 0, 300)
-mainFrame.Position = UDim2.new(0.5, -200, 0.5, -150)
+mainFrame.Size = UDim2.new(0.35, 0, 0.7, 0)
+mainFrame.Position = UDim2.new(0.05, 0, 0.15, 0)
 mainFrame.BackgroundColor3 = Color3.fromRGB(20, 20, 20)
+mainFrame.BackgroundTransparency = 0.3
 mainFrame.Visible = false
 mainFrame.Active = true
 mainFrame.Draggable = true
 
--- TÍTULO
+-- Layout vertical general
+local uiList = Instance.new("UIListLayout", mainFrame)
+uiList.SortOrder = Enum.SortOrder.LayoutOrder
+uiList.Padding = UDim.new(0, 8)
+
+-- Título
 local title = Instance.new("TextLabel", mainFrame)
-title.Size = UDim2.new(1, 0, 0, 40)
-title.Position = UDim2.new(0, 0, 0, 0)
+title.Size = UDim2.new(1, 0, 0, 35)
 title.Text = "By Christian"
-title.Font = Enum.Font.GothamBold
-title.TextColor3 = Color3.new(1, 1, 1)
 title.TextScaled = true
+title.Font = Enum.Font.Arcade
+title.TextColor3 = Color3.new(1, 1, 1)
 title.BackgroundTransparency = 1
+title.LayoutOrder = 1
 
--- DATOS PERSONALES
-local info = Instance.new("TextLabel", mainFrame)
-info.Size = UDim2.new(1, -20, 0, 30)
-info.Position = UDim2.new(0, 10, 0, 45)
-info.Text = "Usuario: Christian_xyx | TikTok: @christ_sebast_7d"
-info.Font = Enum.Font.Gotham
-info.TextColor3 = Color3.new(1,1,1)
-info.TextScaled = true
-info.BackgroundTransparency = 1
+-- Datos usuario y red social
+local datos = Instance.new("TextLabel", mainFrame)
+datos.Size = UDim2.new(1, 0, 0, 25)
+datos.Text = "Usuario: Christian_xyx | TikTok: @christ_sebast_7d"
+datos.TextScaled = true
+datos.Font = Enum.Font.Arcade
+datos.TextColor3 = Color3.new(1, 1, 1)
+datos.BackgroundTransparency = 1
+datos.LayoutOrder = 2
 
--- BOTÓN "Scripts"
-local scriptsBtn = Instance.new("TextButton", mainFrame)
-scriptsBtn.Size = UDim2.new(0.5, -15, 0, 40)
-scriptsBtn.Position = UDim2.new(0, 10, 0, 85)
-scriptsBtn.Text = "📂 Scripts"
-scriptsBtn.Font = Enum.Font.GothamBlack
-scriptsBtn.TextScaled = true
-scriptsBtn.BackgroundColor3 = Color3.fromRGB(40, 40, 40)
-scriptsBtn.TextColor3 = Color3.new(1,1,1)
+-- Barra de búsqueda
+local searchBox = Instance.new("TextBox", mainFrame)
+searchBox.Size = UDim2.new(1, -20, 0, 30)
+searchBox.Position = UDim2.new(0, 10, 0, 65)
+searchBox.PlaceholderText = "Buscar scripts..."
+searchBox.TextScaled = true
+searchBox.Font = Enum.Font.Arcade
+searchBox.TextColor3 = Color3.new(1,1,1)
+searchBox.BackgroundColor3 = Color3.fromRGB(40,40,40)
+searchBox.ClearTextOnFocus = false
+searchBox.LayoutOrder = 3
 
--- PANEL DE SCRIPTS
-local scriptsFrame = Instance.new("Frame", gui)
-scriptsFrame.Size = UDim2.new(0, 400, 0, 300)
-scriptsFrame.Position = mainFrame.Position
-scriptsFrame.BackgroundColor3 = Color3.fromRGB(25, 25, 25)
-scriptsFrame.Visible = false
-scriptsFrame.Active = true
-scriptsFrame.Draggable = true
+-- ScrollingFrame para carpetas y scripts
+local scrollFrame = Instance.new("ScrollingFrame", mainFrame)
+scrollFrame.Size = UDim2.new(1, 0, 1, -120)
+scrollFrame.Position = UDim2.new(0, 0, 0, 95)
+scrollFrame.BackgroundTransparency = 1
+scrollFrame.BorderSizePixel = 0
+scrollFrame.CanvasSize = UDim2.new(0, 0, 0, 0)
+scrollFrame.ScrollBarThickness = 8
+scrollFrame.VerticalScrollBarInset = Enum.ScrollBarInset.Always
+scrollFrame.LayoutOrder = 4
 
--- TÍTULO Scripts
-local scriptsTitle = Instance.new("TextLabel", scriptsFrame)
-scriptsTitle.Size = UDim2.new(1, 0, 0, 40)
-scriptsTitle.Position = UDim2.new(0, 0, 0, 0)
-scriptsTitle.Text = "🎮 Juegos Populares"
-scriptsTitle.Font = Enum.Font.GothamBold
-scriptsTitle.TextColor3 = Color3.new(1, 1, 1)
-scriptsTitle.TextScaled = true
-scriptsTitle.BackgroundTransparency = 1
+local carpetaLayout = Instance.new("UIListLayout", scrollFrame)
+carpetaLayout.SortOrder = Enum.SortOrder.LayoutOrder
+carpetaLayout.Padding = UDim.new(0, 6)
 
--- SCROLL CONTAINER
-local scroll = Instance.new("ScrollingFrame", scriptsFrame)
-scroll.Size = UDim2.new(1, -20, 1, -80)
-scroll.Position = UDim2.new(0, 10, 0, 50)
-scroll.CanvasSize = UDim2.new(0, 0, 2, 0)
-scroll.BackgroundTransparency = 1
-scroll.ScrollBarThickness = 8
+-- Función para crear carpeta expandible
+local function crearCarpeta(nombre)
+    local carpeta = Instance.new("Frame")
+    carpeta.Size = UDim2.new(1, 0, 0, 35)
+    carpeta.BackgroundColor3 = Color3.fromRGB(40, 40, 40)
+    carpeta.ClipsDescendants = true
+    carpeta.LayoutOrder = 1
 
--- FUNCIÓN PARA CREAR BOTÓN DE SCRIPT
-local function crearBoton(nombre, scriptURL, y)
-	local btn = Instance.new("TextButton", scroll)
-	btn.Size = UDim2.new(1, 0, 0, 40)
-	btn.Position = UDim2.new(0, 0, 0, y)
-	btn.Text = nombre
-	btn.Font = Enum.Font.GothamBlack
-	btn.TextScaled = true
-	btn.BackgroundColor3 = Color3.fromRGB(35, 35, 35)
-	btn.TextColor3 = Color3.new(1,1,1)
-	btn.MouseButton1Click:Connect(function()
-		loadstring(game:HttpGet(scriptURL))()
-	end)
+    local titulo = Instance.new("TextButton", carpeta)
+    titulo.Size = UDim2.new(1, 0, 0, 35)
+    titulo.BackgroundColor3 = Color3.fromRGB(35, 35, 35)
+    titulo.Text = "📁 "..nombre
+    titulo.TextColor3 = Color3.new(1,1,1)
+    titulo.Font = Enum.Font.Arcade
+    titulo.TextScaled = true
+    titulo.LayoutOrder = 1
+
+    local contenido = Instance.new("Frame", carpeta)
+    contenido.Name = "Contenido"
+    contenido.Size = UDim2.new(1, 0, 0, 0)
+    contenido.Position = UDim2.new(0, 0, 0, 35)
+    contenido.BackgroundTransparency = 1
+    contenido.LayoutOrder = 2
+
+    local contenidoLayout = Instance.new("UIListLayout", contenido)
+    contenidoLayout.SortOrder = Enum.SortOrder.LayoutOrder
+    contenidoLayout.Padding = UDim.new(0, 4)
+
+    local abierto = false
+
+    titulo.MouseButton1Click:Connect(function()
+        abierto = not abierto
+        if abierto then
+            local btnCount = 0
+            for _, child in pairs(contenido:GetChildren()) do
+                if child:IsA("TextButton") and child.Visible then
+                    btnCount += 1
+                end
+            end
+            local altura = btnCount * 40
+            contenido:TweenSize(UDim2.new(1,0,0,altura), "Out", "Quad", 0.3, true)
+            carpeta:TweenSize(UDim2.new(1, 0, 0, 35 + altura), "Out", "Quad", 0.3, true)
+        else
+            contenido:TweenSize(UDim2.new(1,0,0,0), "Out", "Quad", 0.3, true)
+            carpeta:TweenSize(UDim2.new(1, 0, 0, 35), "Out", "Quad", 0.3, true)
+        end
+        wait(0.35)
+        scrollFrame.CanvasSize = UDim2.new(0, 0, 0, carpetaLayout.AbsoluteContentSize.Y + 10)
+    end)
+
+    return carpeta, contenido
 end
 
--- LISTA DE SCRIPTS
-local scripts = {
-	{"🧠 Brainlot", "https://raw.githubusercontent.com/Akbar123s/Script-Roblox-/refs/heads/main/nabaruBrainrot"},
-	{"🚓 Jailbreak", "https://raw.githubusercontent.com/BlitzIsKing/UniversalFarm/main/Loader/Regular"},
-	{"🚂 Dead Rails", "https://raw.githubusercontent.com/gumanba/Scripts/refs/heads/main/DeadRails"},
-	{"🍉 Blox Fruits", "https://raw.githubusercontent.com/tlredz/Scripts/refs/heads/main/main.luau"},
-	{"🌀 Touch Fling", "https://rawscripts.net/raw/Universal-Script-TOUCH-FLING-ULTRA-POWER-30194"},
-	{"🚀 Fly V3", "https://raw.githubusercontent.com/XNEOFF/FlyGuiV3/main/FlyGuiV3.txt"},
-	{"👁 ESP Player", "https://pastebin.com/raw/DZ3uT8tF"},
-	{"🧱 Comandos (Infinity Yield)", "https://raw.githubusercontent.com/EdgeIY/infinityyield/master/source"}
+-- Función para crear botones de scripts
+local function crearBotonScript(nombre, link)
+    local btn = Instance.new("TextButton")
+    btn.Size = UDim2.new(1, 0, 0, 35)
+    btn.BackgroundColor3 = Color3.fromRGB(55, 55, 55)
+    btn.TextColor3 = Color3.new(1, 1, 1)
+    btn.Text = "▶️ "..nombre
+    btn.Font = Enum.Font.Arcade
+    btn.TextScaled = true
+    btn.AutoButtonColor = true
+
+    btn.MouseButton1Click:Connect(function()
+        local success, err = pcall(function()
+            loadstring(game:HttpGet(link))()
+        end)
+        if not success then
+            warn("Error cargando script: "..nombre.."\n"..tostring(err))
+        end
+    end)
+
+    return btn
+end
+
+-- Crear carpetas principales
+local carpetaJuegos, contenidoJuegos = crearCarpeta("Juegos Populares")
+carpetaJuegos.Parent = scrollFrame
+carpetaJuegos.LayoutOrder = 3
+
+local carpetaComandos, contenidoComandos = crearCarpeta("Comandos")
+carpetaComandos.Parent = scrollFrame
+carpetaComandos.LayoutOrder = 4
+
+-- Scripts Juegos Populares
+local juegosScripts = {
+    {nombre = "🧠 Brainlot", link = "https://raw.githubusercontent.com/Akbar123s/Script-Roblox-/refs/heads/main/nabaruBrainrot"},
+    {nombre = "🚓 Jailbreak", link = "https://raw.githubusercontent.com/BlitzIsKing/UniversalFarm/main/Loader/Regular"},
+    {nombre = "🚂 Dead Rails", link = "https://raw.githubusercontent.com/gumanba/Scripts/refs/heads/main/DeadRails"},
+    {nombre = "🍉 Blox Fruits", link = "https://raw.githubusercontent.com/tlredz/Scripts/refs/heads/main/main.luau"},
 }
 
--- CREAR TODOS LOS BOTONES
-for i, data in ipairs(scripts) do
-	crearBoton(data[1], data[2], (i - 1) * 45)
+for _, v in ipairs(juegosScripts) do
+    local btn = crearBotonScript(v.nombre, v.link)
+    btn.Parent = contenidoJuegos
 end
 
--- BOTÓN REGRESAR
-local backBtn = Instance.new("TextButton", scriptsFrame)
-backBtn.Size = UDim2.new(1, -20, 0, 40)
-backBtn.Position = UDim2.new(0, 10, 1, -45)
-backBtn.Text = "⬅️ Regresar"
-backBtn.Font = Enum.Font.GothamBold
-backBtn.TextScaled = true
-backBtn.BackgroundColor3 = Color3.fromRGB(40, 40, 40)
-backBtn.TextColor3 = Color3.new(1,1,1)
+-- Scripts Comandos
+local comandosScripts = {
+    {nombre = "🚀 Fly V3", link = "https://raw.githubusercontent.com/XNEOFF/FlyGuiV3/main/FlyGuiV3.txt"},
+    {nombre = "🌀 Touch Fling", link = "https://rawscripts.net/raw/Universal-Script-TOUCH-FLING-ULTRA-POWER-30194"},
+    {nombre = "👁 ESP Player", link = "https://raw.githubusercontent.com/zekewaze/ESP-NameTags/main/main.lua"},
+    {nombre = "📜 Infinity Yield", link = "https://raw.githubusercontent.com/EdgeIY/infiniteyield/master/source"},
+}
 
--- FUNCIONES DE MOSTRAR
-openBtn.MouseButton1Click:Connect(function()
-	mainFrame.Visible = not mainFrame.Visible
+for _, v in ipairs(comandosScripts) do
+    local btn = crearBotonScript(v.nombre, v.link)
+    btn.Parent = contenidoComandos
+end
+
+-- Ajustar CanvasSize inicial
+wait(0.2)
+scrollFrame.CanvasSize = UDim2.new(0, 0, 0, carpetaLayout.AbsoluteContentSize.Y + 10)
+
+-- Función para actualizar altura de carpeta según hijos visibles
+local function actualizarAltura(carpetaFrame, contenidoFrame)
+    local visibleCount = 0
+    for _, child in pairs(contenidoFrame:GetChildren()) do
+        if child:IsA("TextButton") and child.Visible then
+            visibleCount += 1
+        end
+    end
+    local newHeight = visibleCount * 40
+    contenidoFrame:TweenSize(UDim2.new(1,0,0,newHeight), "Out", "Quad", 0.3, true)
+    carpetaFrame:TweenSize(UDim2.new(1,0,0,35 + newHeight), "Out", "Quad", 0.3, true)
+end
+
+-- Filtrado por búsqueda
+searchBox:GetPropertyChangedSignal("Text"):Connect(function()
+    local text = searchBox.Text:lower()
+    -- Filtrar Juegos Populares
+    for _, btn in pairs(contenidoJuegos:GetChildren()) do
+        if btn:IsA("TextButton") then
+            btn.Visible = btn.Text:lower():find(text) ~= nil
+        end
+    end
+    -- Filtrar Comandos
+    for _, btn in pairs(contenidoComandos:GetChildren()) do
+        if btn:IsA("TextButton") then
+            btn.Visible = btn.Text:lower():find(text) ~= nil
+        end
+    end
+    -- Actualizar altura carpetas abiertas
+    if carpetaJuegos.Contenido.Size.Y.Offset > 0 then
+        actualizarAltura(carpetaJuegos, contenidoJuegos)
+    end
+    if carpetaComandos.Contenido.Size.Y.Offset > 0 then
+        actualizarAltura(carpetaComandos, contenidoComandos)
+    end
+
+    wait(0.35)
+    scrollFrame.CanvasSize = UDim2.new(0, 0, 0, carpetaLayout.AbsoluteContentSize.Y + 10)
 end)
 
-scriptsBtn.MouseButton1Click:Connect(function()
-	mainFrame.Visible = false
-	scriptsFrame.Visible = true
-end)
-
-backBtn.MouseButton1Click:Connect(function()
-	scriptsFrame.Visible = false
-	mainFrame.Visible = true
+-- Toggle abrir/cerrar panel con botón "C"
+toggleBtn.MouseButton1Click:Connect(function()
+    mainFrame.Visible = not mainFrame.Visible
 end)
