@@ -1,10 +1,9 @@
--- GUI By ChristianSebas - Ajustado con ESP Player y +1/-1 exacto
 local player = game.Players.LocalPlayer
 local gui = Instance.new("ScreenGui", player:WaitForChild("PlayerGui"))
 gui.Name = "ChristianSebasUI"
 gui.ResetOnSpawn = false
 
--- BOTÓN flotante
+-- BOTÓN FLOTANTE (logo de la C)
 local cBtn = Instance.new("ImageButton")
 cBtn.Size = UDim2.new(0, 60, 0, 60)
 cBtn.Position = UDim2.new(0, 20, 0, 20)
@@ -14,7 +13,7 @@ cBtn.Image = "rbxassetid://94777373855263" -- Tu logo "C"
 cBtn.Draggable = true
 cBtn.Parent = gui
 
--- MENÚ general (más grande)
+-- MENÚ
 local menu = Instance.new("Frame", gui)
 menu.Size = UDim2.new(0, 300, 0, 370)
 menu.Position = UDim2.new(0.5, -150, 0.5, -185)
@@ -34,20 +33,29 @@ cBtn.MouseButton1Click:Connect(function()
 end)
 
 -- VARIABLES
-local velocidadActual = 0
-local saltoActual = 0
+local velocidadGUI = 0
+local saltoGUI = 0
+local velocidadActiva = false
+local saltoActivo = false
+
+local defaultWalkSpeed = 16
+local defaultJumpPower = 50
 
 -- FUNCIONES
-local function actualizarVelocidad()
-    local hum = player.Character and player.Character:FindFirstChild("Humanoid")
-    if hum then hum.WalkSpeed = velocidadActual end
-    velValor.Text = tostring(velocidadActual)
+local function aplicarVelocidad()
+    if velocidadActiva then
+        local hum = player.Character and player.Character:FindFirstChild("Humanoid")
+        if hum then hum.WalkSpeed = velocidadGUI end
+    end
+    velValor.Text = tostring(velocidadGUI)
 end
 
-local function actualizarSalto()
-    local hum = player.Character and player.Character:FindFirstChild("Humanoid")
-    if hum then hum.JumpPower = saltoActual end
-    saltoValor.Text = tostring(saltoActual)
+local function aplicarSalto()
+    if saltoActivo then
+        local hum = player.Character and player.Character:FindFirstChild("Humanoid")
+        if hum then hum.JumpPower = saltoGUI end
+    end
+    saltoValor.Text = tostring(saltoGUI)
 end
 
 -- VELOCIDAD
@@ -63,7 +71,7 @@ velLabel.BackgroundTransparency = 1
 velValor = Instance.new("TextLabel", menu)
 velValor.Position = UDim2.new(0.45, 0, 0.15, 0)
 velValor.Size = UDim2.new(0.15, 0, 0, 30)
-velValor.Text = tostring(velocidadActual)
+velValor.Text = tostring(velocidadGUI)
 velValor.TextScaled = true
 velValor.Font = Enum.Font.GothamBold
 velValor.TextColor3 = Color3.new(1,1,1)
@@ -86,13 +94,19 @@ velMenos.BackgroundColor3 = Color3.fromRGB(45, 45, 45)
 velMenos.TextColor3 = Color3.new(1,1,1)
 
 velMas.MouseButton1Click:Connect(function()
-    velocidadActual += 1
-    actualizarVelocidad()
+    velocidadGUI += 1
+    if not velocidadActiva then
+        velocidadActiva = true
+    end
+    aplicarVelocidad()
 end)
 
 velMenos.MouseButton1Click:Connect(function()
-    velocidadActual = math.max(0, velocidadActual - 1)
-    actualizarVelocidad()
+    velocidadGUI = math.max(0, velocidadGUI - 1)
+    if not velocidadActiva then
+        velocidadActiva = true
+    end
+    aplicarVelocidad()
 end)
 
 -- SALTO
@@ -108,7 +122,7 @@ saltoLabel.BackgroundTransparency = 1
 saltoValor = Instance.new("TextLabel", menu)
 saltoValor.Position = UDim2.new(0.45, 0, 0.28, 0)
 saltoValor.Size = UDim2.new(0.15, 0, 0, 30)
-saltoValor.Text = tostring(saltoActual)
+saltoValor.Text = tostring(saltoGUI)
 saltoValor.TextScaled = true
 saltoValor.Font = Enum.Font.GothamBold
 saltoValor.TextColor3 = Color3.new(1,1,1)
@@ -131,13 +145,19 @@ saltoMenos.BackgroundColor3 = Color3.fromRGB(45, 45, 45)
 saltoMenos.TextColor3 = Color3.new(1,1,1)
 
 saltoMas.MouseButton1Click:Connect(function()
-    saltoActual += 1
-    actualizarSalto()
+    saltoGUI += 1
+    if not saltoActivo then
+        saltoActivo = true
+    end
+    aplicarSalto()
 end)
 
 saltoMenos.MouseButton1Click:Connect(function()
-    saltoActual = math.max(0, saltoActual - 1)
-    actualizarSalto()
+    saltoGUI = math.max(0, saltoGUI - 1)
+    if not saltoActivo then
+        saltoActivo = true
+    end
+    aplicarSalto()
 end)
 
 -- FLY V3
@@ -162,7 +182,6 @@ espBtn.TextScaled = true
 espBtn.Font = Enum.Font.GothamBold
 espBtn.TextColor3 = Color3.new(1, 1, 1)
 espBtn.BackgroundColor3 = Color3.fromRGB(45, 45, 45)
-
 espBtn.MouseButton1Click:Connect(function()
     for _, v in pairs(game.Players:GetPlayers()) do
         if v ~= player and v.Character and v.Character:FindFirstChild("Head") and not v.Character.Head:FindFirstChild("NameTag") then
@@ -195,8 +214,9 @@ cerrarBtn.MouseButton1Click:Connect(function()
     menu.Visible = false
 end)
 
--- ACTUALIZAR cuando respawnea
+-- AL RESPAWNEAR, mantener normal
 player.CharacterAdded:Connect(function(char)
-    char:WaitForChild("Humanoid").WalkSpeed = velocidadActual
-    char:WaitForChild("Humanoid").JumpPower = saltoActual
+    local hum = char:WaitForChild("Humanoid")
+    hum.WalkSpeed = defaultWalkSpeed
+    hum.JumpPower = defaultJumpPower
 end)
