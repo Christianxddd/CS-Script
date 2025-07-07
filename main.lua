@@ -1,6 +1,6 @@
 local player = game.Players.LocalPlayer
 local gui = Instance.new("ScreenGui", player:WaitForChild("PlayerGui"))
-gui.Name = "ChristianPanelCarpetas"
+gui.Name = "PanelChristian"
 gui.ResetOnSpawn = false
 
 -- Botón flotante "C"
@@ -78,6 +78,7 @@ local function crearCarpeta(nombre)
     titulo.LayoutOrder = 1
 
     local contenido = Instance.new("Frame", carpeta)
+    contenido.Name = "Contenido"
     contenido.Size = UDim2.new(1, 0, 0, 0) -- contenido oculto al inicio
     contenido.Position = UDim2.new(0, 0, 0, 35)
     contenido.BackgroundTransparency = 1
@@ -94,7 +95,14 @@ local function crearCarpeta(nombre)
         if abierto then
             -- calcular altura según cantidad de hijos (botones) en contenido
             local totalHijos = #contenido:GetChildren()
-            local altura = totalHijos * 40
+            -- contar solo botones para calcular altura (evitar UIListLayout)
+            local btnCount = 0
+            for _, child in pairs(contenido:GetChildren()) do
+                if child:IsA("TextButton") then
+                    btnCount += 1
+                end
+            end
+            local altura = btnCount * 40
             contenido:TweenSize(UDim2.new(1,0,0,altura), "Out", "Quad", 0.3, true)
             carpeta:TweenSize(UDim2.new(1, 0, 0, 35 + altura), "Out", "Quad", 0.3, true)
         else
@@ -132,9 +140,11 @@ end
 -- Crear carpetas principales
 local carpetaJuegos, contenidoJuegos = crearCarpeta("Juegos Populares")
 carpetaJuegos.Parent = carpetasContainer
+carpetaJuegos.LayoutOrder = 3
 
 local carpetaComandos, contenidoComandos = crearCarpeta("Comandos")
 carpetaComandos.Parent = carpetasContainer
+carpetaComandos.LayoutOrder = 4
 
 -- Agregar scripts a "Juegos Populares"
 local juegosScripts = {
@@ -142,7 +152,7 @@ local juegosScripts = {
     {nombre = "🚓 Jailbreak", link = "https://raw.githubusercontent.com/BlitzIsKing/UniversalFarm/main/Loader/Regular"},
     {nombre = "🚂 Dead Rails", link = "https://raw.githubusercontent.com/gumanba/Scripts/refs/heads/main/DeadRails"},
     {nombre = "🍉 Blox Fruits", link = "https://raw.githubusercontent.com/tlredz/Scripts/refs/heads/main/main.luau"},
-    -- Puedes agregar más juegos aquí
+    -- Más juegos aquí si quieres
 }
 for _, v in ipairs(juegosScripts) do
     local btn = crearBotonScript(v.nombre, v.link)
@@ -155,7 +165,7 @@ local comandosScripts = {
     {nombre = "🌀 Touch Fling", link = "https://rawscripts.net/raw/Universal-Script-TOUCH-FLING-ULTRA-POWER-30194"},
     {nombre = "👁 ESP Player", link = "https://raw.githubusercontent.com/zekewaze/ESP-NameTags/main/main.lua"},
     {nombre = "📜 Infinity Yield", link = "https://raw.githubusercontent.com/EdgeIY/infiniteyield/master/source"},
-    -- Más comandos si quieres
+    -- Más comandos aquí si quieres
 }
 for _, v in ipairs(comandosScripts) do
     local btn = crearBotonScript(v.nombre, v.link)
@@ -173,10 +183,14 @@ botonRegresar.Text = "⬅️ Cerrar carpetas"
 botonRegresar.LayoutOrder = 99
 
 botonRegresar.MouseButton1Click:Connect(function()
+    -- Contraer carpetas abiertas
     for _, carpeta in pairs(carpetasContainer:GetChildren()) do
-        if carpeta:IsA("Frame") and carpeta:FindFirstChild("Contenido") then
-            carpeta.Contenido:TweenSize(UDim2.new(1,0,0,0), "Out", "Quad", 0.3, true)
-            carpeta:TweenSize(UDim2.new(1, 0, 0, 35), "Out", "Quad", 0.3, true)
+        if carpeta:IsA("Frame") then
+            local contenido = carpeta:FindFirstChild("Contenido")
+            if contenido then
+                contenido:TweenSize(UDim2.new(1,0,0,0), "Out", "Quad", 0.3, true)
+                carpeta:TweenSize(UDim2.new(1,0,0,35), "Out", "Quad", 0.3, true)
+            end
         end
     end
 end)
