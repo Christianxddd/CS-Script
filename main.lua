@@ -3,13 +3,16 @@ local gui = Instance.new("ScreenGui", player:WaitForChild("PlayerGui"))
 gui.Name = "ChristianSebasUI"
 gui.ResetOnSpawn = false
 
--- BOTÓN FLOTANTE
-local cBtn = Instance.new("ImageButton")
+-- BOTÓN FLOTANTE CON "C"
+local cBtn = Instance.new("TextButton")
 cBtn.Size = UDim2.new(0, 60, 0, 60)
 cBtn.Position = UDim2.new(0, 20, 0, 20)
 cBtn.BackgroundColor3 = Color3.new(0, 0, 0)
 cBtn.BorderSizePixel = 0
-cBtn.Image = "rbxassetid://94777373855263"
+cBtn.Text = "C"
+cBtn.TextColor3 = Color3.new(1, 1, 1)
+cBtn.TextScaled = true
+cBtn.Font = Enum.Font.GothamBold
 cBtn.Draggable = true
 cBtn.Parent = gui
 
@@ -32,29 +35,29 @@ cBtn.MouseButton1Click:Connect(function()
     menu.Visible = not menu.Visible
 end)
 
--- VALORES INICIALES
+-- VARIABLES
 local velocidad = 16
 local salto = 50
 local velON = false
 local saltoON = false
 
 local function actualizarVelocidad()
-    if velON then
-        local hum = player.Character and player.Character:FindFirstChild("Humanoid")
-        if hum then hum.WalkSpeed = velocidad end
+    local hum = player.Character and player.Character:FindFirstChild("Humanoid")
+    if hum then
+        hum.WalkSpeed = velON and velocidad or 16
     end
     velValor.Text = tostring(velocidad)
 end
 
 local function actualizarSalto()
-    if saltoON then
-        local hum = player.Character and player.Character:FindFirstChild("Humanoid")
-        if hum then hum.JumpPower = salto end
+    local hum = player.Character and player.Character:FindFirstChild("Humanoid")
+    if hum then
+        hum.JumpPower = saltoON and salto or 50
     end
     saltoValor.Text = tostring(salto)
 end
 
--- VELOCIDAD
+-- SECCIÓN: VELOCIDAD
 local velLabel = Instance.new("TextLabel", menu)
 velLabel.Position = UDim2.new(0.05, 0, 0.15, 0)
 velLabel.Size = UDim2.new(0.4, 0, 0, 30)
@@ -96,6 +99,10 @@ velMas.Text = "+"
 velMas.TextScaled = true
 velMas.BackgroundColor3 = Color3.fromRGB(45, 45, 45)
 velMas.TextColor3 = Color3.new(1,1,1)
+velMas.MouseButton1Click:Connect(function()
+    velocidad += 1
+    actualizarVelocidad()
+end)
 
 local velMenos = Instance.new("TextButton", menu)
 velMenos.Position = UDim2.new(0.86, 0, 0.15, 0)
@@ -104,18 +111,12 @@ velMenos.Text = "-"
 velMenos.TextScaled = true
 velMenos.BackgroundColor3 = Color3.fromRGB(45, 45, 45)
 velMenos.TextColor3 = Color3.new(1,1,1)
-
-velMas.MouseButton1Click:Connect(function()
-    velocidad += 1
-    actualizarVelocidad()
-end)
-
 velMenos.MouseButton1Click:Connect(function()
     velocidad = math.max(0, velocidad - 1)
     actualizarVelocidad()
 end)
 
--- SALTO
+-- SECCIÓN: SALTO
 local saltoLabel = Instance.new("TextLabel", menu)
 saltoLabel.Position = UDim2.new(0.05, 0, 0.28, 0)
 saltoLabel.Size = UDim2.new(0.4, 0, 0, 30)
@@ -157,6 +158,10 @@ saltoMas.Text = "+"
 saltoMas.TextScaled = true
 saltoMas.BackgroundColor3 = Color3.fromRGB(45, 45, 45)
 saltoMas.TextColor3 = Color3.new(1,1,1)
+saltoMas.MouseButton1Click:Connect(function()
+    salto += 1
+    actualizarSalto()
+end)
 
 local saltoMenos = Instance.new("TextButton", menu)
 saltoMenos.Position = UDim2.new(0.86, 0, 0.28, 0)
@@ -165,18 +170,12 @@ saltoMenos.Text = "-"
 saltoMenos.TextScaled = true
 saltoMenos.BackgroundColor3 = Color3.fromRGB(45, 45, 45)
 saltoMenos.TextColor3 = Color3.new(1,1,1)
-
-saltoMas.MouseButton1Click:Connect(function()
-    salto += 1
-    actualizarSalto()
-end)
-
 saltoMenos.MouseButton1Click:Connect(function()
     salto = math.max(0, salto - 1)
     actualizarSalto()
 end)
 
--- FLY
+-- FLY V3
 local flyBtn = Instance.new("TextButton", menu)
 flyBtn.Position = UDim2.new(0.05, 0, 0.42, 0)
 flyBtn.Size = UDim2.new(0.9, 0, 0, 35)
@@ -216,7 +215,7 @@ espBtn.MouseButton1Click:Connect(function()
     end
 end)
 
--- CERRAR
+-- CERRAR MENÚ
 local cerrarBtn = Instance.new("TextButton", menu)
 cerrarBtn.Position = UDim2.new(0.05, 0, 0.7, 0)
 cerrarBtn.Size = UDim2.new(0.9, 0, 0, 35)
@@ -229,11 +228,9 @@ cerrarBtn.MouseButton1Click:Connect(function()
     menu.Visible = false
 end)
 
--- RESETEAR AL MORIR
+-- RESTAURAR VALORES AL MORIR
 player.CharacterAdded:Connect(function(char)
     local hum = char:WaitForChild("Humanoid")
-    hum.WalkSpeed = 16
-    hum.JumpPower = 50
-    if velON then hum.WalkSpeed = velocidad end
-    if saltoON then hum.JumpPower = salto end
+    hum.WalkSpeed = velON and velocidad or 16
+    hum.JumpPower = saltoON and salto or 50
 end)
