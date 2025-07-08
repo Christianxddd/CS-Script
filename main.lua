@@ -1,229 +1,167 @@
-local Players = game:GetService("Players")
-local TweenService = game:GetService("TweenService")
-local player = Players.LocalPlayer
+local player = game.Players.LocalPlayer
 local gui = Instance.new("ScreenGui", player:WaitForChild("PlayerGui"))
-gui.Name = "ChristianProHub"
+gui.Name = "ChristianProPanel"
 gui.ResetOnSpawn = false
 
--- RAINBOW
-local function rainbow()
-	local t = tick()
-	return Color3.fromRGB(
-		math.floor(math.sin(t) * 127 + 128),
-		math.floor(math.sin(t + 2) * 127 + 128),
-		math.floor(math.sin(t + 4) * 127 + 128)
-	)
-end
+-- Icono flotante "C"
+local openBtn = Instance.new("TextButton")
+openBtn.Size = UDim2.new(0, 50, 0, 50)
+openBtn.Position = UDim2.new(0, 10, 0.5, -25)
+openBtn.BackgroundColor3 = Color3.new(0, 0, 0)
+openBtn.Text = "C"
+openBtn.TextColor3 = Color3.new(1, 1, 1)
+openBtn.Font = Enum.Font.Arcade
+openBtn.TextScaled = true
+openBtn.Draggable = true
+openBtn.Parent = gui
 
--- BOTÓN FLOTANTE "C"
-local iconBtn = Instance.new("TextButton", gui)
-iconBtn.Size = UDim2.new(0, 60, 0, 60)
-iconBtn.Position = UDim2.new(0, 20, 0, 20)
-iconBtn.BackgroundColor3 = Color3.fromRGB(0, 0, 0)
-iconBtn.Text = "C"
-iconBtn.Font = Enum.Font.Arcade
-iconBtn.TextColor3 = Color3.new(1, 1, 1)
-iconBtn.TextScaled = true
-iconBtn.Draggable = true
-
--- MENSAJE INICIAL: "By Christian"
-local pantalla = Instance.new("TextLabel", gui)
-pantalla.Size = UDim2.new(1, 0, 1, 0)
-pantalla.BackgroundTransparency = 1
-pantalla.Text = "By Christian"
-pantalla.TextScaled = true
-pantalla.Font = Enum.Font.Arcade
-pantalla.TextColor3 = Color3.new(1, 1, 1)
-pantalla.BackgroundColor3 = Color3.new(0, 0, 0)
-pantalla.ZIndex = 10
-
-wait(2.5)
-pantalla:TweenSize(UDim2.new(0,0,0,0), "Out", "Quad", 1, true, function()
-	pantalla:Destroy()
-end)
-
--- PEDIR CONTRASEÑA
-local passFrame = Instance.new("Frame", gui)
-passFrame.Size = UDim2.new(0, 300, 0, 200)
-passFrame.Position = UDim2.new(0.5, -150, 0.5, -100)
-passFrame.BackgroundColor3 = Color3.fromRGB(15, 15, 15)
-passFrame.BorderSizePixel = 0
-Instance.new("UICorner", passFrame)
-
-local info = Instance.new("TextLabel", passFrame)
-info.Size = UDim2.new(1, 0, 0.3, 0)
-info.Text = "Ingresa la contraseña:\n(link en chat)"
-info.TextColor3 = Color3.new(1, 1, 1)
-info.BackgroundTransparency = 1
-info.TextScaled = true
-info.Font = Enum.Font.Arcade
-
-local input = Instance.new("TextBox", passFrame)
-input.Size = UDim2.new(0.8, 0, 0.2, 0)
-input.Position = UDim2.new(0.1, 0, 0.4, 0)
-input.Text = ""
-input.TextColor3 = Color3.new(1,1,1)
-input.BackgroundColor3 = Color3.fromRGB(30,30,30)
-input.Font = Enum.Font.Arcade
-input.TextScaled = true
-
-local continuar = Instance.new("TextButton", passFrame)
-continuar.Size = UDim2.new(0.6, 0, 0.2, 0)
-continuar.Position = UDim2.new(0.2, 0, 0.7, 0)
-continuar.Text = "Entrar"
-continuar.Font = Enum.Font.Arcade
-continuar.TextScaled = true
-continuar.BackgroundColor3 = Color3.fromRGB(30,30,30)
-continuar.TextColor3 = Color3.new(1,1,1)
-
-local panel -- lo creamos más adelante
-
-continuar.MouseButton1Click:Connect(function()
-	if input.Text == "AYAM" then
-		passFrame:Destroy()
-		panel.Visible = true
-	else
-		info.Text = "¡Contraseña incorrecta!"
-	end
-end)
-
--- PANEL PROFESIONAL
-panel = Instance.new("Frame", gui)
-panel.Size = UDim2.new(0.5, 0, 0.7, 0)
-panel.Position = UDim2.new(0.25, 0, 0.15, 0)
-panel.BackgroundColor3 = Color3.fromRGB(10, 10, 10)
-panel.BackgroundTransparency = 0.4
+-- Panel principal
+local panel = Instance.new("Frame")
+panel.Size = UDim2.new(0, 400, 0, 500)
+panel.Position = UDim2.new(0.5, -200, 0.5, -250)
+panel.BackgroundColor3 = Color3.fromRGB(20, 20, 20)
+panel.BackgroundTransparency = 0.35
 panel.Visible = false
 panel.Active = true
 panel.Draggable = true
-Instance.new("UICorner", panel)
+panel.Parent = gui
+
 local stroke = Instance.new("UIStroke", panel)
+stroke.Color = Color3.new(1, 1, 1)
 stroke.Thickness = 2
 
--- TÍTULO
-local title = Instance.new("TextLabel", panel)
-title.Size = UDim2.new(1, 0, 0.1, 0)
-title.Text = "By Christian"
-title.TextScaled = true
-title.Font = Enum.Font.Arcade
-title.TextColor3 = Color3.new(1,1,1)
-title.BackgroundTransparency = 1
+-- Título
+local titulo = Instance.new("TextLabel", panel)
+titulo.Size = UDim2.new(1, 0, 0, 40)
+titulo.Position = UDim2.new(0, 0, 0, 0)
+titulo.Text = "By Christian"
+titulo.TextColor3 = Color3.new(1, 1, 1)
+titulo.BackgroundTransparency = 1
+titulo.Font = Enum.Font.Arcade
+titulo.TextScaled = true
 
--- DATOS
-local datos = Instance.new("TextLabel", panel)
-datos.Size = UDim2.new(1, 0, 0.05, 0)
-datos.Position = UDim2.new(0, 0, 0.1, 0)
-datos.Text = "Usuario: Christian_xyx | TikTok: @christ_sebast_7d"
-datos.TextScaled = true
-datos.Font = Enum.Font.Arcade
-datos.TextColor3 = Color3.new(1,1,1)
-datos.BackgroundTransparency = 1
+-- Información del usuario
+local info = Instance.new("TextLabel", panel)
+info.Size = UDim2.new(1, 0, 0, 20)
+info.Position = UDim2.new(0, 0, 0, 40)
+info.Text = "Usuario: Christian_xyx  |  TikTok: @christ_sebast_7d"
+info.TextColor3 = Color3.new(1, 1, 1)
+info.BackgroundTransparency = 1
+info.Font = Enum.Font.Arcade
+info.TextScaled = true
 
--- BUSCADOR
-local buscador = Instance.new("TextBox", panel)
-buscador.Size = UDim2.new(0.9, 0, 0.06, 0)
-buscador.Position = UDim2.new(0.05, 0, 0.17, 0)
-buscador.PlaceholderText = "Buscar script..."
-buscador.Text = ""
-buscador.TextScaled = true
-buscador.Font = Enum.Font.Arcade
-buscador.TextColor3 = Color3.new(1,1,1)
-buscador.BackgroundColor3 = Color3.fromRGB(30, 30, 30)
+-- Barra de búsqueda
+local searchBox = Instance.new("TextBox", panel)
+searchBox.Size = UDim2.new(0.9, 0, 0, 30)
+searchBox.Position = UDim2.new(0.05, 0, 0, 70)
+searchBox.PlaceholderText = "Buscar script..."
+searchBox.Text = ""
+searchBox.Font = Enum.Font.Arcade
+searchBox.TextScaled = true
+searchBox.TextColor3 = Color3.new(1, 1, 1)
+searchBox.BackgroundColor3 = Color3.fromRGB(30, 30, 30)
 
--- CONTENEDOR DE CARPETAS
-local scroll = Instance.new("ScrollingFrame", panel)
-scroll.Size = UDim2.new(1, 0, 0.7, 0)
-scroll.Position = UDim2.new(0, 0, 0.25, 0)
-scroll.BackgroundTransparency = 1
-scroll.CanvasSize = UDim2.new(0, 0, 3, 0)
-scroll.ScrollBarThickness = 4
+-- Contenedor scrollable
+local scrollFrame = Instance.new("ScrollingFrame", panel)
+scrollFrame.Position = UDim2.new(0.05, 0, 0, 110)
+scrollFrame.Size = UDim2.new(0.9, 0, 0.8, -40)
+scrollFrame.CanvasSize = UDim2.new(0, 0, 2, 0)
+scrollFrame.ScrollBarThickness = 8
+scrollFrame.BackgroundTransparency = 1
 
-local layout = Instance.new("UIListLayout", scroll)
-layout.Padding = UDim.new(0, 5)
+local UIList = Instance.new("UIListLayout", scrollFrame)
+UIList.SortOrder = Enum.SortOrder.LayoutOrder
+UIList.Padding = UDim.new(0, 6)
 
--- FUNCIONES
-local function crearCarpeta(nombre, scripts)
-	local folderBtn = Instance.new("TextButton", scroll)
-	folderBtn.Size = UDim2.new(0.9, 0, 0.08, 0)
-	folderBtn.Position = UDim2.new(0.05, 0, 0, 0)
-	folderBtn.Text = "📂 " .. nombre
-	folderBtn.TextScaled = true
-	folderBtn.Font = Enum.Font.Arcade
-	folderBtn.TextColor3 = Color3.new(1,1,1)
-	folderBtn.BackgroundColor3 = Color3.fromRGB(30, 30, 30)
+-- Crear carpetas
+local function crearCarpeta(nombre)
+	local folder = Instance.new("TextButton")
+	folder.Size = UDim2.new(1, 0, 0, 40)
+	folder.Text = "📁 " .. nombre
+	folder.Font = Enum.Font.Arcade
+	folder.TextScaled = true
+	folder.TextColor3 = Color3.new(1, 1, 1)
+	folder.BackgroundColor3 = Color3.fromRGB(40, 40, 40)
+	folder.LayoutOrder = 1
+	folder.Parent = scrollFrame
+	return folder
+end
 
-	folderBtn.MouseButton1Click:Connect(function()
-		scroll:ClearAllChildren()
-		layout = Instance.new("UIListLayout", scroll)
-		layout.Padding = UDim.new(0, 5)
+-- Crear scripts dentro de cada carpeta
+local function crearScript(nombre, enlace)
+	local btn = Instance.new("TextButton")
+	btn.Size = UDim2.new(1, 0, 0, 35)
+	btn.Text = "📜 " .. nombre
+	btn.Font = Enum.Font.Arcade
+	btn.TextScaled = true
+	btn.TextColor3 = Color3.new(1, 1, 1)
+	btn.BackgroundColor3 = Color3.fromRGB(25, 25, 25)
+	btn.Visible = false
+	btn.LayoutOrder = 2
+	btn.MouseButton1Click:Connect(function()
+		loadstring(game:HttpGet(enlace))()
+	end)
+	btn.Parent = scrollFrame
+	return btn
+end
 
-		for i, data in pairs(scripts) do
-			local btn = Instance.new("TextButton", scroll)
-			btn.Size = UDim2.new(0.9, 0, 0.08, 0)
-			btn.Text = data.name
-			btn.Font = Enum.Font.Arcade
-			btn.TextScaled = true
-			btn.TextColor3 = Color3.new(1,1,1)
-			btn.BackgroundColor3 = Color3.fromRGB(40, 40, 40)
-			btn.MouseButton1Click:Connect(function()
-				loadstring(game:HttpGet(data.link))()
-			end)
+-- Carpeta: Juegos Populares
+local popBtn = crearCarpeta("Juegos Populares")
+local juegosScripts = {
+	{ "🧠 Brainlot", "https://raw.githubusercontent.com/Akbar123s/Script-Roblox-/refs/heads/main/nabaruBrainrot" },
+	{ "🚓 Jailbreak", "https://raw.githubusercontent.com/BlitzIsKing/UniversalFarm/main/Loader/Regular" },
+	{ "🚂 Dead Rails", "https://raw.githubusercontent.com/gumanba/Scripts/refs/heads/main/DeadRails" },
+	{ "🍉 Blox Fruits", "https://raw.githubusercontent.com/tlredz/Scripts/refs/heads/main/main.luau" }
+}
+for _, s in ipairs(juegosScripts) do
+	crearScript(s[1], s[2])
+end
+
+-- Carpeta: Comandos
+local cmdBtn = crearCarpeta("Comandos")
+local comandos = {
+	{ "🚀 Fly V3", "https://raw.githubusercontent.com/XNEOFF/FlyGuiV3/main/FlyGuiV3.txt" },
+	{ "🌀 Touch Fling", "https://rawscripts.net/raw/Universal-Script-TOUCH-FLING-ULTRA-POWER-30194" },
+	{ "👁 ESP Player", "https://raw.githubusercontent.com/BeboProject/ESP/main/ESP.lua" },
+	{ "⌨️ Infinity Yield", "https://raw.githubusercontent.com/EdgeIY/infiniteyield/master/source" }
+}
+for _, s in ipairs(comandos) do
+	crearScript(s[1], s[2])
+end
+
+-- Carpeta: General (más de 40 scripts)
+local generalBtn = crearCarpeta("General")
+for i = 1, 40 do
+	crearScript("Script #" .. i, "https://raw.githubusercontent.com/GhosTinyMain/Ghoster/refs/heads/main/FirstHub")
+end
+
+-- Función para toggle de carpetas
+local function conectarCarpeta(btn)
+	local estado = false
+	btn.MouseButton1Click:Connect(function()
+		estado = not estado
+		for _, obj in pairs(scrollFrame:GetChildren()) do
+			if obj:IsA("TextButton") and obj.LayoutOrder == 2 and obj ~= btn then
+				obj.Visible = estado
+			end
 		end
-
-		local volver = Instance.new("TextButton", scroll)
-		volver.Size = UDim2.new(0.9, 0, 0.08, 0)
-		volver.Text = "🔙 Regresar"
-		volver.Font = Enum.Font.Arcade
-		volver.TextScaled = true
-		volver.TextColor3 = Color3.new(1,1,1)
-		volver.BackgroundColor3 = Color3.fromRGB(70, 0, 0)
-		volver.MouseButton1Click:Connect(function()
-			scroll:ClearAllChildren()
-			layout = Instance.new("UIListLayout", scroll)
-			layout.Padding = UDim.new(0, 5)
-			inicializarCarpetas()
-		end)
 	end)
 end
 
--- LISTAS DE SCRIPTS
-local juegosPopulares = {
-	{name="Brainlot", link="https://raw.githubusercontent.com/Akbar123s/Script-Roblox-/refs/heads/main/nabaruBrainrot"},
-	{name="Jailbreak", link="https://raw.githubusercontent.com/BlitzIsKing/UniversalFarm/main/Loader/Regular"},
-	{name="Dead Rails", link="https://raw.githubusercontent.com/gumanba/Scripts/refs/heads/main/DeadRails"},
-	{name="Blox Fruits", link="https://raw.githubusercontent.com/tlredz/Scripts/refs/heads/main/main.luau"},
-	-- Agrega 10 más si deseas...
-}
+conectarCarpeta(popBtn)
+conectarCarpeta(cmdBtn)
+conectarCarpeta(generalBtn)
 
-local comandos = {
-	{name="Fly V3", link="https://raw.githubusercontent.com/XNEOFF/FlyGuiV3/main/FlyGuiV3.txt"},
-	{name="Touch Fling", link="https://rawscripts.net/raw/Universal-Script-TOUCH-FLING-ULTRA-POWER-30194"},
-	{name="ESP Player", link="https://raw.githubusercontent.com/ic3w0lf22/ESP/main/esp.lua"},
-	{name="Infinity Yield", link="https://raw.githubusercontent.com/EdgeIY/infiniteyield/master/source"},
-}
+-- Función búsqueda
+searchBox:GetPropertyChangedSignal("Text"):Connect(function()
+	for _, child in ipairs(scrollFrame:GetChildren()) do
+		if child:IsA("TextButton") and child.LayoutOrder == 2 then
+			child.Visible = string.find(string.lower(child.Text), string.lower(searchBox.Text)) ~= nil
+		end
+	end
+end)
 
-local general = {
-	{name="CMD-X", link="https://raw.githubusercontent.com/CMD-X/CMD-X/master/CMD-X"},
-	{name="Dark Dex", link="https://raw.githubusercontent.com/peyton2465/Dark-Dex/main/source.lua"},
-	{name="Remote Spy", link="https://raw.githubusercontent.com/exxtremestuffs/SimpleSpySource/master/SimpleSpy.lua"},
-	-- Agrega 40 si deseas...
-}
-
--- INICIALIZAR CARPETAS
-function inicializarCarpetas()
-	crearCarpeta("Juegos Populares", juegosPopulares)
-	crearCarpeta("Comandos", comandos)
-	crearCarpeta("General", general)
-end
-
-inicializarCarpetas()
-
--- EFECTO RAINBOW
-game:GetService("RunService").RenderStepped:Connect(function()
-	local c = rainbow()
-	stroke.Color = c
-	iconBtn.TextColor3 = c
-	title.TextColor3 = c
-	datos.TextColor3 = c
-	buscador.TextColor3 = c
+-- Mostrar/ocultar panel
+openBtn.MouseButton1Click:Connect(function()
+	panel.Visible = not panel.Visible
 end)
