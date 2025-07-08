@@ -1,181 +1,199 @@
+-- BY CHRISTIAN - PANEL PRO VERTICAL CON CÓDIGO DE ACCESO
+
 local Players = game:GetService("Players")
+local HttpService = game:GetService("HttpService")
 local TweenService = game:GetService("TweenService")
+local RunService = game:GetService("RunService")
 local player = Players.LocalPlayer
+
+-- Crear GUI
 local gui = Instance.new("ScreenGui", player:WaitForChild("PlayerGui"))
-gui.Name = "CS_F3XStyleUI"
+gui.Name = "ChristianPanelPro"
 gui.ResetOnSpawn = false
 
--- CONTRASEÑA INICIAL
-local authFrame = Instance.new("Frame", gui)
-authFrame.Size = UDim2.new(0.3, 0, 0.2, 0)
-authFrame.Position = UDim2.new(0.35, 0, 0.4, 0)
-authFrame.BackgroundColor3 = Color3.fromRGB(30, 30, 30)
-authFrame.BorderSizePixel = 0
-authFrame.Active = true
-authFrame.Draggable = true
+-- BLOQUEO DE ACCESO
+local blockFrame = Instance.new("Frame", gui)
+blockFrame.Size = UDim2.new(1, 0, 1, 0)
+blockFrame.BackgroundColor3 = Color3.fromRGB(20, 20, 20)
 
-local authLabel = Instance.new("TextLabel", authFrame)
-authLabel.Size = UDim2.new(1, 0, 0.4, 0)
-authLabel.Text = "Introduce el código:"
-authLabel.TextColor3 = Color3.new(1, 1, 1)
-authLabel.Font = Enum.Font.Arcade
-authLabel.TextScaled = true
-authLabel.BackgroundTransparency = 1
+local input = Instance.new("TextBox", blockFrame)
+input.Size = UDim2.new(0, 300, 0, 50)
+input.Position = UDim2.new(0.5, -150, 0.5, -25)
+input.PlaceholderText = "Ingresa el código"
+input.TextScaled = true
+input.Font = Enum.Font.SourceSansBold
+input.TextColor3 = Color3.new(1, 1, 1)
+input.BackgroundColor3 = Color3.fromRGB(40, 40, 40)
 
-local authBox = Instance.new("TextBox", authFrame)
-authBox.Size = UDim2.new(1, -20, 0.3, 0)
-authBox.Position = UDim2.new(0, 10, 0.4, 0)
-authBox.PlaceholderText = "Código aquí..."
-authBox.Font = Enum.Font.Arcade
-authBox.TextScaled = true
-authBox.Text = ""
-authBox.TextColor3 = Color3.new(1,1,1)
-authBox.BackgroundColor3 = Color3.fromRGB(45, 45, 45)
+local btn = Instance.new("TextButton", blockFrame)
+btn.Size = UDim2.new(0, 120, 0, 40)
+btn.Position = UDim2.new(0.5, -60, 0.5, 40)
+btn.Text = "Verificar"
+btn.TextScaled = true
+btn.Font = Enum.Font.SourceSansBold
+btn.TextColor3 = Color3.new(1, 1, 1)
+btn.BackgroundColor3 = Color3.fromRGB(0, 170, 0)
 
-local authBtn = Instance.new("TextButton", authFrame)
-authBtn.Size = UDim2.new(1, -20, 0.25, 0)
-authBtn.Position = UDim2.new(0, 10, 0.75, 0)
-authBtn.Text = "Verificar"
-authBtn.Font = Enum.Font.Arcade
-authBtn.TextScaled = true
-authBtn.TextColor3 = Color3.new(1,1,1)
-authBtn.BackgroundColor3 = Color3.fromRGB(40,40,40)
-
-local verified = false
-authBtn.MouseButton1Click:Connect(function()
-	if authBox.Text == "AYAM" then
-		authFrame:Destroy()
-		verified = true
-	else
-		authLabel.Text = "Código incorrecto ❌"
-	end
-end)
-
--- ESPERA CÓDIGO
-repeat task.wait() until verified
-
--- BOTÓN FLOTANTE "C"
-local cBtn = Instance.new("TextButton", gui)
-cBtn.Size = UDim2.new(0, 50, 0, 50)
-cBtn.Position = UDim2.new(0, 20, 0, 20)
-cBtn.BackgroundColor3 = Color3.fromRGB(0, 0, 0)
-cBtn.Text = "C"
-cBtn.TextScaled = true
-cBtn.Font = Enum.Font.Arcade
-cBtn.TextColor3 = Color3.new(1, 1, 1)
-cBtn.Active = true
-cBtn.Draggable = true
-
--- PANEL PRINCIPAL
+-- PANEL PRINCIPAL (oculto hasta ingresar código)
 local panel = Instance.new("Frame", gui)
-panel.Size = UDim2.new(0.22, 0, 0.7, 0)
-panel.Position = UDim2.new(0, 80, 0.15, 0)
-panel.BackgroundColor3 = Color3.fromRGB(25, 25, 25)
+panel.Size = UDim2.new(0.6, 0, 0.85, 0)
+panel.Position = UDim2.new(0.2, 0, 0.075, 0)
+panel.BackgroundTransparency = 0.3
+panel.BackgroundColor3 = Color3.fromRGB(10, 10, 10)
 panel.Visible = false
+panel.ClipsDescendants = true
 panel.Active = true
 panel.Draggable = true
 
--- TÍTULO
-local title = Instance.new("TextLabel", panel)
-title.Size = UDim2.new(1, 0, 0.08, 0)
-title.Text = "By Christian"
-title.TextColor3 = Color3.fromRGB(0, 255, 0)
-title.Font = Enum.Font.Arcade
-title.TextScaled = true
-title.BackgroundTransparency = 1
+local uiCorner = Instance.new("UICorner", panel)
+local uiStroke = Instance.new("UIStroke", panel)
+uiStroke.Thickness = 2
 
--- FUNCIÓN PARA CREAR CARPETAS (secciones)
-local function crearCarpeta(nombre, scripts, posY)
-	local folderBtn = Instance.new("TextButton", panel)
-	folderBtn.Size = UDim2.new(0.9, 0, 0.06, 0)
-	folderBtn.Position = UDim2.new(0.05, 0, posY, 0)
-	folderBtn.Text = "📁 " .. nombre
-	folderBtn.Font = Enum.Font.Arcade
-	folderBtn.TextScaled = true
-	folderBtn.BackgroundColor3 = Color3.fromRGB(35, 35, 35)
-	folderBtn.TextColor3 = Color3.new(1,1,1)
-
-	local frame = Instance.new("Frame", panel)
-	frame.Size = UDim2.new(0.9, 0, 0.25, 0)
-	frame.Position = UDim2.new(0.05, 0, posY + 0.06, 0)
-	frame.Visible = false
-	frame.BackgroundColor3 = Color3.fromRGB(20, 20, 20)
-	
-	local layout = Instance.new("UIListLayout", frame)
-	layout.FillDirection = Enum.FillDirection.Vertical
-	layout.Padding = UDim.new(0, 4)
-
-	for _, data in ipairs(scripts) do
-		local b = Instance.new("TextButton", frame)
-		b.Size = UDim2.new(1, 0, 0, 30)
-		b.Text = data.name
-		b.Font = Enum.Font.Arcade
-		b.TextScaled = true
-		b.BackgroundColor3 = Color3.fromRGB(45, 45, 45)
-		b.TextColor3 = Color3.new(1,1,1)
-		b.MouseButton1Click:Connect(function()
-			loadstring(game:HttpGet(data.url))()
-		end)
-	end
-
-	folderBtn.MouseButton1Click:Connect(function()
-		frame.Visible = not frame.Visible
-	end)
+-- Rainbow efecto
+local function rainbow()
+	local t = tick()
+	return Color3.fromRGB(
+		math.sin(t) * 127 + 128,
+		math.sin(t + 2) * 127 + 128,
+		math.sin(t + 4) * 127 + 128
+	)
 end
 
--- SECCIONES
-crearCarpeta("🕹 Juegos Populares", {
-	{name="🧠 Brainlot", url="https://raw.githubusercontent.com/Akbar123s/Script-Roblox-/refs/heads/main/nabaruBrainrot"},
-	{name="🚓 Jailbreak", url="https://raw.githubusercontent.com/BlitzIsKing/UniversalFarm/main/Loader/Regular"},
-	{name="🚂 Dead Rails", url="https://raw.githubusercontent.com/gumanba/Scripts/refs/heads/main/DeadRails"},
-	{name="🍉 Blox Fruits", url="https://raw.githubusercontent.com/tlredz/Scripts/refs/heads/main/main.luau"},
-}, 0.1)
+RunService.RenderStepped:Connect(function()
+	local c = rainbow()
+	uiStroke.Color = c
+	for _, v in pairs(panel:GetDescendants()) do
+		if v:IsA("TextLabel") or v:IsA("TextButton") then
+			v.TextColor3 = c
+		end
+	end
+end)
 
-crearCarpeta("🧰 Comandos", {
-	{name="🚀 Fly V3", url="https://raw.githubusercontent.com/XNEOFF/FlyGuiV3/main/FlyGuiV3.txt"},
-	{name="👁 ESP Player", url=""}, -- se implementa abajo
-	{name="🌀 Touch Fling", url="https://rawscripts.net/raw/Universal-Script-TOUCH-FLING-ULTRA-POWER-30194"},
-	{name="⚙️ Infinity Yield", url="https://raw.githubusercontent.com/EdgeIY/infiniteyield/master/source"},
-}, 0.42)
+-- ICONO LETRA "C"
+local icon = Instance.new("TextButton", gui)
+icon.Size = UDim2.new(0, 50, 0, 50)
+icon.Position = UDim2.new(0, 20, 0, 20)
+icon.Text = "C"
+icon.Font = Enum.Font.Arcade
+icon.TextScaled = true
+icon.BackgroundColor3 = Color3.fromRGB(0, 0, 0)
+icon.TextColor3 = Color3.new(1, 1, 1)
+icon.Active = true
+icon.Draggable = true
 
-crearCarpeta("🌐 General", {
-	{name="🔥 Admin V2", url="https://pastebin.com/raw/GnywzK8h"},
-	{name="🎯 Aimlock", url="https://pastebin.com/raw/qUw3S3xy"},
-	{name="💬 Chat Spy", url="https://pastebin.com/raw/uH0h5KxT"},
-	{name="🎮 FPS Boost", url="https://pastebin.com/raw/P8yDdqB2"},
-	{name="🧲 Gravity Tool", url="https://pastebin.com/raw/UXbE7SSt"},
-}, 0.74)
-
--- BOTÓN ABRIR PANEL
-cBtn.MouseButton1Click:Connect(function()
+icon.MouseButton1Click:Connect(function()
 	panel.Visible = not panel.Visible
 end)
 
--- ESP PLAYER FUNCIONALIDAD
-local function toggleESP()
-	for _, plr in pairs(Players:GetPlayers()) do
-		if plr ~= player and plr.Character and plr.Character:FindFirstChild("Head") then
-			if not plr.Character.Head:FindFirstChild("NameTag") then
-				local gui = Instance.new("BillboardGui", plr.Character.Head)
-				gui.Name = "NameTag"
-				gui.Size = UDim2.new(0, 200, 0, 50)
-				gui.AlwaysOnTop = true
-				local txt = Instance.new("TextLabel", gui)
-				txt.Size = UDim2.new(1, 0, 1, 0)
-				txt.BackgroundTransparency = 1
-				txt.Text = plr.Name
-				txt.TextScaled = true
-				txt.TextColor3 = Color3.fromRGB(0,255,0)
-			else
-				plr.Character.Head:FindFirstChild("NameTag"):Destroy()
-			end
-		end
+-- TITULO Y DATOS
+local title = Instance.new("TextLabel", panel)
+title.Size = UDim2.new(1, 0, 0, 40)
+title.Text = "By Christian"
+title.Font = Enum.Font.Arcade
+title.TextScaled = true
+title.BackgroundTransparency = 1
+title.TextColor3 = Color3.new(1, 1, 1)
+
+local datos = Instance.new("TextLabel", panel)
+datos.Position = UDim2.new(0, 0, 0, 40)
+datos.Size = UDim2.new(1, 0, 0, 40)
+datos.Text = "Usuario: Christian_xyx | TikTok: @christ_sebast_7d"
+datos.TextScaled = true
+datos.Font = Enum.Font.SourceSansBold
+datos.BackgroundTransparency = 1
+datos.TextColor3 = Color3.new(1, 1, 1)
+
+-- BARRA DE BÚSQUEDA
+local buscador = Instance.new("TextBox", panel)
+buscador.Position = UDim2.new(0.05, 0, 0, 85)
+buscador.Size = UDim2.new(0.9, 0, 0, 35)
+buscador.PlaceholderText = "Buscar scripts..."
+buscador.TextScaled = true
+buscador.BackgroundColor3 = Color3.fromRGB(30, 30, 30)
+buscador.TextColor3 = Color3.new(1,1,1)
+buscador.Font = Enum.Font.SourceSansBold
+
+-- SCROLLING PARA CATEGORÍAS
+local scroll = Instance.new("ScrollingFrame", panel)
+scroll.Position = UDim2.new(0, 0, 0, 130)
+scroll.Size = UDim2.new(1, 0, 1, -130)
+scroll.CanvasSize = UDim2.new(0, 0, 2, 0)
+scroll.ScrollBarThickness = 6
+scroll.BackgroundTransparency = 1
+
+local layout = Instance.new("UIListLayout", scroll)
+layout.Padding = UDim.new(0, 5)
+layout.SortOrder = Enum.SortOrder.LayoutOrder
+
+-- CATEGORÍA FACTORY
+local function crearCategoria(nombre, scripts)
+	local folder = Instance.new("Frame", scroll)
+	folder.Size = UDim2.new(1, 0, 0, 30)
+	folder.BackgroundColor3 = Color3.fromRGB(20, 20, 20)
+	local btn = Instance.new("TextButton", folder)
+	btn.Size = UDim2.new(1, 0, 1, 0)
+	btn.Text = "📂 "..nombre
+	btn.TextScaled = true
+	btn.Font = Enum.Font.SourceSansBold
+	btn.BackgroundTransparency = 1
+
+	local contenedor = Instance.new("Frame", scroll)
+	contenedor.Size = UDim2.new(1, 0, 0, #scripts * 35 + 10)
+	contenedor.Visible = false
+	local list = Instance.new("UIListLayout", contenedor)
+	list.SortOrder = Enum.SortOrder.LayoutOrder
+	list.Padding = UDim.new(0, 5)
+
+	for _, data in pairs(scripts) do
+		local sBtn = Instance.new("TextButton", contenedor)
+		sBtn.Size = UDim2.new(0.95, 0, 0, 30)
+		sBtn.Position = UDim2.new(0.025, 0, 0, 0)
+		sBtn.Text = data[1]
+		sBtn.Font = Enum.Font.SourceSansBold
+		sBtn.TextScaled = true
+		sBtn.BackgroundColor3 = Color3.fromRGB(35, 35, 35)
+		sBtn.TextColor3 = Color3.new(1,1,1)
+		sBtn.MouseButton1Click:Connect(function()
+			loadstring(game:HttpGet(data[2]))()
+		end)
 	end
+
+	btn.MouseButton1Click:Connect(function()
+		contenedor.Visible = not contenedor.Visible
+	end)
 end
 
--- ASOCIAR BOTÓN ESP
-for _, f in pairs(panel:GetDescendants()) do
-	if f:IsA("TextButton") and f.Text:find("ESP Player") then
-		f.MouseButton1Click:Connect(toggleESP)
+-- 🔹 SCRIPTS DE CADA CATEGORÍA
+
+crearCategoria("Juegos Populares", {
+	{"🧠 Brainlot", "https://raw.githubusercontent.com/Akbar123s/Script-Roblox-/refs/heads/main/nabaruBrainrot"},
+	{"🚓 Jailbreak", "https://raw.githubusercontent.com/BlitzIsKing/UniversalFarm/main/Loader/Regular"},
+	{"🚂 Dead Rails", "https://raw.githubusercontent.com/gumanba/Scripts/refs/heads/main/DeadRails"},
+	{"🍉 Blox Fruits", "https://raw.githubusercontent.com/tlredz/Scripts/refs/heads/main/main.luau"},
+})
+
+crearCategoria("Comandos", {
+	{"🚀 Fly V3", "https://raw.githubusercontent.com/XNEOFF/FlyGuiV3/main/FlyGuiV3.txt"},
+	{"👁 ESP Player", "https://pastebin.com/raw/F9GZgfBP"},
+	{"🌀 Touch Fling", "https://rawscripts.net/raw/Universal-Script-TOUCH-FLING-ULTRA-POWER-30194"},
+	{"⚙️ Infinity Yield", "https://raw.githubusercontent.com/EdgeIY/infiniteyield/master/source"},
+})
+
+crearCategoria("General", {
+	{"🎮 Admin Commands", "https://pastebin.com/raw/RMmR8SSf"},
+	{"🧊 Anti-AFK", "https://pastebin.com/raw/VHj6nGAc"},
+	{"📡 ESP Universal", "https://pastebin.com/raw/Y8Zxtfr5"},
+	{"🗺 Teleport GUI", "https://pastebin.com/raw/xD2RkMW2"},
+	-- Agrega más aquí...
+})
+
+-- VERIFICACIÓN DE CÓDIGO
+btn.MouseButton1Click:Connect(function()
+	if input.Text == "AYAM" then
+		blockFrame:Destroy()
+		panel.Visible = true
+	else
+		input.Text = ""
+		input.PlaceholderText = "Código incorrecto"
 	end
-end
+end)
